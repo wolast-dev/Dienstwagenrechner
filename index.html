@@ -758,7 +758,7 @@ const FAHRZEUGE=[
 ];
 
 const SAETZE={elektro:.0025,hybrid:.005,verbrenner:.01};
-const AEMO={elektro:”\u26A1”,hybrid:”\uD83D\uDD0B”,verbrenner:”\u26FD”};
+const AEMO={elektro:”\u26A1”,hybrid:”\u{1F50B}”,verbrenner:”\u26FD”};
 const ANAM={elektro:“Elektro”,hybrid:“Hybrid”,verbrenner:“Verbrenner”};
 let ak=“elektro”,selSave=null,appMode=“schnell”,ahSelected=null,ahTimer=null;
 const fmt=n=>n.toLocaleString(“de-DE”,{style:“currency”,currency:“EUR”,maximumFractionDigits:0});
@@ -869,7 +869,7 @@ document.getElementById(“fh-lp”).textContent=fmt(lp);
 document.getElementById(“fh-lr”).textContent=lr>0?fmt(lr)+”/Mo.”:”\u2014”;
 // Marken-Hint
 const mhEl=document.getElementById(“marken-hint”);
-if(appMode===“detail”&&m?.hint){mhEl.style.display=“block”;mhEl.innerHTML=”<strong>\uD83C\uDFF7\uFE0F “+h+”:</strong> “+m.hint;}else mhEl.style.display=“none”;
+if(appMode===“detail”&&m?.hint){mhEl.style.display=“block”;mhEl.innerHTML=”<strong>\u{1F3F7}\uFE0F “+h+”:</strong> “+m.hint;}else mhEl.style.display=“none”;
 document.getElementById(“adac-inline”).innerHTML=m?.adac?”<span class='adac-b'>”+m.adac+”</span>”:””;
 // F\u00F6rder-Card nur bei Elektro
 document.getElementById(“foerd-card”).style.display=ak===“elektro”?“block”:“none”;
@@ -972,7 +972,7 @@ document.getElementById(“foerd-antrag”).innerHTML=“BAFA-Antrag nach Zulass
 }else fbEl.style.display=“none”;
 // Fazit
 const fEl=document.getElementById(“test-fazit”);
-if(m?.fazit){fEl.style.display=“block”;fEl.innerHTML=”<strong>\uD83D\uDCCB Testurteil:</strong> “+m.fazit;}else fEl.style.display=“none”;
+if(m?.fazit){fEl.style.display=“block”;fEl.innerHTML=”<strong>\u{1F4CB} Testurteil:</strong> “+m.fazit;}else fEl.style.display=“none”;
 // Privatleasing
 const prEl=document.getElementById(“priv-res”);
 if(pr>0){
@@ -1016,13 +1016,13 @@ rows+=”<div style='padding:8px 0;'><div class='fakt-bar'><div class='fakt-fill
 const ratio=(lp/r.gk).toFixed(0);
 rows+=”<div class='vh-row'><span class='vh-l'>LP pro EUR Ihrer Mehrsteuer</span><span class='vh-v good'>”+ratio+” EUR LP / 1 EUR Steuer</span></div>”;
 document.getElementById(“vh-content”).innerHTML=rows;
-let taktik=”<strong>\uD83C\uDFAF Taktik f\u00FCr “+h+” “+typ+” (”+ANAM[ak]+”):</strong><br><br>”;
+let taktik=”<strong>\u{1F3AF} Taktik f\u00FCr “+h+” “+typ+” (”+ANAM[ak]+”):</strong><br><br>”;
 const tr=[];
 tr.push({i:”\u2705”,t:“Ihre Mehrsteuer “+fmt(r.gk)+”/Mo. ist Ihr einziger Kostenpunkt \u2014 betonen Sie das.”});
 if(lf>1.0)tr.push({i:”\u26A0\uFE0F”,t:“Leasingfaktor “+fmtPct(lf)+” uber 1% \u2014 Ziel unter “+fmt(Math.round(lp/100))+”/Mo. \u00DCber Vehiculum vergleichen.”});
-if(lf<=0.8)tr.push({i:”\uD83C\uDFC6”,t:“Leasingfaktor “+fmtPct(lf)+” ist ausgezeichnet. Sehr gutes Angebot.”});
-tr.push({i:”\uD83C\uDFAF”,t:“LP-erhoehende Extras vermeiden \u2014 jede 1.000 EUR LP mehr = “+fmt(Math.round(1000*SAETZE[ak]*0.42))+” mehr Steuer/Mo.”});
-tr.push({i:”\uD83C\uDFE6”,t:“AG-Argument: Leasingrate + Betriebskosten sofort als Betriebsausgabe absetzbar. Effektive Kosten 30-40% niedriger.”});
+if(lf<=0.8)tr.push({i:”\u{1F3C6}”,t:“Leasingfaktor “+fmtPct(lf)+” ist ausgezeichnet. Sehr gutes Angebot.”});
+tr.push({i:”\u{1F3AF}”,t:“LP-erhoehende Extras vermeiden \u2014 jede 1.000 EUR LP mehr = “+fmt(Math.round(1000*SAETZE[ak]*0.42))+” mehr Steuer/Mo.”});
+tr.push({i:”\u{1F3E6}”,t:“AG-Argument: Leasingrate + Betriebskosten sofort als Betriebsausgabe absetzbar. Effektive Kosten 30-40% niedriger.”});
 if(ak===“elektro”)tr.push({i:”\u26A1”,t:“Turboabschreibung 75% (Jul 2025-Dez 2027): AG spart bei 40.000 EUR netto ca. 9.000 EUR Steuern im Jahr 1. Starkes Argument!”});
 taktik+=tr.map(t=>”<div class='taktik-row'><span>”+t.i+”</span><span>”+t.t+”</span></div>”).join(””);
 document.getElementById(“vh-taktik”).innerHTML=taktik;
@@ -1080,7 +1080,7 @@ const q=document.getElementById(“ah-search”).value.trim();
 const res=document.getElementById(“ah-results”);
 if(q.length<3){res.style.display=“none”;return;}
 res.style.display=“block”;
-res.innerHTML=”<div class='search-item' style='color:var(--mu);'>\uD83D\uDD0D Suche l\u00E4uft \u2026</div>”;
+res.innerHTML=”<div class='search-item' style='color:var(--mu);'>\u{1F50D} Suche l\u00E4uft \u2026</div>”;
 try{
 const url=“https://nominatim.openstreetmap.org/search?q=”+encodeURIComponent(q+” autohaus”)+”&format=json&addressdetails=1&limit=8&countrycodes=de&accept-language=de”;
 const data=await(await fetch(url,{headers:{“User-Agent”:“DienstwagenrechnerApp/1.0”}})).json();
@@ -1109,10 +1109,10 @@ const det=document.getElementById(“ah-detail”);
 det.style.display=“block”;
 document.getElementById(“ah-detail-wrap”).style.display=“block”;
 document.getElementById(“ah-kontakt-wrap”).style.display=“grid”;
-det.innerHTML=”<div class='ah-name'>\uD83C\uDFE2 “+data.name+”</div>”
-+”<div class='ah-info'>\uD83D\uDCCD “+(data.addr||”\u2014”)+”<br>”
-+(phone?”\uD83D\uDCDE <a href='tel:"+phone+"'>”+phone+”</a><br>”:””)
-+(website?”\uD83C\uDF10 <a href='"+(website.startsWith("http")?website:"https://"+website)+"' target='_blank'>”+website.replace(/^https?:///,””)+”</a><br>”:””)
+det.innerHTML=”<div class='ah-name'>\u{1F3E2} “+data.name+”</div>”
++”<div class='ah-info'>\u{1F4CD} “+(data.addr||”\u2014”)+”<br>”
++(phone?”\u{1F4DE} <a href='tel:"+phone+"'>”+phone+”</a><br>”:””)
++(website?”\u{1F310} <a href='"+(website.startsWith("http")?website:"https://"+website)+"' target='_blank'>”+website.replace(/^https?:///,””)+”</a><br>”:””)
 +(email?”\u2709\uFE0F <a href='mailto:"+email+"'>”+email+”</a><br>”:””)
 +”<a href='https://www.google.com/maps/search/?api=1&query="+encodeURIComponent(data.name+" "+data.addr)+"' target='_blank' style='color:var(--blu);font-size:11px;'>\u2192 Google Maps</a>”
 +”</div><button onclick='clearAutohaus()' style='background:none;border:none;color:var(--dm);font-size:11px;cursor:pointer;margin-top:5px;font-family:DM Sans,sans-serif;'>\u2715 Entfernen</button>”;
@@ -1130,7 +1130,7 @@ const h=gs(“hersteller”),typ=document.getElementById(“fahrzeugtyp”).valu
 const d=new Date().toLocaleDateString(“de-DE”,{day:“2-digit”,month:“2-digit”,year:“numeric”});
 const entry={id:Date.now(),name:h+” \u00B7 “+(typ||“Typ”)+” \u00B7 “+d,hersteller:h,typ:typ||””,antrieb:ak,lp,brutto,ks,lr,lf,zuz,notiz:document.getElementById(“notiz”).value.trim(),autohaus:ahSelected?{name:ahSelected.name,addr:ahSelected.addr}:null,kontakt:gs(“ah-kontakt”),tel:gs(“ah-tel”),result:r,fazit:MARKEN[h]?.fazit||null};
 const s=getSaves();s.unshift(entry);setSaves(s);
-const btn=document.querySelector(”.btn-gold”);btn.innerHTML=”\u2705 Gespeichert!”;setTimeout(()=>btn.innerHTML=”\uD83D\uDCBE Berechnung speichern”,2000);
+const btn=document.querySelector(”.btn-gold”);btn.innerHTML=”\u2705 Gespeichert!”;setTimeout(()=>btn.innerHTML=”\u{1F4BE} Berechnung speichern”,2000);
 }
 function deleteSave(id,e){e.stopPropagation();setSaves(getSaves().filter(s=>s.id!==id));if(selSave?.id===id){selSave=null;document.getElementById(“compare-section”).style.display=“none”;}renderSaves();}
 function selectSave(entry){selSave=entry;document.querySelectorAll(”.save-item”).forEach(el=>el.classList.toggle(“sel”,el.dataset.id==entry.id));renderCompare(entry);document.getElementById(“compare-section”).style.display=“block”;document.getElementById(“compare-section”).scrollIntoView({behavior:“smooth”});}
@@ -1141,7 +1141,7 @@ const cur=berechne(brutto,ks,lp,SAETZE[ak],zuz),sav=saved.result;
 const curLF=lr>0?lr/lp*100:0,savLF=saved.lf||0;
 const h=gs(“hersteller”),typ=document.getElementById(“fahrzeugtyp”).value.trim();
 const hn=(h+(typ?” “+typ:””)).substring(0,22),sn=(saved.hersteller+” “+saved.typ).substring(0,22);
-document.getElementById(“vc-tl”).textContent=”\uD83D\uDD04 “+hn;document.getElementById(“vc-tr”).textContent=”\uD83D\uDCC2 “+sn;
+document.getElementById(“vc-tl”).textContent=”\u{1F504} “+hn;document.getElementById(“vc-tr”).textContent=”\u{1F4C2} “+sn;
 document.getElementById(“vc-lp-l”).textContent=fmt(lp);document.getElementById(“vc-an-l”).textContent=AEMO[ak]+” “+ANAM[ak];
 document.getElementById(“vc-st-l”).textContent=”\u2212”+fmt(cur.gk)+”/Mo.”;document.getElementById(“vc-nm-l”).textContent=fmt(cur.nettoMit);
 document.getElementById(“vc-lr-l”).textContent=lr>0?fmt(lr)+”/Mo.”:”\u2014”;
@@ -1154,18 +1154,18 @@ document.getElementById(“ac-nl”).textContent=hn;document.getElementById(“a
 document.getElementById(“ac-vl”).textContent=”\u2212”+fmt(cur.gk);document.getElementById(“ac-vr”).textContent=”\u2212”+fmt(sav.gk);
 const wEl=document.getElementById(“vc-winner”);
 if(cur.gk<sav.gk){wEl.innerHTML=”\u2705 <strong>”+hn+” g\u00FCnstiger</strong> \u2014 “+fmt(sav.gk-cur.gk)+” weniger/Mo.”;wEl.style.borderColor=“var(–grn)”;}
-else if(sav.gk<cur.gk){wEl.innerHTML=”\uD83D\uDCC2 <strong>”+sn+” g\u00FCnstiger</strong> \u2014 “+fmt(cur.gk-sav.gk)+” weniger/Mo.”;wEl.style.borderColor=“var(–blu)”;}
-else{wEl.innerHTML=”\uD83E\uDD1D <strong>Beide identisch</strong>”;wEl.style.borderColor=“var(–gd)”;}
+else if(sav.gk<cur.gk){wEl.innerHTML=”\u{1F4C2} <strong>”+sn+” g\u00FCnstiger</strong> \u2014 “+fmt(cur.gk-sav.gk)+” weniger/Mo.”;wEl.style.borderColor=“var(–blu)”;}
+else{wEl.innerHTML=”\u{1F91D} <strong>Beide identisch</strong>”;wEl.style.borderColor=“var(–gd)”;}
 }
 function renderSaves(){
 const saves=getSaves(),c=document.getElementById(“saves-list”);
-if(!saves.length){c.innerHTML=”<div class='empty'><span>\uD83D\uDCC2</span>Noch keine Berechnungen gespeichert.</div>”;document.getElementById(“compare-section”).style.display=“none”;return;}
+if(!saves.length){c.innerHTML=”<div class='empty'><span>\u{1F4C2}</span>Noch keine Berechnungen gespeichert.</div>”;document.getElementById(“compare-section”).style.display=“none”;return;}
 c.innerHTML=saves.map(s=>{
 const lfi=s.lf>0?” \u00B7 LF: “+fmtPct(s.lf):””;
 return”<div class=‘save-item”+(selSave?.id===s.id?” sel”:””)+”’ data-id=’”+s.id+”’ onclick=‘selectSave(”+JSON.stringify(s).replace(/’/g,”'”)+”)’>”
-+”<span class='si-i'>”+(AEMO[s.antrieb]||”\uD83D\uDE97”)+”</span>”
++”<span class='si-i'>”+(AEMO[s.antrieb]||”\u{1F697}”)+”</span>”
 +”<div class='si-n'><div class='si-name'>”+s.name+”</div><div class='si-meta'>Steuer: \u2212”+fmt(s.result.gk)+”/Mo.”+lfi+”</div></div>”
-+”<button class='si-del' onclick='deleteSave("+s.id+",event)'>\uD83D\uDDD1</button>”
++”<button class='si-del' onclick='deleteSave("+s.id+",event)'>\u{1F5D1}</button>”
 +”</div>”;
 }).join(””);
 if(selSave)renderCompare(selSave);
@@ -1306,7 +1306,7 @@ const erkl = document.getElementById(“lr-mode-erkl”);
 if(m===‘zusatz’){
 erkl.innerHTML=’<strong style="color:var(--grn);">\u2705 Beste Variante:</strong> AG zahlt die Rate zus\u00E4tzlich zu Ihrem Brutto \u2014 wie eine Gehaltserh\u00F6hung in Sachform. Ihr Netto sinkt <em>nur</em> durch die GVV-Mehrsteuer. Die Leasingrate kostet Sie nichts.’;
 } else if(m===‘umwandlung’){
-erkl.innerHTML=’<strong style="color:var(--gold);">\uD83D\uDD04 Gehaltsumwandlung:</strong> Ihr Brutto wird um die Rate reduziert, daf\u00FCr zahlt der AG die Leasingrate. Sie zahlen weniger Sozialversicherung \u2014 aber auch weniger Rente. Steuerwirkung je nach Gehaltsh\u00F6he unterschiedlich.’;
+erkl.innerHTML=’<strong style="color:var(--gold);">\u{1F504} Gehaltsumwandlung:</strong> Ihr Brutto wird um die Rate reduziert, daf\u00FCr zahlt der AG die Leasingrate. Sie zahlen weniger Sozialversicherung \u2014 aber auch weniger Rente. Steuerwirkung je nach Gehaltsh\u00F6he unterschiedlich.’;
 } else {
 erkl.innerHTML=’<strong style="color:var(--red);">\u26A0\uFE0F Ung\u00FCnstigste Variante:</strong> Die Rate wird von Ihrem Netto abgezogen \u2014 ein echter zus\u00E4tzlicher Geldabfluss. Ihr Kostenpunkt = GVV-Mehrsteuer <em>plus</em> volle Leasingrate. Wenn m\u00F6glich auf Variante A verhandeln!’;
 }
