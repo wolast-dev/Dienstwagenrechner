@@ -1279,7 +1279,7 @@ let dp=null;
 window.addEventListener(“beforeinstallprompt”,e=>{e.preventDefault();dp=e;document.getElementById(“ib”).style.display=“flex”;});
 function installApp(){if(!dp)return;dp.prompt();dp.userChoice.then(()=>{dp=null;closeBanner();});}
 function closeBanner(){document.getElementById(“ib”).style.display=“none”;}
-if(“serviceWorker”in navigator){const swc=‘const C=“dw-v16”;self.addEventListener(“install”,e=>e.waitUntil(caches.open(C).then(c=>c.addAll([”/”]))));self.addEventListener(“fetch”,e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));’;navigator.serviceWorker.register(URL.createObjectURL(new Blob([swc],{type:“application/javascript”})));}
+// ServiceWorker: nur aktiv wenn sw.js vorhanden (optional)
 
 // LEASINGRATE MODUS
 // ‘zusatz’      = AG zahlt on top — nur GVV-Mehrsteuer belastet AN
