@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Dienstwagenrechner"/>
 <meta name="theme-color" content="#0f0f13"/>
 <title>Dienstwagenrechner</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 :root{--bg:#0f0f13;--sf:#16161e;--sf2:#1a1a24;--sf3:#0e0e16;--br:#252532;--gold:#c9a84c;--gd:#c9a84c33;--tx:#e8e6e0;--mu:#7a7a90;--dm:#4a4a62;--red:#e06060;--grn:#6ec97a;--blu:#6ab0d4;--orng:#d4944a;--purp:#9b82d4;}
@@ -1175,6 +1175,7 @@ if(selSave)renderCompare(selSave);
 function saf(t){if(!t)return”—”;return t.replace(/ä/g,“ae”).replace(/ö/g,“oe”).replace(/ü/g,“ue”).replace(/Ä/g,“Ae”).replace(/Ö/g,“Oe”).replace(/Ü/g,“Ue”).replace(/ß/g,“ss”).replace(/Š/g,“S”).replace(/š/g,“s”).replace(/[^\x00-\x7F]/g,”?”);}
 
 function exportPDF(){
+if(!window.jspdf){alert(“PDF-Export wird geladen, bitte kurz warten und erneut versuchen.”);return;}
 const{jsPDF}=window.jspdf;const doc=new jsPDF({orientation:“portrait”,unit:“mm”,format:“a4”});
 const W=210,M=16,TW=W-2*M;
 const brutto=gi(“brutto”),ks=getKS(),lp=gi(“listenpreis”),zuz=gi(“zuzahl”),lr=gi(“lrate”),pr=gi(“priv-rate”);
@@ -1340,7 +1341,14 @@ document.getElementById(“detail-extra-toggle”).querySelector(“button”).t
 }
 
 // INIT
-setLRMode(“zusatz”);onHerstellerChange();updateNettoInfo();updateKmInfo();updateKistSub();updateHoSub();
+document.addEventListener(“DOMContentLoaded”, function(){
+setLRMode(“zusatz”);
+onHerstellerChange();
+updateNettoInfo();
+updateKmInfo();
+updateKistSub();
+updateHoSub();
+});
 </script>
 
 </body>
