@@ -5,7 +5,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#0f0f13"/>
-<title>Dienstwagenrechner</title>
+<title>Dienstwagenrechner v12</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
@@ -23,7 +23,7 @@ body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-h
 .nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(13,13,20,.97);border-top:1px solid var(--br);box-shadow:0 -6px 28px rgba(0,0,0,.55);display:flex;padding-bottom:env(safe-area-inset-bottom,0);}
 .nb{flex:1;background:none;border:none;color:var(--dm);padding:8px 2px 6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:color .2s;-webkit-user-select:none;user-select:none;}
 .nb .ni{font-size:19px;transition:transform .15s;}.nb.active{color:var(--gold);}.nb.active .ni{transform:scale(1.15);}.nb:active .ni{transform:scale(.88);}
-.page{display:none;max-width:640px;margin:0 auto;padding-top:calc(62px + env(safe-area-inset-top,0));padding-left:14px;padding-right:14px;padding-bottom:calc(78px + env(safe-area-inset-bottom,0));position:relative;z-index:1;}
+.page{display:none;max-width:640px;margin:0 auto;padding-top:calc(62px + env(safe-area-inset-top,0));padding-left:14px;padding-right:14px;padding-bottom:calc(78px + env(safe-area-inset-bottom,0));}
 .page.active{display:block;}.ph{padding:16px 0 12px;}
 .ey{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px;}
 h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-height:1.1;}h1 em{color:var(--gold);font-style:normal;}
@@ -174,7 +174,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
 <body>
 <!-- FLOATING HEADER -->
 <div class="fhdr"><div class="fhdr-in">
-  <div class="fapp">🚗 DW-Rechner</div>
+  <div class="fapp">DW-Rechner v12</div>
   <div class="ff"><div class="fl">Marke</div><div class="fv" id="fh-m">Opel</div></div><div class="fdv"></div>
   <div class="ff"><div class="fl">Typ</div><div class="fv" id="fh-t">Grandland Electric</div></div><div class="fdv"></div>
   <div class="ff"><div class="fl">Listenpreis</div><div class="fv gold" id="fh-lp">40.000 €</div></div><div class="fdv"></div>
@@ -1251,30 +1251,32 @@ el.style.color=lfi.c;
 }
 
 // ===== NAVIGATION =====
+function _showErr(m){
+var d=document.createElement(‘div’);
+d.style.cssText=‘position:fixed;top:60px;left:10px;right:10px;background:#c00;color:#fff;padding:14px;font-size:13px;font-weight:bold;z-index:99999;border-radius:10px;word-break:break-all;’;
+d.textContent=‘FEHLER: ‘+m;
+document.body.appendChild(d);
+setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},10000);
+}
 function showPage(n,idx){
 try{
-// Direkte style.display Steuerung - funktioniert auf allen Browsern
 var allPages=document.querySelectorAll(’.page’);
+if(!allPages||allPages.length===0){_showErr(‘Keine .page Elemente gefunden!’);return;}
 for(var i=0;i<allPages.length;i++){
 allPages[i].style.display=‘none’;
 allPages[i].classList.remove(‘active’);
 }
 var target=document.getElementById(‘page-’+n);
-if(target){
+if(!target){_showErr(‘Seite nicht gefunden: page-’+n);return;}
 target.style.display=‘block’;
 target.classList.add(‘active’);
-}
 var nbs=document.querySelectorAll(’.nb’);
-for(var i=0;i<nbs.length;i++){
-nbs[i].classList.toggle(‘active’,i===idx);
-}
-try{ if(n===‘auto’)update(); }catch(e){console.error(‘update:’,e);}
-try{ if(n===‘saves’)renderSaves(); }catch(e){console.error(‘renderSaves:’,e);}
-try{ if(n===‘stamm’){updateNettoInfo();updateKmInfo();} }catch(e){console.error(‘stamm:’,e);}
-window.scrollTo(0,0);
-}catch(e){
-alert(‘Fehler: ‘+e.message+’ (’+e.lineNumber+’)’);
-}
+for(var i=0;i<nbs.length;i++)nbs[i].classList.toggle(‘active’,i===idx);
+try{if(n===‘auto’)update();}catch(e){_showErr(’update: ’+e.message);}
+try{if(n===‘saves’)renderSaves();}catch(e){_showErr(’renderSaves: ’+e.message);}
+try{if(n===‘stamm’){updateNettoInfo();updateKmInfo();}}catch(e){_showErr(’stamm: ’+e.message);}
+try{window.scrollTo(0,0);}catch(e){}
+}catch(e){_showErr(’showPage: ’+e.message);}
 }
 function toggleTip(c){c.classList.toggle(‘open’);}
 
@@ -1564,7 +1566,7 @@ _tryInit(‘hoSub’, function(){ updateHoSub(); });
 if(_initErrors.length>0){
 var eb=document.createElement(‘div’);
 eb.style.cssText=‘position:fixed;top:0;left:0;right:0;background:red;color:white;padding:10px;font-size:11px;z-index:9999;word-break:break-all;’;
-eb.textContent=‘INIT-FEHLER: ‘+_initErrors.join(’ | ‘);
+eb.textContent=‘INIT-FEHLER v12: ‘+_initErrors.join(’ | ‘);
 document.body.appendChild(eb);
 }
 // Seiten initial korrekt setzen
