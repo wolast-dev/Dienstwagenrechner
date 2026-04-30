@@ -9,7 +9,7 @@
 <meta name="apple-mobile-web-app-title" content="Dienstwagenrechner"/>
 <meta name="theme-color" content="#0f0f13"/>
 <title>Dienstwagenrechner</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" defer></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 :root{--bg:#0f0f13;--sf:#16161e;--sf2:#1a1a24;--sf3:#0e0e16;--br:#252532;--gold:#c9a84c;--gd:#c9a84c33;--tx:#e8e6e0;--mu:#7a7a90;--dm:#4a4a62;--red:#e06060;--grn:#6ec97a;--blu:#6ab0d4;--orng:#d4944a;--purp:#9b82d4;}
@@ -743,8 +743,8 @@ function lfInfo(lf){
 }
 function fmt(n){return n.toLocaleString('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0});}
 function fmtPct(n){return n.toFixed(2).replace('.',',')+' %';}
-function gi(id){var el=document.getElementById(id);return el?(parseFloat(el.value)||0):0;}
-function gs(id){var el=document.getElementById(id);return el?(el.value||''):''}
+function gi(id){try{var el=document.getElementById(id);return el?(parseFloat(el.value)||0):0;}catch(e){return 0;}}
+function gs(id){try{var el=document.getElementById(id);return el?(el.value||''):'O';}catch(e){return '';}}
 function saf(t){
   if(!t)return'--';
   return t.replace(/\u00e4/g,'ae').replace(/\u00f6/g,'oe').replace(/\u00fc/g,'ue')
@@ -1527,14 +1527,22 @@ function installApp(){if(!_dp)return;_dp.prompt();_dp.userChoice.then(function()
 function closeBanner(){var ib=document.getElementById(‘ib’);if(ib)ib.style.display=‘none’;}
 
 // ===== INIT =====
-document.addEventListener(‘DOMContentLoaded’,function(){
-setLRMode(‘zusatz’);
-onHerstellerChange();
-updateNettoInfo();
-updateKmInfo();
-updateKistSub();
-updateHoSub();
-});
+// Fehler-Handler fuer Debugging
+window.onerror = function(msg, src, line, col, err) {
+var d = document.createElement(‘div’);
+d.style.cssText = ‘position:fixed;top:0;left:0;right:0;background:red;color:white;padding:8px;font-size:12px;z-index:9999;’;
+d.textContent = ’JS Fehler Zeile ’ + line + ’: ’ + msg;
+document.body.appendChild(d);
+return false;
+};
+
+// INIT - Script ist am Ende von body, DOM ist bereits bereit
+try { setLRMode(‘zusatz’); } catch(e) { console.error(‘setLRMode:’, e); }
+try { onHerstellerChange(); } catch(e) { console.error(‘onHerstellerChange:’, e); }
+try { updateNettoInfo(); } catch(e) { console.error(‘updateNettoInfo:’, e); }
+try { updateKmInfo(); } catch(e) { console.error(‘updateKmInfo:’, e); }
+try { updateKistSub(); } catch(e) { console.error(‘updateKistSub:’, e); }
+try { updateHoSub(); } catch(e) { console.error(‘updateHoSub:’, e); }
 </script>
 
 </body>
