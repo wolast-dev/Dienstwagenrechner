@@ -1189,10 +1189,12 @@ if(selSave)renderCompare(selSave);
 }
 
 function sw(k){
+try{
 ak=k;
 var abs=document.querySelectorAll(’.ab’);
 for(var i=0;i<abs.length;i++)abs[i].classList.toggle(‘active’,abs[i].getAttribute(‘data-key’)===k);
 update();
+}catch(e){alert(’sw Fehler: ’+e.message);}
 }
 
 function updateVerhandlung(brutto,ks,lp,r,lr,laufzeit,kmJahr){
@@ -1250,16 +1252,29 @@ el.style.color=lfi.c;
 
 // ===== NAVIGATION =====
 function showPage(n,idx){
-var pages=document.querySelectorAll(’.page’);
-for(var i=0;i<pages.length;i++)pages[i].classList.remove(‘active’);
+try{
+// Direkte style.display Steuerung - funktioniert auf allen Browsern
+var allPages=document.querySelectorAll(’.page’);
+for(var i=0;i<allPages.length;i++){
+allPages[i].style.display=‘none’;
+allPages[i].classList.remove(‘active’);
+}
+var target=document.getElementById(‘page-’+n);
+if(target){
+target.style.display=‘block’;
+target.classList.add(‘active’);
+}
 var nbs=document.querySelectorAll(’.nb’);
-for(var i=0;i<nbs.length;i++)nbs[i].classList.toggle(‘active’,i===idx);
-var pg=document.getElementById(‘page-’+n);
-if(pg)pg.classList.add(‘active’);
-if(n===‘auto’)update();
-if(n===‘saves’)renderSaves();
-if(n===‘stamm’){updateNettoInfo();updateKmInfo();}
+for(var i=0;i<nbs.length;i++){
+nbs[i].classList.toggle(‘active’,i===idx);
+}
+try{ if(n===‘auto’)update(); }catch(e){console.error(‘update:’,e);}
+try{ if(n===‘saves’)renderSaves(); }catch(e){console.error(‘renderSaves:’,e);}
+try{ if(n===‘stamm’){updateNettoInfo();updateKmInfo();} }catch(e){console.error(‘stamm:’,e);}
 window.scrollTo(0,0);
+}catch(e){
+alert(‘Fehler: ‘+e.message+’ (’+e.lineNumber+’)’);
+}
 }
 function toggleTip(c){c.classList.toggle(‘open’);}
 
@@ -1534,12 +1549,29 @@ return false;
 };
 
 // INIT - Script ist am Ende von body, DOM ist bereits bereit
-try { setLRMode(‘zusatz’); } catch(e) { console.error(‘setLRMode:’, e); }
-try { onHerstellerChange(); } catch(e) { console.error(‘onHerstellerChange:’, e); }
-try { updateNettoInfo(); } catch(e) { console.error(‘updateNettoInfo:’, e); }
-try { updateKmInfo(); } catch(e) { console.error(‘updateKmInfo:’, e); }
-try { updateKistSub(); } catch(e) { console.error(‘updateKistSub:’, e); }
-try { updateHoSub(); } catch(e) { console.error(‘updateHoSub:’, e); }
+// Init mit sichtbaren Fehlermeldungen
+var _initErrors = [];
+function _tryInit(name, fn){
+try{ fn(); }catch(e){ _initErrors.push(name+’: ’+e.message); }
+}
+_tryInit(‘setLRMode’, function(){ setLRMode(‘zusatz’); });
+_tryInit(‘herstellerChange’, function(){ onHerstellerChange(); });
+_tryInit(‘nettoInfo’, function(){ updateNettoInfo(); });
+_tryInit(‘kmInfo’, function(){ updateKmInfo(); });
+_tryInit(‘kistSub’, function(){ updateKistSub(); });
+_tryInit(‘hoSub’, function(){ updateHoSub(); });
+// Zeige Init-Fehler als roten Banner
+if(_initErrors.length>0){
+var eb=document.createElement(‘div’);
+eb.style.cssText=‘position:fixed;top:0;left:0;right:0;background:red;color:white;padding:10px;font-size:11px;z-index:9999;word-break:break-all;’;
+eb.textContent=‘INIT-FEHLER: ‘+_initErrors.join(’ | ‘);
+document.body.appendChild(eb);
+}
+// Seiten initial korrekt setzen
+var _allPages=document.querySelectorAll(’.page’);
+for(var _pi=0;_pi<_allPages.length;_pi++){
+_allPages[_pi].style.display=_allPages[_pi].classList.contains(‘active’)?‘block’:‘none’;
+}
 </script>
 
 </body>
