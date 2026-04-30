@@ -3,27 +3,24 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0,viewport-fit=cover"/>
-<meta name="apple-mobile-web-app-capable" content="yes"/>
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-<meta name="apple-mobile-web-app-title" content="Dienstwagenrechner"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#0f0f13"/>
 <title>Dienstwagenrechner</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 :root{--bg:#0f0f13;--sf:#16161e;--sf2:#1a1a24;--sf3:#0e0e16;--br:#252532;--gold:#c9a84c;--gd:#c9a84c33;--tx:#e8e6e0;--mu:#7a7a90;--dm:#4a4a62;--red:#e06060;--grn:#6ec97a;--blu:#6ab0d4;--orng:#d4944a;--purp:#9b82d4;}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html{scroll-behavior:smooth;}
+*{box-sizing:border-box;margin:0;padding:0;}a,button{-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+html{}
 body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;}
-.fhdr{position:fixed;top:0;left:0;right:0;z-index:90;background:rgba(13,13,20,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--br);box-shadow:0 6px 28px rgba(0,0,0,.55);padding-top:calc(10px + env(safe-area-inset-top,0));padding-bottom:10px;}
-.fhdr-in{max-width:640px;margin:0 auto;padding:0 14px;display:flex;align-items:center;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;}
+.fhdr{position:fixed;top:0;left:0;right:0;z-index:90;background:rgba(13,13,20,.97);border-bottom:1px solid var(--br);box-shadow:0 6px 28px rgba(0,0,0,.55);padding-top:calc(10px + env(safe-area-inset-top,0));padding-bottom:10px;}
+.fhdr-in{max-width:640px;margin:0 auto;padding:0 14px;display:flex;align-items:center;overflow-x:auto;scrollbar-width:none;}
 .fhdr-in::-webkit-scrollbar{display:none;}
 .fapp{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold);white-space:nowrap;padding-right:12px;border-right:1px solid var(--br);margin-right:12px;flex-shrink:0;}
 .fl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mu);margin-bottom:3px;}
 .fv{font-size:14px;font-weight:700;color:var(--tx);white-space:nowrap;}.fv.gold{color:var(--gold);}.fv.red{color:var(--red);}
 .fdv{width:1px;height:26px;background:var(--br);margin-right:10px;flex-shrink:0;}
-.nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(13,13,20,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid var(--br);box-shadow:0 -6px 28px rgba(0,0,0,.55);display:flex;padding-bottom:env(safe-area-inset-bottom,0);}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(13,13,20,.97);border-top:1px solid var(--br);box-shadow:0 -6px 28px rgba(0,0,0,.55);display:flex;padding-bottom:env(safe-area-inset-bottom,0);}
 .nb{flex:1;background:none;border:none;color:var(--dm);padding:8px 2px 6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:color .2s;-webkit-user-select:none;user-select:none;}
 .nb .ni{font-size:19px;transition:transform .15s;}.nb.active{color:var(--gold);}.nb.active .ni{transform:scale(1.15);}.nb:active .ni{transform:scale(.88);}
 .page{display:none;max-width:640px;margin:0 auto;padding-top:calc(62px + env(safe-area-inset-top,0));padding-left:14px;padding-right:14px;padding-bottom:calc(78px + env(safe-area-inset-bottom,0));}
@@ -124,7 +121,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
 .adac-b{display:inline-flex;align-items:center;gap:4px;background:#1d1810;border:1px solid #c9a84c44;border-radius:7px;padding:3px 8px;font-size:10px;color:var(--gold);font-weight:600;margin-left:5px;vertical-align:middle;}
 .fazit-box{background:var(--sf2);border-radius:10px;padding:11px 12px;margin-top:10px;font-size:12px;color:var(--mu);line-height:1.65;display:none;}
 .hint{background:var(--sf3);border-radius:8px;padding:9px 11px;font-size:11px;color:var(--dm);line-height:1.6;margin-top:9px;}
-.btn{width:100%;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:7px;}
+.btn{width:100%;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;}
 .btn:active{opacity:.8;}.btn-gold{background:var(--gold);color:#0f0f13;}.btn-out{background:transparent;color:var(--gold);border:1.5px solid var(--gold);}.btn-pp{background:#0070ba;color:#fff;}.btn+.btn{margin-top:8px;}
 .notiz-list{list-style:none;padding:0;margin-top:6px;}
 .notiz-list li{font-size:13px;color:var(--mu);padding:3px 0;display:flex;gap:7px;line-height:1.5;}
@@ -192,28 +189,28 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
   <div class="card">
     <div class="sec">Was ist Ihnen wichtig? (mehrere möglich)</div>
     <div class="pref-grid">
-      <button class="pref-btn" id="p-platz" onclick="togglePref(this)">🏠 Viel Platz</button>
-      <button class="pref-btn" id="p-sport" onclick="togglePref(this)">🏎️ Sportlich</button>
-      <button class="pref-btn" id="p-effizienz" onclick="togglePref(this)">⚡ Effizienz</button>
-      <button class="pref-btn" id="p-kosten" onclick="togglePref(this)">💰 Niedrige Kosten</button>
-      <button class="pref-btn" id="p-image" onclick="togglePref(this)">✨ Prestige</button>
-      <button class="pref-btn" id="p-prakt" onclick="togglePref(this)">🔧 Praktisch</button>
+      <button type="button" class="pref-btn" id="p-platz" onclick="togglePref(this)">🏠 Viel Platz</button>
+      <button type="button" class="pref-btn" id="p-sport" onclick="togglePref(this)">🏎️ Sportlich</button>
+      <button type="button" class="pref-btn" id="p-effizienz" onclick="togglePref(this)">⚡ Effizienz</button>
+      <button type="button" class="pref-btn" id="p-kosten" onclick="togglePref(this)">💰 Niedrige Kosten</button>
+      <button type="button" class="pref-btn" id="p-image" onclick="togglePref(this)">✨ Prestige</button>
+      <button type="button" class="pref-btn" id="p-prakt" onclick="togglePref(this)">🔧 Praktisch</button>
     </div>
     <div class="sec">Antrieb?</div>
     <div class="pref-grid">
-      <button class="pref-btn sel" id="p-bev" onclick="togglePref(this)">⚡ Elektro bevorzugt</button>
-      <button class="pref-btn" id="p-phev" onclick="togglePref(this)">🔋 Hybrid OK</button>
-      <button class="pref-btn" id="p-verb" onclick="togglePref(this)">⛽ Verbrenner OK</button>
-      <button class="pref-btn" id="p-egal" onclick="togglePref(this)">🤷 Egal</button>
+      <button type="button" class="pref-btn sel" id="p-bev" onclick="togglePref(this)">⚡ Elektro bevorzugt</button>
+      <button type="button" class="pref-btn" id="p-phev" onclick="togglePref(this)">🔋 Hybrid OK</button>
+      <button type="button" class="pref-btn" id="p-verb" onclick="togglePref(this)">⛽ Verbrenner OK</button>
+      <button type="button" class="pref-btn" id="p-egal" onclick="togglePref(this)">🤷 Egal</button>
     </div>
     <div class="sec">Budget Listenpreis?</div>
     <div class="pref-grid">
-      <button class="pref-btn" id="p-u30" onclick="togglePref(this)">Unter 30.000 €</button>
-      <button class="pref-btn sel" id="p-3050" onclick="togglePref(this)">30.000–50.000 €</button>
-      <button class="pref-btn" id="p-5080" onclick="togglePref(this)">50.000–80.000 €</button>
-      <button class="pref-btn" id="p-o80" onclick="togglePref(this)">Über 80.000 €</button>
+      <button type="button" class="pref-btn" id="p-u30" onclick="togglePref(this)">Unter 30.000 €</button>
+      <button type="button" class="pref-btn sel" id="p-3050" onclick="togglePref(this)">30.000–50.000 €</button>
+      <button type="button" class="pref-btn" id="p-5080" onclick="togglePref(this)">50.000–80.000 €</button>
+      <button type="button" class="pref-btn" id="p-o80" onclick="togglePref(this)">Über 80.000 €</button>
     </div>
-    <button class="btn btn-gold" style="margin-top:6px;" onclick="berechneEmpfehlungen()">🔍 Passende Fahrzeuge anzeigen</button>
+    <button type="button" class="btn btn-gold" style="margin-top:6px;" onclick="berechneEmpfehlungen()">🔍 Passende Fahrzeuge anzeigen</button>
   </div>
   <div id="emp-wrap" style="display:none;">
     <div class="sec" style="margin-bottom:6px;">Empfehlungen für Sie</div>
@@ -249,15 +246,15 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
     <div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">🔑 Pflichtangabe — beeinflusst Ihr Ergebnis</div>
     <div style="font-size:13px;color:var(--tx);font-weight:600;margin-bottom:10px;">Wie übernimmt Ihr Arbeitgeber die Leasingrate?</div>
     <div style="display:flex;gap:3px;background:var(--sf3);border-radius:10px;padding:3px;">
-      <button id="lr-mode-zusatz" onclick="setLRMode('zusatz')"
+      <button type="button" id="lr-mode-zusatz" onclick="setLRMode('zusatz')"
         style="flex:1;border:none;border-radius:8px;padding:11px 6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;line-height:1.4;background:var(--gold);color:#0f0f13;">
         ✅ Zusätzlich zum Gehalt<br><span style="font-size:10px;font-weight:400;">wie Gehaltserhöhung</span>
       </button>
-      <button id="lr-mode-umwandlung" onclick="setLRMode('umwandlung')"
+      <button type="button" id="lr-mode-umwandlung" onclick="setLRMode('umwandlung')"
         style="flex:1;border:none;border-radius:8px;padding:11px 6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;line-height:1.4;background:none;color:var(--mu);">
         🔄 Gehaltsumwandlung<br><span style="font-size:10px;font-weight:400;">vom Brutto abgezogen</span>
       </button>
-      <button id="lr-mode-abzug" onclick="setLRMode('abzug')"
+      <button type="button" id="lr-mode-abzug" onclick="setLRMode('abzug')"
         style="flex:1;border:none;border-radius:8px;padding:11px 6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;line-height:1.4;background:none;color:var(--mu);">
         ⚠️ Vom Netto abgezogen<br><span style="font-size:10px;font-weight:400;">echter Geldabfluss</span>
       </button>
@@ -298,9 +295,9 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
   <div class="card accent">
     <div class="sec">② Antrieb wählen <span style="color:var(--mu);font-size:10px;font-weight:400;">→ bestimmt den GVV-Satz</span></div>
     <div class="ag">
-      <button class="ab active" data-key="elektro" onclick="sw('elektro')"><span class="ae">⚡</span><span class="an">Elektro</span><span class="as">0,25 % — günstigst</span></button>
-      <button class="ab" data-key="hybrid" onclick="sw('hybrid')"><span class="ae">🔋</span><span class="an">Hybrid</span><span class="as">0,50 %</span></button>
-      <button class="ab" data-key="verbrenner" onclick="sw('verbrenner')"><span class="ae">⛽</span><span class="an">Verbrenner</span><span class="as">1,00 % — teuerst</span></button>
+      <button type="button" class="ab active" data-key="elektro" onclick="sw('elektro')"><span class="ae">⚡</span><span class="an">Elektro</span><span class="as">0,25 % — günstigst</span></button>
+      <button type="button" class="ab" data-key="hybrid" onclick="sw('hybrid')"><span class="ae">🔋</span><span class="an">Hybrid</span><span class="as">0,50 %</span></button>
+      <button type="button" class="ab" data-key="verbrenner" onclick="sw('verbrenner')"><span class="ae">⛽</span><span class="an">Verbrenner</span><span class="as">1,00 % — teuerst</span></button>
     </div>
     <div class="triplet">
       <div class="tri sel" id="tri-e" onclick="sw('elektro')"><span class="tri-em">⚡</span><span class="tri-nm">Elektro</span><span class="tri-k" id="tk-e">—</span><span class="tri-n" id="tn-e">—</span></div>
@@ -340,7 +337,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
   <!-- WEITERE DETAILS — ausklappbar -->
 
   <div style="margin-bottom:11px;">
-    <button onclick="toggleDetails()" id="details-toggle-btn"
+    <button type="button" onclick="toggleDetails()" id="details-toggle-btn"
       style="width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:12px;padding:12px 14px;color:var(--mu);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
       <span>🔧 Weitere Details — Leasingrate, Rabatte, Förderung, Notizen</span>
       <span id="details-arrow" style="font-size:16px;transition:transform .3s;">›</span>
@@ -384,7 +381,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
       </div>
     </div>
     <div id="detail-extra-toggle" style="margin-top:8px;">
-      <button onclick="toggleDetailExtra()" style="background:none;border:none;color:var(--dm);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Flottenabzug & Eigenzuzahlung anzeigen</button>
+      <button type="button" onclick="toggleDetailExtra()" style="background:none;border:none;color:var(--dm);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Flottenabzug & Eigenzuzahlung anzeigen</button>
     </div>
   </div>
 
@@ -461,8 +458,8 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
 
   <div class="card">
     <div style="font-size:11px;color:var(--mu);margin-bottom:7px;">Speichern als: <strong id="save-preview" style="color:var(--tx);">—</strong></div>
-    <button class="btn btn-gold" onclick="saveResult()">💾 Berechnung speichern</button>
-    <button class="btn btn-out" onclick="exportPDF()">📄 Als PDF (DIN A4)</button>
+    <button type="button" class="btn btn-gold" onclick="saveResult()">💾 Berechnung speichern</button>
+    <button type="button" class="btn btn-out" onclick="exportPDF()">📄 Als PDF (DIN A4)</button>
   </div>
   <div class="hint">ℹ️ Leasingrate zahlt der AG. AG trägt zudem Sprit/Strom, Versicherung + Wartung (~200–360 €/Mo.).</div>
 </div>
@@ -642,7 +639,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
       <div class="ac-box"><div class="ac-nm" id="ac-nr">Gespeichert</div><div class="ac-lbl">Mehrsteuer/Mo.</div><div class="ac-val" id="ac-vr">—</div></div>
     </div>
     <div class="win-box" id="vc-winner"></div>
-    <button class="btn btn-out" style="margin-top:10px;" onclick="exportVergleichPDF()">📄 Vergleich als PDF (DIN A4 quer)</button>
+    <button type="button" class="btn btn-out" style="margin-top:10px;" onclick="exportVergleichPDF()">📄 Vergleich als PDF (DIN A4 quer)</button>
   </div>
 </div>
 
@@ -696,14 +693,14 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
 <!-- FLOATING NAV -->
 
 <nav class="nav">
-  <button class="nb" onclick="showPage('suche',0)"><span class="ni">🔎</span>Suchen</button>
-  <button class="nb active" onclick="showPage('auto',1)"><span class="ni">🚗</span>Rechner</button>
-  <button class="nb" onclick="showPage('stamm',2)"><span class="ni">👤</span>Stammdaten</button>
-  <button class="nb" onclick="showPage('haendler',3)"><span class="ni">🤝</span>Händler</button>
-  <button class="nb" onclick="showPage('saves',4)"><span class="ni">📂</span>Vergleich</button>
-  <button class="nb" onclick="showPage('tipps',5)"><span class="ni">💡</span>Tipps</button>
+  <button type="button" class="nb" onclick="showPage('suche',0)"><span class="ni">🔎</span>Suchen</button>
+  <button type="button" class="nb active" onclick="showPage('auto',1)"><span class="ni">🚗</span>Rechner</button>
+  <button type="button" class="nb" onclick="showPage('stamm',2)"><span class="ni">👤</span>Stammdaten</button>
+  <button type="button" class="nb" onclick="showPage('haendler',3)"><span class="ni">🤝</span>Händler</button>
+  <button type="button" class="nb" onclick="showPage('saves',4)"><span class="ni">📂</span>Vergleich</button>
+  <button type="button" class="nb" onclick="showPage('tipps',5)"><span class="ni">💡</span>Tipps</button>
 </nav>
-<div id="ib"><span><strong>🚗 App installieren</strong>Zum Homescreen</span><button id="ibb" onclick="installApp()">Installieren</button><button id="icb" onclick="closeBanner()">✕</button></div>
+<div id="ib"><span><strong>🚗 App installieren</strong>Zum Homescreen</span><button type="button" id="ibb" onclick="installApp()">Installieren</button><button type="button" id="icb" onclick="closeBanner()">✕</button></div>
 <script>
 // ===== STEUERBERECHNUNG =====
 function lstF(z){
@@ -848,7 +845,7 @@ html+=’</div><div class="emp-badge">~’+fmt(f.lp)+’</div></div>’;
 html+=’<div class="emp-desc">Vorteil: ‘+f.pro+’<br>Nachteil: ‘+f.contra+’</div>’;
 html+=’<div class="emp-row"><span class="emp-l">Mehrsteuer/Mo.</span><span class="emp-v" style="color:var(--red);">-’+fmt(r.gk)+’</span></div>’;
 html+=’<div class="emp-row"><span class="emp-l">Netto mit DW</span><span class="emp-v" style="color:var(--gold);">’+fmt(r.nettoMit)+’</span></div>’;
-html+=’<button class="use-btn" onclick="uebernehmeFahrzeug('+si+')">Uebernehmen in Rechner</button>’;
+html+=’<button type="button" class="use-btn" onclick="uebernehmeFahrzeug('+si+')">Uebernehmen in Rechner</button>’;
 html+=’</div>’;
 }
 list.innerHTML=html;
@@ -1309,7 +1306,7 @@ var detEl=document.getElementById(‘ah-detail’);
 if(detEl)detEl.innerHTML=’<div class="ah-name">’+data.name+’</div>’
 +’<div class="ah-info">’+data.addr+’<br>’
 +’<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(data.name+' '+data.addr)+'" target="_blank" style="color:var(--blu);">Google Maps</a></div>’
-+’<button onclick="clearAutohaus()" style="background:none;border:none;color:var(--dm);font-size:11px;cursor:pointer;margin-top:5px;">Entfernen</button>’;
++’<button type="button" onclick="clearAutohaus()" style="background:none;border:none;color:var(--dm);font-size:11px;cursor:pointer;margin-top:5px;">Entfernen</button>’;
 }
 function clearAutohaus(){
 ahSelected=null;
@@ -1415,7 +1412,7 @@ var isSel=selSave&&selSave.id===s.id;
 html+=’<div class="save-item'+(isSel?' sel':'')+'" data-id="'+s.id+'" onclick="selectSave('+s.id+')">’
 +’<span class="si-i">Auto</span>’
 +’<div class="si-n"><div class="si-name">’+s.name+’</div><div class="si-meta">Steuer: -’+fmt(s.result.gk)+’/Mo.’+lfi+’</div></div>’
-+’<button class="si-del" onclick="deleteSave('+s.id+',event)">X</button>’
++’<button type="button" class="si-del" onclick="deleteSave('+s.id+',event)">X</button>’
 +’</div>’;
 }
 c.innerHTML=html;
