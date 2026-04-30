@@ -2,710 +2,271 @@
 
 <html lang="de">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="theme-color" content="#0f0f13"/>
-<title>Dienstwagenrechner 1.10</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Dienstwagenrechner 1.11</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
-:root{--bg:#0f0f13;--sf:#16161e;--sf2:#1a1a24;--sf3:#0e0e16;--br:#252532;--gold:#c9a84c;--gd:#c9a84c33;--tx:#e8e6e0;--mu:#7a7a90;--dm:#4a4a62;--red:#e06060;--grn:#6ec97a;--blu:#6ab0d4;--orng:#d4944a;--purp:#9b82d4;}
-*{box-sizing:border-box;margin:0;padding:0;}a,button,input,select,textarea,[onclick]{-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;cursor:pointer;}.tri,.ab,.tc,.th,.emp-card,.save-item,.search-item,.checklist li,.pref-btn,.tgl,.tgls{cursor:pointer;touch-action:manipulation;}html,body{height:100%;-webkit-text-size-adjust:100%;}
-html{}
-body{background:var(--bg);color:var(--tx);font-family:'DM Sans',sans-serif;min-height:100vh;}
-.fhdr{position:fixed;top:0;left:0;right:0;z-index:90;background:rgba(13,13,20,.97);border-bottom:1px solid var(--br);box-shadow:0 6px 28px rgba(0,0,0,.55);padding-top:calc(10px + env(safe-area-inset-top,0));padding-bottom:10px;}
-.fhdr-in{max-width:640px;margin:0 auto;padding:0 14px;display:flex;align-items:center;overflow-x:auto;scrollbar-width:none;}
-.fhdr-in::-webkit-scrollbar{display:none;}
-.fapp{font-family:'Playfair Display',serif;font-size:13px;color:var(--gold);white-space:nowrap;padding-right:12px;border-right:1px solid var(--br);margin-right:12px;flex-shrink:0;}
-.fl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--mu);margin-bottom:3px;}
-.fv{font-size:14px;font-weight:700;color:var(--tx);white-space:nowrap;}.fv.gold{color:var(--gold);}.fv.red{color:var(--red);}
-.fdv{width:1px;height:26px;background:var(--br);margin-right:10px;flex-shrink:0;}
-.nav{position:fixed;bottom:0;left:0;right:0;z-index:100;background:rgba(13,13,20,.97);border-top:1px solid var(--br);box-shadow:0 -6px 28px rgba(0,0,0,.55);display:flex;padding-bottom:env(safe-area-inset-bottom,0);}
-.nb{flex:1;background:none;border:none;color:var(--dm);padding:8px 2px 6px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:9px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;transition:color .2s;-webkit-user-select:none;user-select:none;}
-.nb .ni{font-size:19px;transition:transform .15s;}.nb.active{color:var(--gold);}.nb.active .ni{transform:scale(1.15);}.nb:active .ni{transform:scale(.88);}
-.page{display:none;max-width:640px;margin:0 auto;padding-top:calc(62px + env(safe-area-inset-top,0));padding-left:14px;padding-right:14px;padding-bottom:calc(78px + env(safe-area-inset-bottom,0));}
-.page.active{display:block;}.ph{padding:16px 0 12px;}
-.ey{font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase;margin-bottom:5px;}
-h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-height:1.1;}h1 em{color:var(--gold);font-style:normal;}
-.sub{color:var(--mu);font-size:13px;margin-top:5px;line-height:1.5;}
-.sec{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dm);margin-bottom:9px;}
-.card{background:var(--sf);border:1px solid var(--br);border-radius:16px;padding:15px 13px;margin-bottom:11px;}
-.card.accent{border-color:var(--gd);}.card.priv{border-color:#d4944a44;}.card.blu{border-color:#6ab0d422;}.card.green{border-color:#6ec97a33;}
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}.full{grid-column:1/-1;}
-.field label{display:block;font-size:11px;color:var(--mu);margin-bottom:4px;line-height:1.3;}
-.field input,.field select,.field textarea{width:100%;background:var(--sf2);border:1px solid var(--br);color:var(--tx);border-radius:9px;padding:10px 11px;font-size:15px;font-family:'DM Sans',sans-serif;-webkit-appearance:none;outline:none;transition:border .2s;resize:none;}
-.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);}
-.field.hero input{font-size:22px;font-weight:700;color:var(--gold);padding:13px;}
-.field textarea{font-size:13px;line-height:1.6;min-height:72px;}
-.mode-wrap{display:flex;background:var(--sf2);border-radius:10px;padding:3px;margin-bottom:12px;gap:3px;}
-.mode-btn{flex:1;background:none;border:none;color:var(--mu);padding:8px 4px;border-radius:7px;cursor:pointer;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;transition:all .2s;}
-.mode-btn.active{background:var(--gold);color:#0f0f13;font-weight:700;}
-.trow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 0;}
-.tinfo{flex:1;}.tlbl{font-size:13px;color:var(--tx);}.tsub{font-size:11px;color:var(--mu);margin-top:1px;}
-.tgl{position:relative;width:44px;height:24px;flex-shrink:0;}
+:root{--bg:#0f0f13;--sf:#16161e;--sf2:#1a1a24;--br:#252532;--gold:#c9a84c;--tx:#e8e6e0;--mu:#7a7a90;--dm:#4a4a62;--red:#e06060;--grn:#6ec97a;--blu:#6ab0d4;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--tx);font-family:sans-serif;min-height:100vh;}
+.hdr{position:fixed;top:0;left:0;right:0;background:#0d0d14;border-bottom:1px solid var(--br);padding:10px 14px;z-index:50;display:flex;align-items:center;gap:10px;}
+.hdr-brand{color:var(--gold);font-size:14px;font-weight:700;}
+.hdr-ver{color:var(--dm);font-size:10px;}
+.hdr-info{margin-left:auto;display:flex;gap:12px;}
+.hdr-item{text-align:right;}
+.hdr-label{font-size:9px;color:var(--dm);}
+.hdr-val{font-size:13px;font-weight:700;color:var(--tx);}
+.hdr-val.gold{color:var(--gold);}
+.hdr-val.red{color:var(--red);}
+.nav{position:fixed;bottom:0;left:0;right:0;background:#0d0d14;border-top:1px solid var(--br);display:flex;z-index:50;}
+.nb{flex:1;background:none;border:none;color:var(--dm);padding:10px 4px 8px;cursor:pointer;font-family:sans-serif;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:3px;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+.nb.active{color:var(--gold);}
+.nb-icon{font-size:20px;}
+.page{display:none;max-width:640px;margin:0 auto;padding:70px 14px 80px;}
+.page.active{display:block;}
+.card{background:var(--sf);border:1px solid var(--br);border-radius:14px;padding:16px;margin-bottom:12px;}
+.label{font-size:11px;color:var(--mu);margin-bottom:4px;display:block;}
+input,select{width:100%;background:var(--sf2);border:1px solid var(--br);color:var(--tx);border-radius:9px;padding:11px;font-size:16px;font-family:sans-serif;-webkit-appearance:none;outline:none;}
+input:focus,select:focus{border-color:var(--gold);}
+.hero-input{font-size:24px;font-weight:700;color:var(--gold);}
+.antrieb-wrap{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:12px;}
+.ant-btn{background:var(--sf2);border:2px solid var(--br);color:var(--mu);border-radius:10px;padding:12px 4px;cursor:pointer;text-align:center;font-family:sans-serif;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+.ant-btn.active{border-color:var(--gold);background:#1d1a0e;color:var(--gold);}
+.ant-icon{font-size:22px;display:block;margin-bottom:4px;}
+.ant-name{font-size:12px;font-weight:700;display:block;}
+.ant-pct{font-size:10px;color:var(--dm);display:block;margin-top:2px;}
+.ant-btn.active .ant-pct{color:#c9a84c66;}
+.result-box{background:#1e1b0e;border:2px solid var(--gold);border-radius:12px;padding:16px;margin-top:8px;}
+.result-main{display:flex;justify-content:space-between;align-items:center;}
+.result-label{font-size:13px;color:var(--mu);}
+.result-sub{font-size:10px;color:var(--dm);margin-top:2px;}
+.result-val{font-size:30px;font-weight:700;color:var(--gold);font-family:Georgia,serif;}
+.result-rows{margin-top:10px;border-top:1px solid #2a2510;}
+.result-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #2a2510;font-size:13px;}
+.result-row:last-child{border-bottom:none;}
+.result-row-l{color:var(--mu);}
+.result-row-v{font-weight:700;}
+.result-row-v.neg{color:var(--red);}
+.result-row-v.pos{color:var(--grn);}
+.result-row-v.gold{color:var(--gold);}
+.section-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--dm);margin-bottom:10px;}
+.hint-box{background:var(--sf2);border-left:3px solid var(--blu);border-radius:0 8px 8px 0;padding:10px 12px;font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:12px;}
+.saves-empty{text-align:center;padding:40px;color:var(--dm);font-size:13px;}
+.save-item{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:12px;margin-bottom:8px;cursor:pointer;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+.save-item.sel{border-color:var(--gold);background:#1d1a0e;}
+.save-name{font-size:13px;font-weight:700;}
+.save-meta{font-size:11px;color:var(--mu);margin-top:3px;}
+.btn{width:100%;border:none;border-radius:10px;padding:14px;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px;font-family:sans-serif;-webkit-tap-highlight-color:rgba(0,0,0,0);touch-action:manipulation;}
+.btn-gold{background:var(--gold);color:#0f0f13;}
+.btn-out{background:none;color:var(--gold);border:2px solid var(--gold);}
+.footer{text-align:center;font-size:11px;color:var(--dm);margin-top:20px;padding-top:16px;border-top:1px solid var(--br);line-height:1.8;}
+.netto-prev{background:var(--sf2);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--mu);margin-top:8px;}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.field{margin-bottom:10px;}
+.tgl-wrap{background:var(--sf2);border-radius:10px;padding:12px;display:flex;align-items:center;justify-content:space-between;margin-top:8px;}
+.tgl-label{font-size:13px;}
+.tgl{position:relative;width:44px;height:24px;}
 .tgl input{opacity:0;width:0;height:0;}
 .tgls{position:absolute;inset:0;background:var(--br);border-radius:24px;cursor:pointer;transition:.3s;}
 .tgls:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:var(--mu);border-radius:50%;transition:.3s;}
-.tgl input:checked+.tgls{background:var(--gold);}.tgl input:checked+.tgls:before{transform:translateX(20px);background:#0f0f13;}
-.ag{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;}
-.ab{background:var(--sf2);border:1.5px solid var(--br);color:var(--mu);border-radius:10px;padding:10px 4px;cursor:pointer;text-align:center;transition:all .2s;font-family:'DM Sans',sans-serif;}
-.ab:active{transform:scale(.96);}.ab.active{border-color:var(--gold);background:#1d1a0e;color:var(--gold);}
-.ab span{display:block;}.ab .ae{font-size:18px;margin-bottom:2px;}.ab .an{font-size:11px;font-weight:600;}.ab .as{font-size:10px;color:var(--dm);margin-top:1px;}.ab.active .as{color:#c9a84c66;}
-.triplet{display:grid;grid-template-columns:repeat(3,1fr);gap:7px;margin-top:10px;}
-.tri{border-radius:11px;padding:11px 5px;text-align:center;border:1.5px solid var(--br);background:var(--sf3);cursor:pointer;transition:all .2s;}
-.tri.sel{border-color:var(--gold);background:#1d1a0e;}.tri:active{transform:scale(.96);}
-.tri span{display:block;}.tri-em{font-size:18px;margin-bottom:2px;}.tri-nm{font-size:10px;color:var(--dm);margin-bottom:5px;}
-.tri-k{font-size:11px;font-weight:600;color:var(--red);margin-bottom:4px;}.tri-n{font-size:13px;font-weight:700;}
-.tri-n.best{color:var(--grn);}.tri-n.mid{color:var(--gold);}.tri-n.low{color:var(--mu);}
-.kblock{background:var(--sf3);border-radius:13px;padding:13px;margin-top:10px;}
-.kr{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #1e1e2c;font-size:13px;}
-.kr:last-child{border-bottom:none;}.kl{color:var(--mu);}.kv{font-weight:600;}
-.kv.neg{color:var(--red);}.kv.pos{color:var(--grn);}.kv.gold{color:var(--gold);}
-.dvd{height:1px;background:linear-gradient(90deg,transparent,#2e2e3e,transparent);margin:8px 0;}
-.aw-box{margin-top:10px;background:#1e1b0e;border:1.5px solid var(--gold);border-radius:12px;padding:13px;}
-.aw-row{display:flex;justify-content:space-between;align-items:center;}
-.aw-lbl{font-size:13px;color:var(--mu);line-height:1.4;}.aw-lbl small{display:block;font-size:10px;color:var(--dm);margin-top:2px;}
-.aw-val{font-size:26px;font-weight:700;color:var(--gold);font-family:'Playfair Display',serif;}
-.foerd-badge{background:#0a1e12;border:1.5px solid var(--grn);border-radius:12px;padding:13px;margin-top:10px;}
-.foerd-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #142014;font-size:13px;}
-.foerd-row:last-child{border-bottom:none;}
-.foerd-total{background:#0e2410;border-radius:8px;padding:10px;margin-top:9px;display:flex;justify-content:space-between;align-items:center;}
-.vhcard{background:#0e1610;border:1.5px solid #6ec97a55;border-radius:14px;padding:13px;margin-top:10px;}
-.vh-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grn);margin-bottom:11px;}
-.vh-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid #162014;font-size:13px;}
-.vh-row:last-child{border-bottom:none;}.vh-l{color:var(--mu);flex:1;padding-right:8px;}
-.vh-v{font-weight:700;flex-shrink:0;text-align:right;}.vh-v.good{color:var(--grn);}.vh-v.bad{color:var(--red);}.vh-v.ok{color:var(--gold);}.vh-v.neu{color:var(--mu);}
-.fakt-bar{height:8px;border-radius:4px;margin-top:5px;overflow:hidden;background:#1a2018;}
-.fakt-fill{height:100%;border-radius:4px;transition:width .4s;}
-.taktik-box{background:#111a12;border-radius:10px;padding:12px;margin-top:10px;font-size:12px;color:var(--mu);line-height:1.7;}
-.taktik-row{display:flex;gap:8px;margin-bottom:6px;font-size:12px;color:var(--mu);line-height:1.5;}.taktik-row:last-child{margin-bottom:0;}
-.priv-res{background:#1a120e;border:1.5px solid var(--orng);border-radius:12px;padding:13px;margin-top:10px;display:none;}
-.priv-title{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--orng);margin-bottom:9px;}
-.priv-row{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #2a1e16;font-size:13px;}
-.priv-row:last-child{border-bottom:none;}
-.priv-verd{background:#221810;border-radius:8px;padding:10px;margin-top:9px;font-size:12px;color:var(--mu);line-height:1.6;}
-.pref-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:12px;}
-.pref-btn{background:var(--sf2);border:1.5px solid var(--br);border-radius:10px;padding:10px 13px;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--mu);transition:all .2s;width:100%;}
-.pref-btn.sel{border-color:var(--gold);background:#1d1a0e;color:var(--gold);}
-.emp-card{background:var(--sf);border:1px solid var(--br);border-radius:14px;padding:14px 13px;margin-bottom:10px;}
-.emp-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;}
-.emp-name{font-size:15px;font-weight:700;color:var(--tx);}
-.emp-badge{font-size:10px;background:var(--gd);color:var(--gold);border-radius:6px;padding:2px 8px;font-weight:600;}
-.emp-row{display:flex;justify-content:space-between;font-size:12px;padding:3px 0;border-bottom:1px solid #1e1e28;}
-.emp-row:last-child{border-bottom:none;}.emp-l{color:var(--dm);}.emp-v{font-weight:600;color:var(--tx);}
-.emp-desc{font-size:12px;color:var(--mu);line-height:1.5;margin-bottom:8px;}
-.use-btn{background:var(--gold);color:#0f0f13;border:none;border-radius:8px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;width:100%;margin-top:8px;}
-.haendler-step{background:var(--sf2);border-radius:10px;padding:12px 13px;margin-bottom:9px;}
-.hs-num{display:inline-flex;width:22px;height:22px;border-radius:50%;background:var(--gold);color:#0f0f13;font-weight:700;font-size:11px;align-items:center;justify-content:center;margin-right:8px;flex-shrink:0;}
-.hs-title{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:5px;display:flex;align-items:center;}
-.hs-text{font-size:12px;color:var(--mu);line-height:1.6;margin-top:4px;}
-.checklist{list-style:none;padding:0;margin-top:8px;}
-.checklist li{display:flex;align-items:flex-start;gap:8px;font-size:12px;color:var(--mu);padding:5px 0;border-bottom:1px solid #1e1e28;line-height:1.5;cursor:pointer;}
-.checklist li:last-child{border-bottom:none;}
-.checklist li::before{content:"☐";color:var(--gold);flex-shrink:0;font-size:14px;}
-.checklist li.done{color:var(--grn);}.checklist li.done::before{content:"☑";color:var(--grn);}
-.search-wrap{position:relative;}
-.search-input{padding-left:36px!important;}
-.search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;}
-.search-results{background:var(--sf2);border:1px solid var(--br);border-radius:10px;margin-top:6px;overflow:hidden;display:none;max-height:220px;overflow-y:auto;}
-.search-item{padding:10px 13px;border-bottom:1px solid var(--br);cursor:pointer;transition:background .2s;}
-.search-item:last-child{border-bottom:none;}.search-item:active{background:var(--sf);}
-.si-name-r{font-size:13px;font-weight:600;color:var(--tx);margin-bottom:2px;}
-.si-addr{font-size:11px;color:var(--mu);}
-.autohaus-detail{background:var(--sf2);border-radius:10px;padding:12px 13px;margin-top:8px;display:none;}
-.ah-name{font-size:14px;font-weight:700;color:var(--tx);margin-bottom:5px;}
-.ah-info{font-size:11px;color:var(--mu);line-height:1.8;}.ah-info a{color:var(--blu);text-decoration:none;}
-.ibox{background:var(--sf2);border-left:3px solid var(--blu);border-radius:0 9px 9px 0;padding:10px 12px;font-size:12px;color:var(--mu);line-height:1.6;margin-bottom:11px;}
-.ibox strong{color:var(--tx);}
-.mhint{background:var(--sf2);border-left:3px solid var(--gold);border-radius:0 9px 9px 0;padding:9px 11px;font-size:12px;color:var(--tx);line-height:1.6;margin-top:10px;display:none;}
-.adac-b{display:inline-flex;align-items:center;gap:4px;background:#1d1810;border:1px solid #c9a84c44;border-radius:7px;padding:3px 8px;font-size:10px;color:var(--gold);font-weight:600;margin-left:5px;vertical-align:middle;}
-.fazit-box{background:var(--sf2);border-radius:10px;padding:11px 12px;margin-top:10px;font-size:12px;color:var(--mu);line-height:1.65;display:none;}
-.hint{background:var(--sf3);border-radius:8px;padding:9px 11px;font-size:11px;color:var(--dm);line-height:1.6;margin-top:9px;}
-.btn{width:100%;border:none;border-radius:10px;padding:13px;font-size:14px;font-weight:700;font-family:'DM Sans',sans-serif;cursor:pointer;transition:opacity .2s;display:flex;align-items:center;justify-content:center;gap:7px;touch-action:manipulation;}
-.btn:active{opacity:.8;}.btn-gold{background:var(--gold);color:#0f0f13;}.btn-out{background:transparent;color:var(--gold);border:1.5px solid var(--gold);}.btn-pp{background:#0070ba;color:#fff;}.btn+.btn{margin-top:8px;}
-.notiz-list{list-style:none;padding:0;margin-top:6px;}
-.notiz-list li{font-size:13px;color:var(--mu);padding:3px 0;display:flex;gap:7px;line-height:1.5;}
-.notiz-list li::before{content:"•";color:var(--gold);flex-shrink:0;}
-.save-item{background:var(--sf2);border:1px solid var(--br);border-radius:10px;padding:10px 12px;display:flex;align-items:center;gap:9px;margin-bottom:7px;cursor:pointer;transition:border-color .2s;}
-.save-item.sel,.save-item:active{border-color:var(--gold);background:#1d1a0e;}
-.si-i{font-size:20px;flex-shrink:0;}.si-n{flex:1;min-width:0;}
-.si-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.si-meta{font-size:11px;color:var(--mu);margin-top:1px;}
-.si-del{background:none;border:none;color:var(--dm);font-size:16px;cursor:pointer;padding:3px;}.si-del:active{color:var(--red);}
-.empty{text-align:center;padding:40px 16px;color:var(--dm);font-size:13px;line-height:1.7;}
-.empty span{font-size:36px;display:block;margin-bottom:10px;}
-.vcols{display:flex;gap:8px;}
-.vcol{background:var(--sf);border:1px solid var(--br);border-radius:12px;padding:12px 10px;flex:1;min-width:0;}
-.vcol.vl{border-color:var(--gd);}.vcol.vr{border-color:#6ab0d422;}
-.vctit{font-size:10px;font-weight:700;color:var(--mu);margin-bottom:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.vrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #1a1a28;font-size:11px;}
-.vrow:last-child{border-bottom:none;}.vvl{color:var(--dm);}.vvv{font-weight:600;}
-.vvv.g{color:var(--gold);}.vvv.r{color:var(--red);}.vvv.gr{color:var(--grn);}
-.ac-wrap{display:flex;gap:8px;margin-top:9px;}
-.ac-box{flex:1;background:#1e1b0e;border:1.5px solid var(--gold);border-radius:10px;padding:11px 10px;text-align:center;}
-.ac-lbl{font-size:10px;color:var(--mu);margin-bottom:3px;}
-.ac-nm{font-size:10px;color:var(--dm);margin-bottom:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.ac-val{font-size:20px;font-weight:700;color:var(--red);font-family:'Playfair Display',serif;}
-.win-box{margin-top:9px;background:#1a1a0e;border:1px solid var(--gd);border-radius:10px;padding:12px;text-align:center;font-size:13px;}
-.tc{background:var(--sf);border:1px solid var(--br);border-radius:13px;overflow:hidden;margin-bottom:9px;}.th{cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0);}
-.th{display:flex;align-items:center;gap:9px;padding:13px;cursor:pointer;}.th:active{background:var(--sf2);}
-.tif{flex:1;}.tt{font-size:13px;font-weight:600;margin-bottom:1px;}.tsr{font-size:11px;color:var(--mu);}
-.tch{color:var(--dm);font-size:15px;transition:transform .3s;}.tc.open .tch{transform:rotate(90deg);}
-.tb{display:none;padding:0 13px 13px;}.tc.open .tb{display:block;}
-.tb p{font-size:13px;color:var(--mu);line-height:1.65;margin-bottom:8px;}.tb strong{color:var(--tx);}
-.exb{background:var(--sf2);border-left:3px solid var(--gold);border-radius:0 7px 7px 0;padding:9px 11px;margin:8px 0;font-size:12px;color:var(--tx);line-height:1.6;}
-.tls{display:flex;flex-direction:column;gap:5px;margin-top:8px;}
-.tl{display:flex;align-items:center;gap:7px;background:var(--sf2);border-radius:7px;padding:8px 10px;text-decoration:none;color:var(--tx);font-size:12px;}
-.tln{font-weight:600;display:block;}.tld{color:var(--mu);font-size:11px;display:block;}
-.beg{background:var(--sf2);border-radius:10px;padding:12px 13px;margin-bottom:8px;}
-.b-term{font-size:13px;font-weight:700;color:var(--gold);margin-bottom:5px;}
-.b-def{font-size:12px;color:var(--mu);line-height:1.6;}.b-def strong{color:var(--tx);}
-.b-tag{display:inline-block;background:#1a1a10;border:1px solid var(--gd);color:var(--gold);font-size:10px;border-radius:5px;padding:2px 7px;margin:4px 3px 0 0;}
-.b-tag.r{background:#1a1010;border-color:#e0606033;color:var(--red);}.b-tag.g{background:#101a12;border-color:#6ec97a33;color:var(--grn);}
-.footer{text-align:center;padding:18px 0 4px;font-size:11px;color:var(--dm);line-height:1.8;border-top:1px solid var(--br);margin-top:6px;}
-#ib{display:none;position:fixed;bottom:calc(64px + env(safe-area-inset-bottom,0));left:12px;right:12px;background:#1d1b0e;border:1px solid var(--gold);border-radius:12px;padding:11px 13px;z-index:200;box-shadow:0 8px 40px #00000099;align-items:center;gap:8px;}
-#ib span{flex:1;font-size:12px;}#ib span strong{color:var(--gold);display:block;}
-#ibb{background:var(--gold);color:#0f0f13;border:none;border-radius:8px;padding:8px 12px;font-weight:700;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;}
-#icb{background:none;border:none;color:var(--dm);font-size:16px;cursor:pointer;}
-@media(min-width:640px){.page{padding-left:20px;padding-right:20px;}}
-@media print{.nav,.fhdr,#ib{display:none!important;}}
+.tgl input:checked+.tgls{background:var(--gold);}
+.tgl input:checked+.tgls:before{transform:translateX(20px);background:#0f0f13;}
 </style>
 </head>
 <body>
-<!-- FLOATING HEADER -->
-<div class="fhdr"><div class="fhdr-in">
-  <div class="fapp">DW-Rechner <span style="font-size:9px;opacity:0.5;font-family:DM Sans,sans-serif;font-weight:400;">1.10</span></div>
-  <div class="ff"><div class="fl">Marke</div><div class="fv" id="fh-m">Opel</div></div><div class="fdv"></div>
-  <div class="ff"><div class="fl">Typ</div><div class="fv" id="fh-t">Grandland Electric</div></div><div class="fdv"></div>
-  <div class="ff"><div class="fl">Listenpreis</div><div class="fv gold" id="fh-lp">40.000 €</div></div><div class="fdv"></div>
-  <div class="ff"><div class="fl">Mehrsteuer</div><div class="fv red" id="fh-st">—</div></div><div class="fdv"></div>
-  <div class="ff"><div class="fl">Rate AG</div><div class="fv" id="fh-lr">—</div></div>
-</div></div>
 
-<!-- PAGE: FAHRZEUGSUCHE -->
-
-<div class="page" id="page-suche">
-  <div class="ph"><div class="ey">Schritt 1</div><h1>Fahrzeug <em>finden</em></h1><p class="sub">Kurze Fragen — passende Empfehlungen.</p></div>
-  <div class="card">
-    <div class="sec">Was ist Ihnen wichtig? (mehrere möglich)</div>
-    <div class="pref-grid">
-      <button type="button" class="pref-btn" id="p-platz" onclick="togglePref(this)">🏠 Viel Platz</button>
-      <button type="button" class="pref-btn" id="p-sport" onclick="togglePref(this)">🏎️ Sportlich</button>
-      <button type="button" class="pref-btn" id="p-effizienz" onclick="togglePref(this)">⚡ Effizienz</button>
-      <button type="button" class="pref-btn" id="p-kosten" onclick="togglePref(this)">💰 Niedrige Kosten</button>
-      <button type="button" class="pref-btn" id="p-image" onclick="togglePref(this)">✨ Prestige</button>
-      <button type="button" class="pref-btn" id="p-prakt" onclick="togglePref(this)">🔧 Praktisch</button>
-    </div>
-    <div class="sec">Antrieb?</div>
-    <div class="pref-grid">
-      <button type="button" class="pref-btn sel" id="p-bev" onclick="togglePref(this)">⚡ Elektro bevorzugt</button>
-      <button type="button" class="pref-btn" id="p-phev" onclick="togglePref(this)">🔋 Hybrid OK</button>
-      <button type="button" class="pref-btn" id="p-verb" onclick="togglePref(this)">⛽ Verbrenner OK</button>
-      <button type="button" class="pref-btn" id="p-egal" onclick="togglePref(this)">🤷 Egal</button>
-    </div>
-    <div class="sec">Budget Listenpreis?</div>
-    <div class="pref-grid">
-      <button type="button" class="pref-btn" id="p-u30" onclick="togglePref(this)">Unter 30.000 €</button>
-      <button type="button" class="pref-btn sel" id="p-3050" onclick="togglePref(this)">30.000–50.000 €</button>
-      <button type="button" class="pref-btn" id="p-5080" onclick="togglePref(this)">50.000–80.000 €</button>
-      <button type="button" class="pref-btn" id="p-o80" onclick="togglePref(this)">Über 80.000 €</button>
-    </div>
-    <button type="button" class="btn btn-gold" style="margin-top:6px;" onclick="berechneEmpfehlungen()">🔍 Passende Fahrzeuge anzeigen</button>
+<div class="hdr">
+  <div>
+    <div class="hdr-brand">DW-Rechner</div>
+    <div class="hdr-ver">v1.11</div>
   </div>
-  <div id="emp-wrap" style="display:none;">
-    <div class="sec" style="margin-bottom:6px;">Empfehlungen für Sie</div>
-    <div id="emp-list"></div>
-    <div class="hint">Tippen Sie auf „Übernehmen" um ein Fahrzeug in den Rechner zu laden. Die Liste bleibt beim Tab-Wechsel erhalten.</div>
+  <div class="hdr-info">
+    <div class="hdr-item">
+      <div class="hdr-label">Listenpreis</div>
+      <div class="hdr-val gold" id="h-lp">40.000 EUR</div>
+    </div>
+    <div class="hdr-item">
+      <div class="hdr-label">Mehrsteuer</div>
+      <div class="hdr-val red" id="h-st">--</div>
+    </div>
   </div>
 </div>
 
-<!-- PAGE: FAHRZEUG RECHNER -->
+<!-- SEITE: RECHNER -->
 
-<div class="page active" id="page-auto">
-  <div class="ph"><div class="ey">Fahrzeugvergleich</div><h1>Dienstwagen<em>rechner</em></h1></div>
-
-  <!-- ERKLÄRBOX: Was zählt wirklich -->
-
-  <div style="background:#1a1a0e;border:1px solid var(--gd);border-radius:12px;padding:13px 14px;margin-bottom:14px;">
-    <div style="font-size:11px;color:var(--gold);font-weight:700;margin-bottom:6px;letter-spacing:1px;text-transform:uppercase;">💡 Was Ihre Steuer bestimmt</div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;">
-      <div style="flex:1;min-width:140px;background:#141408;border-radius:8px;padding:9px 11px;">
-        <div style="font-size:10px;color:var(--grn);font-weight:700;margin-bottom:3px;">✅ RELEVANT für Steuer</div>
-        <div style="font-size:12px;color:var(--mu);line-height:1.7;">Brutto-Listenpreis<br>Antrieb (0,25% / 1%)<br>Ihr Bruttogehalt</div>
-      </div>
-      <div style="flex:1;min-width:140px;background:#141408;border-radius:8px;padding:9px 11px;">
-        <div style="font-size:10px;color:var(--mu);font-weight:700;margin-bottom:3px;">ℹ️ NICHT steuerrelevant</div>
-        <div style="font-size:12px;color:var(--dm);line-height:1.7;">Leasingrate (zahlt AG)<br>Rabatte (senken Rate, nicht LP)<br>Förderung (einmalig)</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- PFLICHTFELD: Wie zahlt der AG? — beeinflusst die Berechnung direkt -->
-
-  <div style="background:#1a1a0e;border:2px solid var(--gold);border-radius:14px;padding:14px;margin-bottom:12px;">
-    <div style="font-size:11px;color:var(--gold);font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;">🔑 Pflichtangabe — beeinflusst Ihr Ergebnis</div>
-    <div style="font-size:13px;color:var(--tx);font-weight:600;margin-bottom:10px;">Wie übernimmt Ihr Arbeitgeber die Leasingrate?</div>
-    <div style="display:flex;gap:3px;background:var(--sf3);border-radius:10px;padding:3px;">
-      <button type="button" id="lr-mode-zusatz" onclick="setLRMode('zusatz')"
-        style="flex:1;border:none;border-radius:8px;padding:11px 6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;line-height:1.4;background:var(--gold);color:#0f0f13;">
-        ✅ Zusätzlich zum Gehalt<br><span style="font-size:10px;font-weight:400;">wie Gehaltserhöhung</span>
-      </button>
-      <button type="button" id="lr-mode-umwandlung" onclick="setLRMode('umwandlung')"
-        style="flex:1;border:none;border-radius:8px;padding:11px 6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;line-height:1.4;background:none;color:var(--mu);">
-        🔄 Gehaltsumwandlung<br><span style="font-size:10px;font-weight:400;">vom Brutto abgezogen</span>
-      </button>
-      <button type="button" id="lr-mode-abzug" onclick="setLRMode('abzug')"
-        style="flex:1;border:none;border-radius:8px;padding:11px 6px;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;line-height:1.4;background:none;color:var(--mu);">
-        ⚠️ Vom Netto abgezogen<br><span style="font-size:10px;font-weight:400;">echter Geldabfluss</span>
-      </button>
-    </div>
-    <div id="lr-mode-erkl" style="margin-top:10px;background:var(--sf2);border-radius:9px;padding:10px 12px;font-size:12px;color:var(--mu);line-height:1.6;"></div>
-  </div>
-
-  <!-- KERNFELDER: Nur das Wesentliche -->
-
-  <div class="card" style="border-color:var(--gd);">
-    <div class="sec" style="color:var(--gold);">Die zwei entscheidenden Felder</div>
-    <div class="g2">
-      <div class="field full"><label>Hersteller & Modell</label>
-        <select id="hersteller" onchange="onHerstellerChange()" style="margin-bottom:8px;">
-          <option value="VW">VW (Volkswagen)</option><option value="Mercedes">Mercedes-Benz</option>
-          <option value="BMW">BMW</option><option value="Audi">Audi</option>
-          <option value="Opel" selected>Opel</option><option value="Ford">Ford</option>
-          <option value="Škoda">Škoda</option><option value="Seat">Seat</option>
-          <option value="Cupra">Cupra</option><option value="Renault">Renault</option>
-          <option value="Peugeot">Peugeot</option><option value="Toyota">Toyota</option>
-          <option value="Hyundai">Hyundai</option><option value="Kia">Kia</option>
-          <option value="Tesla">Tesla</option><option value="Volvo">Volvo</option>
-          <option value="Porsche">Porsche</option><option value="Sonstiger">Sonstiger</option>
-        </select>
-        <input type="text" id="fahrzeugtyp" value="Grandland Electric" placeholder="Modell / Typ z.B. Grandland Electric …" oninput="update()"/>
-      </div>
-      <div class="field full hero">
-        <label>① Brutto-Listenpreis (€) <span style="color:var(--grn);font-size:10px;font-weight:400;">→ bestimmt Ihre Steuer</span></label>
-        <input type="number" id="listenpreis" value="40000" step="500" min="0" inputmode="numeric" oninput="update()"/>
-      </div>
-    </div>
-    <!-- ADAC Badge -->
-    <div id="adac-inline" style="margin-top:4px;"></div>
-  </div>
-
-  <!-- ANTRIEB: ebenfalls steuerrelevant -->
-
-  <div class="card accent">
-    <div class="sec">② Antrieb wählen <span style="color:var(--mu);font-size:10px;font-weight:400;">→ bestimmt den GVV-Satz</span></div>
-    <div class="ag">
-      <button type="button" class="ab active" data-key="elektro" onclick="sw('elektro')"><span class="ae">⚡</span><span class="an">Elektro</span><span class="as">0,25 % — günstigst</span></button>
-      <button type="button" class="ab" data-key="hybrid" onclick="sw('hybrid')"><span class="ae">🔋</span><span class="an">Hybrid</span><span class="as">0,50 %</span></button>
-      <button type="button" class="ab" data-key="verbrenner" onclick="sw('verbrenner')"><span class="ae">⛽</span><span class="an">Verbrenner</span><span class="as">1,00 % — teuerst</span></button>
-    </div>
-    <div class="triplet">
-      <div class="tri sel" id="tri-e" onclick="sw('elektro')"><span class="tri-em">⚡</span><span class="tri-nm">Elektro</span><span class="tri-k" id="tk-e">—</span><span class="tri-n" id="tn-e">—</span></div>
-      <div class="tri" id="tri-h" onclick="sw('hybrid')"><span class="tri-em">🔋</span><span class="tri-nm">Hybrid</span><span class="tri-k" id="tk-h">—</span><span class="tri-n" id="tn-h">—</span></div>
-      <div class="tri" id="tri-v" onclick="sw('verbrenner')"><span class="tri-em">⛽</span><span class="tri-nm">Verbrenner</span><span class="tri-k" id="tk-v">—</span><span class="tri-n" id="tn-v">—</span></div>
-    </div>
-    <!-- ERGEBNIS direkt darunter -->
-    <div class="kblock">
-      <div class="sec" id="kb-title" style="margin-bottom:9px;">⚡ Elektro — Kostenrechnung</div>
-      <div class="kr"><span class="kl">Ihr Bruttogehalt</span><span class="kv" id="kb-brutto">—</span></div>
-      <div class="kr"><span class="kl">Netto ohne Dienstwagen</span><span class="kv" id="kb-ohne">—</span></div>
-      <div class="dvd"></div>
-      <div class="kr"><span class="kl">Mehrsteuer durch Dienstwagen</span><span class="kv neg" id="kb-st">—</span></div>
-      <div class="kr" id="kb-zrow" style="display:none;"><span class="kl">Eigenzuzahlung (mindert GVV)</span><span class="kv pos" id="kb-z">—</span></div>
-      <div class="kr"><span class="kl">= Netto mit Dienstwagen</span><span class="kv gold" id="kb-mit">—</span></div>
-      <div class="aw-box">
-        <div class="aw-row">
-          <div class="aw-lbl">Ihre monatliche Mehrbelastung<small>Das ist Ihr einziger echter Kostenpunkt</small></div>
-          <div class="aw-val" id="kb-diff">—</div>
-        </div>
-        <div style="font-size:11px;color:var(--dm);margin-top:5px;" id="kb-lr-info"></div>
-      </div>
-    </div>
-    <div id="test-fazit" class="fazit-box"></div>
-  </div>
-
-  <!-- VERHANDLUNGSANALYSE (erscheint wenn Leasingrate eingegeben) -->
-
-  <div id="verhandlung-section" style="display:none;">
-    <div class="vhcard">
-      <div class="vh-title">🤝 Verhandlungsanalyse</div>
-      <div id="vh-content"></div>
-      <div id="vh-taktik" class="taktik-box" style="margin-top:10px;"></div>
-    </div>
-  </div>
-
-  <!-- WEITERE DETAILS — ausklappbar -->
-
-  <div style="margin-bottom:11px;">
-    <button type="button" onclick="toggleDetails()" id="details-toggle-btn"
-      style="width:100%;background:var(--sf2);border:1px solid var(--br);border-radius:12px;padding:12px 14px;color:var(--mu);font-family:'DM Sans',sans-serif;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;">
-      <span>🔧 Weitere Details — Leasingrate, Rabatte, Förderung, Notizen</span>
-      <span id="details-arrow" style="font-size:16px;transition:transform .3s;">›</span>
-    </button>
-    <div id="details-panel" style="display:none;margin-top:2px;">
-
-```
-  <!-- LEASINGRATE — info, nicht steuerrelevant -->
-  <div class="card" style="margin-top:8px;">
-    <div class="sec">Leasingrate des Arbeitgebers <span style="background:#1a1a0e;border:1px solid var(--gd);border-radius:5px;padding:2px 6px;font-size:9px;color:var(--mu);">nicht steuerrelevant</span></div>
-
-    <!-- ERKLÄRUNG ZWECK -->
-    <div style="background:var(--sf2);border-left:3px solid var(--blu);border-radius:0 9px 9px 0;padding:9px 12px;font-size:12px;color:var(--mu);line-height:1.5;margin-bottom:10px;">
-      💡 <strong style="color:var(--tx);">Verhandlungsgrundlage:</strong> Leasingfaktor + Gesamtanalyse erscheinen automatisch auf der <strong style="color:var(--gold);">Händler-Seite</strong>. Wie der AG die Rate zahlt, legen Sie oben im Pflichtfeld fest.
-    </div>
-
-    <div class="g2">
-      <div class="field full"><label>Leasingrate brutto (€/Mo.) — vom Händler genannt</label>
-        <input type="number" id="lrate" value="0" step="10" min="0" inputmode="numeric" oninput="update()"/>
-      </div>
-      <div class="field">
-        <label>Laufzeit (Monate) <span style="color:var(--dm);font-size:10px;">Standard: 36</span></label>
-        <input type="number" id="laufzeit" value="36" step="12" min="12" max="60" inputmode="numeric" oninput="update()"/>
-      </div>
-      <div class="field">
-        <label>km/Jahr <span style="color:var(--dm);font-size:10px;">Standard: 10.000</span></label>
-        <input type="number" id="km-jahr" value="10000" step="5000" min="5000" max="50000" inputmode="numeric" oninput="update()"/>
-      </div>
-      <!-- ERGEBNIS der Rate-Eingabe direkt sichtbar -->
-      <div class="full" id="lrate-result" style="display:none;"></div>
-
-      <div class="field" id="lrtyp-w" style="display:none;"><label>Flottenabzug Typ</label>
-        <select id="lrabatt-typ" onchange="updateLRLabel();update()"><option value="pct">Prozent (%)</option><option value="eur">Festbetrag (€)</option></select>
-      </div>
-      <div class="field" id="lrval-w" style="display:none;"><label id="lrabatt-label">Flottenabzug (%)</label>
-        <input type="number" id="lrabatt-val" value="0" step="0.5" min="0" inputmode="decimal" oninput="update()"/>
-      </div>
-      <div class="field full" id="zuzahl-w" style="display:none;">
-        <label>Eigenzuzahlung AN (€/Mo.) <span style="color:var(--grn);font-size:10px;font-weight:700;">✅ STEUERRELEVANT — mindert GVV direkt!</span></label>
-        <input type="number" id="zuzahl" value="0" step="10" min="0" inputmode="numeric" oninput="update()"/>
-      </div>
-    </div>
-    <div id="detail-extra-toggle" style="margin-top:8px;">
-      <button type="button" onclick="toggleDetailExtra()" style="background:none;border:none;color:var(--dm);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;">+ Flottenabzug & Eigenzuzahlung anzeigen</button>
-    </div>
-  </div>
-
-  <!-- RABATTE — nicht steuerrelevant -->
+<div class="page active" id="page-rechner">
   <div class="card">
-    <div class="sec">Einkaufsrabatte <span style="background:#1a1a0e;border:1px solid var(--gd);border-radius:5px;padding:2px 6px;font-size:9px;color:var(--mu);">nicht steuerrelevant</span></div>
-    <div style="background:var(--sf2);border-left:3px solid var(--mu);border-radius:0 9px 9px 0;padding:9px 12px;font-size:12px;color:var(--dm);line-height:1.5;margin-bottom:10px;">
-      Rabatte senken die Leasingrate und den Kaufpreis — <strong style="color:var(--tx);">nicht</strong> den steuerlichen Listenpreis. Trotzdem gut: AG zahlt weniger Rate.
-    </div>
-    <div class="g2">
-      <div class="field"><label>Herstellerrabatt (%)</label><input type="number" id="rpct" value="0" step="0.5" min="0" max="50" inputmode="decimal" oninput="update()"/></div>
-      <div class="field"><label>Flottenrabatt (€)</label><input type="number" id="reur" value="0" step="100" min="0" inputmode="numeric" oninput="update()"/></div>
-    </div>
-    <div id="marken-hint" class="mhint"></div>
-  </div>
-
-  <!-- PRIVATLEASING VERGLEICH -->
-  <div class="card priv">
-    <div class="sec" style="color:var(--orng);">Privatleasing-Vergleich (optional)</div>
-    <div class="field"><label>Private Leasingrate (€/Mo.) — zahlen Sie selbst</label>
-      <input type="number" id="priv-rate" value="0" step="10" min="0" inputmode="numeric" oninput="update()"/>
-    </div>
-    <div class="priv-res" id="priv-res"></div>
-  </div>
-
-  <!-- FÖRDERUNG — einmalig, nicht steuerrelevant -->
-  <div class="card green" id="foerd-card">
-    <div class="sec" style="color:var(--grn);">Staatliche Förderung & Herstellerprämie <span style="background:#0a1e12;border:1px solid #6ec97a33;border-radius:5px;padding:2px 6px;font-size:9px;color:var(--grn);">einmalig</span></div>
-    <div style="background:var(--sf2);border-left:3px solid var(--grn);border-radius:0 9px 9px 0;padding:9px 12px;font-size:12px;color:var(--dm);line-height:1.5;margin-bottom:10px;">
-      Ändert die monatliche Steuer nicht — ist aber ein einmaliger Vorteil der Monate Ihrer Mehrsteuer ausgleicht.
-    </div>
-    <div style="background:var(--sf2);border-radius:10px;padding:12px;margin-bottom:10px;">
-      <div class="trow">
-        <div class="tinfo"><div class="tlbl">Umweltbonus 2026 einrechnen</div><div class="tsub" id="foerd-sub">Aus</div></div>
-        <label class="tgl"><input type="checkbox" id="foerd-aktiv" onchange="updateFoerdSub();update()"/><span class="tgls"></span></label>
-      </div>
-    </div>
-    <div id="foerd-detail" style="display:none;">
-      <div class="g2">
-        <div class="field"><label>Staatl. Förderung (€)</label><input type="number" id="foerd-staat" value="4000" step="500" min="0" inputmode="numeric" oninput="update()"/></div>
-        <div class="field"><label>Herstellerprämie (€)</label><input type="number" id="foerd-hersteller" value="0" step="500" min="0" inputmode="numeric" oninput="update()"/></div>
-      </div>
-      <div id="foerd-hinweis" style="background:#0a1e12;border-radius:8px;padding:9px 11px;font-size:12px;color:var(--mu);margin-top:8px;line-height:1.6;"></div>
-    </div>
-  </div>
-
-  <!-- FÖRDERUNG ERGEBNIS -->
-  <div class="foerd-badge" id="foerd-badge" style="display:none;">
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--grn);margin-bottom:9px;">🎁 Förderung & Prämien</div>
-    <div id="foerd-rows"></div>
-    <div class="foerd-total">
-      <span style="font-size:12px;color:var(--mu);">Gesamtvorteil (einmalig)</span>
-      <span style="font-size:18px;font-weight:700;color:var(--grn);" id="foerd-gesamt">—</span>
-    </div>
-    <div style="font-size:11px;color:var(--dm);margin-top:7px;line-height:1.5;" id="foerd-antrag"></div>
-  </div>
-
-  <!-- NOTIZEN -->
-  <div class="card">
-    <div class="sec">Fahrzeugnotizen</div>
+    <div class="section-title">Fahrzeug</div>
     <div class="field">
-      <label>Stichpunkte (je Zeile einer)</label>
-      <textarea id="notiz" placeholder="• Moonstone Grey&#10;• Business Plus&#10;• Händler: Autohaus XY" oninput="renderNotiz()"></textarea>
-      <ul class="notiz-list" id="notiz-list"></ul>
+      <label class="label">Hersteller</label>
+      <select id="hersteller" onchange="onMarke()">
+        <option value="Opel" selected>Opel</option>
+        <option value="VW">VW</option>
+        <option value="BMW">BMW</option>
+        <option value="Mercedes">Mercedes-Benz</option>
+        <option value="Audi">Audi</option>
+        <option value="Skoda">Skoda</option>
+        <option value="Tesla">Tesla</option>
+        <option value="Hyundai">Hyundai</option>
+        <option value="Kia">Kia</option>
+        <option value="Peugeot">Peugeot</option>
+        <option value="Cupra">Cupra</option>
+        <option value="Renault">Renault</option>
+        <option value="Volvo">Volvo</option>
+        <option value="Ford">Ford</option>
+        <option value="Toyota">Toyota</option>
+        <option value="Porsche">Porsche</option>
+        <option value="Sonstiger">Sonstiger</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="label">Modell</label>
+      <input type="text" id="modell" value="Grandland Electric" oninput="rechne()">
+    </div>
+    <div class="field">
+      <label class="label">Brutto-Listenpreis (EUR) -- bestimmt Ihre Steuer</label>
+      <input type="number" id="lp" value="40000" class="hero-input" inputmode="numeric" oninput="rechne()">
     </div>
   </div>
 
-</div><!-- /details-panel -->
+  <div class="card">
+    <div class="section-title">Antrieb -- bestimmt den GVV-Satz</div>
+    <div class="antrieb-wrap">
+      <div class="ant-btn active" id="ant-e" onclick="setAntrieb('e')">
+        <span class="ant-icon">E</span>
+        <span class="ant-name">Elektro</span>
+        <span class="ant-pct">0,25 %</span>
+      </div>
+      <div class="ant-btn" id="ant-h" onclick="setAntrieb('h')">
+        <span class="ant-icon">H</span>
+        <span class="ant-name">Hybrid</span>
+        <span class="ant-pct">0,50 %</span>
+      </div>
+      <div class="ant-btn" id="ant-v" onclick="setAntrieb('v')">
+        <span class="ant-icon">V</span>
+        <span class="ant-name">Verbrenner</span>
+        <span class="ant-pct">1,00 %</span>
+      </div>
+    </div>
+
+```
+<div class="hint-box">Die Leasingrate zahlt der AG -- kein Abzug von Ihrem Netto. Ihr einziger Kostenpunkt ist die Mehrsteuer.</div>
+
+<div id="result-wrap">
+  <div class="result-box">
+    <div class="result-main">
+      <div>
+        <div class="result-label">Ihre monatliche Mehrsteuer</div>
+        <div class="result-sub">Das ist Ihr einziger Kostenpunkt</div>
+      </div>
+      <div class="result-val" id="r-diff">--</div>
+    </div>
+    <div class="result-rows">
+      <div class="result-row"><span class="result-row-l">Bruttogehalt</span><span class="result-row-v" id="r-brutto">--</span></div>
+      <div class="result-row"><span class="result-row-l">Netto ohne DW</span><span class="result-row-v" id="r-ohne">--</span></div>
+      <div class="result-row"><span class="result-row-l">Mehrsteuer</span><span class="result-row-v neg" id="r-steuer">--</span></div>
+      <div class="result-row"><span class="result-row-l">Netto mit DW</span><span class="result-row-v gold" id="r-mit">--</span></div>
+    </div>
+  </div>
+</div>
+
+<button class="btn btn-gold" onclick="speichern()">Berechnung speichern</button>
 ```
 
   </div>
-
-  <!-- SPEICHERN -->
-
-  <div class="card">
-    <div style="font-size:11px;color:var(--mu);margin-bottom:7px;">Speichern als: <strong id="save-preview" style="color:var(--tx);">—</strong></div>
-    <button type="button" class="btn btn-gold" onclick="saveResult()">💾 Berechnung speichern</button>
-    <button type="button" class="btn btn-out" onclick="exportPDF()">📄 Als PDF (DIN A4)</button>
-  </div>
-  <div class="hint">ℹ️ Leasingrate zahlt der AG. AG trägt zudem Sprit/Strom, Versicherung + Wartung (~200–360 €/Mo.).</div>
 </div>
 
-<!-- PAGE: STAMMDATEN -->
+<!-- SEITE: STAMMDATEN -->
 
 <div class="page" id="page-stamm">
-  <div class="ph"><div class="ey">Einstellungen</div><h1>Stamm<em>daten</em></h1><p class="sub">Einmalig eingeben — gilt für alle Berechnungen.</p></div>
   <div class="card">
-    <div class="sec">Gehalt & Steuer</div>
-    <div class="g2">
-      <div class="field full"><label>Bruttogehalt / Monat (€)</label>
-        <input type="number" id="brutto" value="4000" step="50" min="0" inputmode="numeric" oninput="updateNettoInfo();update()"/>
-      </div>
-      <div id="netto-prev" style="grid-column:1/-1;background:var(--sf2);border-radius:8px;padding:9px 12px;font-size:12px;color:var(--mu);"></div>
-      <div class="field"><label>Steuerklasse</label>
-        <select id="stklasse" onchange="updateNettoInfo();update()">
+    <div class="section-title">Gehalt und Steuer</div>
+    <div class="field">
+      <label class="label">Bruttogehalt / Monat (EUR)</label>
+      <input type="number" id="brutto" value="4000" inputmode="numeric" oninput="updateNetto();rechne()">
+    </div>
+    <div id="netto-prev" class="netto-prev"></div>
+    <div class="g2" style="margin-top:10px;">
+      <div class="field">
+        <label class="label">Steuerklasse</label>
+        <select id="stklasse" onchange="updateNetto();rechne()">
           <option>1</option><option>2</option><option>3</option><option selected>4</option><option>5</option><option>6</option>
         </select>
       </div>
-      <div class="field"><label>Bundesland / KiSt-Satz</label>
-        <select id="kist-satz" onchange="updateKistSub();updateNettoInfo();update()">
-          <option value="0.08">Bayern / BW (8 %)</option>
-          <option value="0.09">Andere BL (9 %)</option>
+      <div class="field">
+        <label class="label">Bundesland</label>
+        <select id="kist-satz" onchange="updateNetto();rechne()">
+          <option value="0.08">Bayern/BW (8%)</option>
+          <option value="0.09">Andere (9%)</option>
         </select>
       </div>
     </div>
-    <div style="background:var(--sf2);border-radius:10px;padding:12px;margin-top:10px;">
-      <div class="trow">
-        <div class="tinfo"><div class="tlbl">Kirchensteuer</div><div class="tsub" id="kist-sub">Aktiv — 8%</div></div>
-        <label class="tgl"><input type="checkbox" id="kist-aktiv" checked onchange="updateKistSub();updateNettoInfo();update()"/><span class="tgls"></span></label>
-      </div>
-    </div>
-  </div>
-  <div class="card blu">
-    <div class="sec">GVV Fahrweg — nach Fahrzeugwahl</div>
-    <p style="font-size:12px;color:var(--mu);margin-bottom:11px;line-height:1.6;">Standard: <strong style="color:var(--tx);">0,03%-Pauschale</strong>. Bei Homeoffice lohnt Einzelbewertung.</p>
-    <div style="background:var(--sf2);border-radius:10px;padding:12px;margin-bottom:11px;">
-      <div class="trow">
-        <div class="tinfo"><div class="tlbl">Einzelbewertung (Homeoffice)</div><div class="tsub" id="ho-sub">Aus — Pauschale gilt</div></div>
-        <label class="tgl"><input type="checkbox" id="ho-aktiv" onchange="updateHoSub();updateKmInfo()"/><span class="tgls"></span></label>
-      </div>
-      <div id="ho-hint" style="display:none;background:#0e1418;border-radius:7px;padding:9px 11px;margin-top:8px;font-size:12px;color:var(--blu);line-height:1.6;">💡 Bei Homeoffice fast immer günstiger — nur echte Fahrten werden bewertet.</div>
-    </div>
-    <div class="g2">
-      <div class="field"><label>Entfernung (km)</label><input type="number" id="km-info" value="3.4" step="0.1" min="0" inputmode="decimal" oninput="updateKmInfo()"/></div>
-      <div class="field"><label>Fahrten / Monat</label><input type="number" id="fahr-info" value="21" step="1" min="0" max="23" inputmode="numeric" oninput="updateKmInfo()"/></div>
-    </div>
-    <div id="km-rechnung" style="background:var(--sf2);border-radius:8px;padding:9px 11px;font-size:12px;color:var(--mu);margin-top:8px;line-height:1.7;"></div>
-  </div>
-  <div class="hint"><strong>SK4</strong> = verheiratet. <strong>SK1</strong> = ledig.</div>
-</div>
-
-<!-- PAGE: HÄNDLER -->
-
-<div class="page" id="page-haendler">
-  <div class="ph"><div class="ey">Beim Händler</div><h1>Verhandlungs<em>hilfe</em></h1><p class="sub">Checkliste — live anpassen. Bleibt offen beim Tab-Wechsel.</p></div>
-
-  <div class="card">
-    <div class="sec">Autohaus suchen</div>
-    <div class="field" style="margin-bottom:8px;">
-      <div class="search-wrap">
-        <span class="search-ico">🔍</span>
-        <input type="text" id="ah-search" class="search-input" placeholder="Name + Ort, z.B. Autohaus Müller München" oninput="debounceSearch()" autocomplete="off"/>
-      </div>
-      <div class="search-results" id="ah-results"></div>
-    </div>
-    <div id="ah-detail-wrap" style="display:none;"><div class="autohaus-detail" id="ah-detail"></div></div>
-    <div class="g2" id="ah-kontakt-wrap" style="display:none;margin-top:8px;">
-      <div class="field"><label>Verkäufer / Abteilung</label><input type="text" id="ah-kontakt" placeholder="z.B. Hr. Müller, Flottenverkauf"/></div>
-      <div class="field"><label>Durchwahl / E-Mail</label><input type="text" id="ah-tel" placeholder="089/12345-12"/></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="sec">Aktuelles Fahrzeug</div>
-    <div id="haendler-fahrzeug" style="font-size:13px;color:var(--mu);line-height:1.8;"></div>
-  </div>
-
-  <div class="card accent">
-    <div class="sec">Checkliste Händlergespräch</div>
-    <div class="haendler-step">
-      <div class="hs-title"><span class="hs-num">1</span>Leasingfaktor erfragen & prüfen</div>
-      <div class="hs-text">Rate für <strong id="h-laufzeit">36</strong> Monate, <strong id="h-km">10.000</strong> km/Jahr, ohne Anzahlung. Dann: Rate ÷ LP × 100. Ziel: unter 1%.</div>
-      <div class="g2" style="margin-top:8px;">
-        <div class="field"><label>Rate des Händlers (€)</label><input type="number" id="haendler-rate" value="0" step="10" min="0" inputmode="numeric" oninput="updateHaendlerCalc()"/></div>
-        <div class="field"><label>Leasingfaktor</label><div id="haendler-lf" style="background:var(--sf2);border-radius:9px;padding:10px 11px;font-size:15px;font-weight:700;height:42px;display:flex;align-items:center;">—</div></div>
-      </div>
-    </div>
-    <div class="haendler-step">
-      <div class="hs-title"><span class="hs-num">2</span>Flottenrabatt ansprechen</div>
-      <div class="hs-text" id="haendler-rabatt-text">Flottenrabatt aktiv ansprechen.</div>
-      <ul class="checklist">
-        <li onclick="this.classList.toggle('done')">Flottenrabatt % direkt abgefragt</li>
-        <li onclick="this.classList.toggle('done')">Herstelleraktion / Sonderkonditionen geprüft</li>
-        <li onclick="this.classList.toggle('done')">Über Vehiculum / leasingmarkt.de verglichen</li>
-      </ul>
-    </div>
-    <div class="haendler-step">
-      <div class="hs-title"><span class="hs-num">3</span>Staatliche Förderung sichern</div>
-      <div class="hs-text">Umweltbonus 2026: Antrag beim BAFA, spätestens 1 Jahr nach Zulassung. Mind. 36 Monate Haltedauer.</div>
-      <ul class="checklist">
-        <li onclick="this.classList.toggle('done')">Förderfähigkeit des Modells bestätigt</li>
-        <li onclick="this.classList.toggle('done')">BAFA-Antrag vorgemerkt (nach Zulassung)</li>
-        <li onclick="this.classList.toggle('done')">Haushaltseinkommen-Staffel geprüft</li>
-      </ul>
-    </div>
-    <div class="haendler-step">
-      <div class="hs-title"><span class="hs-num">4</span>Extras verhandeln</div>
-      <div class="hs-text">LP-neutrale Extras bevorzugen — erhöhen Komfort ohne GVV zu steigern.</div>
-      <ul class="checklist">
-        <li onclick="this.classList.toggle('done')">Wallbox / Ladestrom kostenlos verhandelt</li>
-        <li onclick="this.classList.toggle('done')">Servicepauschale in Rate integriert</li>
-        <li onclick="this.classList.toggle('done')">Winterräder ohne LP-Aufschlag</li>
-        <li onclick="this.classList.toggle('done')">Eigenzuzahlung zur Rate (mindert GVV!)</li>
-      </ul>
-    </div>
-    <div class="haendler-step">
-      <div class="hs-title"><span class="hs-num">5</span>Turboabschreibung 75% (AG-Argument)</div>
-      <div class="hs-text">E-Fahrzeuge Jul 2025–Dez 2027: AG kann 75% im Jahr 1 abschreiben (§ 7 Abs. 2a EStG). Bei 40.000 € netto = ~9.000 € Steuerersparnis sofort. Erwähnen im Chefgespräch!</div>
-      <ul class="checklist">
-        <li onclick="this.classList.toggle('done')">AG über Turboabschreibung 75% informiert</li>
-        <li onclick="this.classList.toggle('done')">Steuerberater des AG einbezogen</li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="card" style="border-color:#9b82d444;">
-    <div class="sec" style="color:var(--purp);">Chefgespräch vorbereiten</div>
-    <div class="haendler-step" style="background:var(--sf3);">
-      <div class="hs-title"><span class="hs-num" style="background:var(--purp);">A</span>Ihre Zahlen live</div>
-      <div id="chef-zahlen" style="font-size:12px;color:var(--mu);line-height:1.9;margin-top:6px;"></div>
-    </div>
-    <div class="haendler-step" style="background:var(--sf3);">
-      <div class="hs-title"><span class="hs-num" style="background:var(--purp);">B</span>AG-Vorteile — Ihre Argumente</div>
-      <ul class="checklist" style="margin-top:6px;">
-        <li onclick="this.classList.toggle('done')">Leasingrate + Betriebskosten = sofort Betriebsausgabe abziehbar</li>
-        <li onclick="this.classList.toggle('done')">Turboabschreibung 75% im Jahr 1 (§ 7 Abs. 2a EStG)</li>
-        <li onclick="this.classList.toggle('done')">Vorsteuerabzug 19% auf Rate + Betriebskosten</li>
-        <li onclick="this.classList.toggle('done')">Effektive AG-Kosten ca. 30–40% niedriger als Brutto</li>
-        <li onclick="this.classList.toggle('done')">Mitarbeiterbindung — strategischer Vorteil vs. Gehaltserhöhung</li>
-        <li onclick="this.classList.toggle('done')">Kfz-Steuerbefreiung E-Auto bis 2035</li>
-      </ul>
+    <div class="tgl-wrap">
+      <div class="tgl-label">Kirchensteuer</div>
+      <label class="tgl"><input type="checkbox" id="kist" checked onchange="updateNetto();rechne()"><span class="tgls"></span></label>
     </div>
   </div>
 </div>
 
-<!-- PAGE: VERGLEICH -->
+<!-- SEITE: VERGLEICH -->
 
 <div class="page" id="page-saves">
-  <div class="ph"><div class="ey">Verlauf</div><h1>Gespeicherte <em>Fahrzeuge</em></h1><p class="sub">Tippe auf ein Fahrzeug zum Direktvergleich.</p></div>
-  <div id="saves-list"></div>
-  <div id="compare-section" style="display:none;">
-    <div style="margin:16px 0 8px;"><div class="ey">Direktvergleich</div></div>
-    <div class="vcols">
-      <div class="vcol vl">
-        <div class="vctit" id="vc-tl">🔄 Aktuell</div>
-        <div class="vrow"><span class="vvl">Listenpreis</span><span class="vvv" id="vc-lp-l">—</span></div>
-        <div class="vrow"><span class="vvl">Antrieb</span><span class="vvv" id="vc-an-l">—</span></div>
-        <div class="vrow"><span class="vvl">Mehrsteuer</span><span class="vvv r" id="vc-st-l">—</span></div>
-        <div class="vrow"><span class="vvl">Netto mit DW</span><span class="vvv g" id="vc-nm-l">—</span></div>
-        <div class="vrow"><span class="vvl">Rate (AG)</span><span class="vvv" id="vc-lr-l">—</span></div>
-        <div class="vrow"><span class="vvl">Leasingfaktor</span><span class="vvv" id="vc-lf-l">—</span></div>
-      </div>
-      <div class="vcol vr">
-        <div class="vctit" id="vc-tr">📂 Gespeichert</div>
-        <div class="vrow"><span class="vvl">Listenpreis</span><span class="vvv" id="vc-lp-r">—</span></div>
-        <div class="vrow"><span class="vvl">Antrieb</span><span class="vvv" id="vc-an-r">—</span></div>
-        <div class="vrow"><span class="vvl">Mehrsteuer</span><span class="vvv r" id="vc-st-r">—</span></div>
-        <div class="vrow"><span class="vvl">Netto mit DW</span><span class="vvv g" id="vc-nm-r">—</span></div>
-        <div class="vrow"><span class="vvl">Rate (AG)</span><span class="vvv" id="vc-lr-r">—</span></div>
-        <div class="vrow"><span class="vvl">Leasingfaktor</span><span class="vvv" id="vc-lf-r">—</span></div>
-      </div>
-    </div>
-    <div class="ac-wrap">
-      <div class="ac-box"><div class="ac-nm" id="ac-nl">Aktuell</div><div class="ac-lbl">Mehrsteuer/Mo.</div><div class="ac-val" id="ac-vl">—</div></div>
-      <div class="ac-box"><div class="ac-nm" id="ac-nr">Gespeichert</div><div class="ac-lbl">Mehrsteuer/Mo.</div><div class="ac-val" id="ac-vr">—</div></div>
-    </div>
-    <div class="win-box" id="vc-winner"></div>
-    <button type="button" class="btn btn-out" style="margin-top:10px;" onclick="exportVergleichPDF()">📄 Vergleich als PDF (DIN A4 quer)</button>
-  </div>
+  <div id="saves-list"><div class="saves-empty">Noch keine Berechnungen gespeichert.</div></div>
 </div>
 
-<!-- PAGE: TIPPS -->
+<!-- SEITE: TIPPS -->
 
 <div class="page" id="page-tipps">
-  <div class="ph"><div class="ey">Wissen & Hilfe</div><h1>Tipps &amp; <em>Tricks</em></h1></div>
-
-  <div class="card" style="border-color:var(--gd);margin-bottom:11px;">
-    <div style="font-family:'Playfair Display',serif;font-size:16px;margin-bottom:11px;">📖 So bedienen Sie <em style="color:var(--gold);font-style:normal;">den Rechner</em></div>
-    <div style="font-size:13px;color:var(--mu);line-height:1.8;">
-      <strong style="color:var(--tx);">🔎 Suchen</strong> — Präferenzen wählen, Empfehlungen erhalten, Fahrzeug übernehmen<br>
-      <strong style="color:var(--tx);">🚗 Rechner</strong> — Listenpreis eingeben, alle Kosten sofort. Detail für Rabatte & Förderung<br>
-      <strong style="color:var(--tx);">👤 Stammdaten</strong> — Brutto, Steuerklasse, Kirchensteuer einmalig einstellen<br>
-      <strong style="color:var(--tx);">🤝 Händler</strong> — Autohaus suchen, Checkliste für Händler- und Chefgespräch<br>
-      <strong style="color:var(--tx);">📂 Vergleich</strong> — Mehrere Fahrzeuge nebeneinander, PDF exportieren
-    </div>
+  <div class="card">
+    <div class="section-title">Wichtigste Tipps</div>
+    <p style="font-size:13px;color:var(--mu);line-height:1.8;">
+      <strong style="color:var(--tx);">GVV (Geldwerter Vorteil):</strong> Listenpreis x Satz (0,25% Elektro / 0,5% Hybrid / 1% Verbrenner). Das Finanzamt rechnet das wie Lohn.<br><br>
+      <strong style="color:var(--tx);">Leasingrate:</strong> Zahlt der AG -- Sie zahlen nur die Mehrsteuer auf den GVV.<br><br>
+      <strong style="color:var(--tx);">Turboabschreibung 75%:</strong> AG kann E-Auto im Jahr 1 mit 75% abschreiben (Jul 2025-Dez 2027). Starkes Verhandlungsargument!<br><br>
+      <strong style="color:var(--tx);">Leasingfaktor:</strong> Rate / Listenpreis x 100. Unter 1% = gut. Ueber 1,3% = verhandeln.<br><br>
+      <strong style="color:var(--tx);">Homeoffice:</strong> Einzelbewertung statt Pauschale kann GVV deutlich senken.
+    </p>
   </div>
-
-  <div class="sec">Begriffe erklärt</div>
-  <div class="beg"><div class="b-term">GVV — Geldwerter Vorteil</div><div class="b-def"><strong>Was?</strong> Steuerlicher Gegenwert für private Fahrzeugnutzung. Finanzamt rechnet das wie Lohn.<br><strong>Wer zahlt?</strong> Sie als AN — Steuer + SV darauf, ohne Geldfluss. Ihr Nettolohn sinkt.<div style="margin-top:5px;"><span class="b-tag">§ 8 EStG</span><span class="b-tag r">AN zahlt Steuer</span></div></div></div>
-  <div class="beg"><div class="b-term">Turboabschreibung 75% — AG-Vorteil</div><div class="b-def"><strong>Was?</strong> Arbeitgeber können reine E-Fahrzeuge (Jul 2025–Dez 2027) im ersten Jahr mit 75% der Anschaffungskosten abschreiben (§ 7 Abs. 2a EStG).<br><br><strong>Beispiel:</strong> E-Auto 40.000 € netto → 30.000 € Steuerabzug im Jahr 1 → bei 30% Steuersatz = ~9.000 € Steuerersparnis sofort.<br><br><strong>Ihr Argument:</strong> Der AG spart im ersten Jahr massiv — nutzen Sie das in der Verhandlung!<div style="margin-top:5px;"><span class="b-tag g">AG-Vorteil</span><span class="b-tag">§ 7 Abs. 2a EStG</span><span class="b-tag">Jul 2025–Dez 2027</span></div></div></div>
-  <div class="beg"><div class="b-term">Umweltbonus 2026 — staatliche Förderung</div><div class="b-def"><strong>Was?</strong> Staatliche Prämie für E-Fahrzeuge ab 01.01.2026 (Zulassung). Bis Ausschöpfung der Mittel.<br><br><strong>Wie viel?</strong> Haushaltseinkommen bis 45.000 €: 5.000 € · bis 60.000 €: 4.000 € · bis 80.000 €: 3.000 € (BEV). PHEVs etwas weniger.<br><br><strong>Wer beantragt?</strong> Sie — beim BAFA, spätestens 1 Jahr nach Zulassung. Mind. 36 Monate Haltedauer.<div style="margin-top:5px;"><span class="b-tag g">Bis 5.000 €</span><span class="b-tag">BAFA-Antrag</span></div>
-  <div class="tls" style="margin-top:8px;"><a class="tl" href="https://www.bafa.de" target="_blank"><span>🏛️</span><span><span class="tln">BAFA — Antrag stellen</span><span class="tld">bafa.de</span></span></a></div></div></div>
-  <div class="beg"><div class="b-term">Leasingfaktor</div><div class="b-def">Rate ÷ Listenpreis × 100. Unter 0,8% = sehr gut · 0,8–1,0% = gut · über 1,3% = verhandeln<div style="margin-top:5px;"><span class="b-tag g">Ziel: unter 1%</span></div></div></div>
-
-  <div class="sec" style="margin-top:14px;">Praxis-Tipps</div>
-  <div class="tc" onclick="toggleTip(this)"><div class="th"><span style="font-size:18px;">🏢</span><div class="tif"><div class="tt">Was der AG beim Leasing spart</div><div class="tsr">Turboabschreibung + Betriebsausgaben + Vorsteuer</div></div><span class="tch">›</span></div>
-  <div class="tb"><div class="exb">✅ Leasingrate sofort als Betriebsausgabe abziehbar<br>✅ Turboabschreibung 75% im Jahr 1 bei Kauf (BEV, Jul 2025–Dez 2027)<br>✅ Vorsteuerabzug 19% auf Rate + Betriebskosten<br>✅ Alle Betriebskosten absetzbar (Sprit, Versicherung, Wartung, Reifen)<br>✅ Mitarbeiterbindung statt Gehaltserhöhung<br>✅ Kfz-Steuerbefreiung E-Auto bis 2035<br><span style="color:var(--grn);">Effektive AG-Kosten ca. 30–40% niedriger als Bruttowert</span></div></div></div>
-  <div class="tc" onclick="toggleTip(this)"><div class="th"><span style="font-size:18px;">⛽</span><div class="tif"><div class="tt">AG zahlt Sprit, Strom & Versicherung</div><div class="tsr">Versteckter Vorteil: 200–360 €/Mo.</div></div><span class="tch">›</span></div>
-  <div class="tb"><div class="exb">Kraftstoff/Strom: 80–150 €/Mo.<br>Kfz-Versicherung: 60–120 €/Mo.<br>Wartung/TÜV: 30–60 €/Mo.<br>Kfz-Steuer: 10–30 €/Mo.<br><span style="color:#6ec97a;">Gesamt: 180–360 € monatliche Ersparnis!</span></div></div></div>
-  <div class="tc" onclick="toggleTip(this)"><div class="th"><span style="font-size:18px;">💡</span><div class="tif"><div class="tt">Eigenzuzahlung — stärkster Steuerhebel</div><div class="tsr">Mindert GVV Euro für Euro</div></div><span class="tch">›</span></div>
-  <div class="tb"><div class="exb">Elektro 40.000 €: GVV = 100 €/Mo.<br>Eigenzuzahlung 100 €/Mo. → GVV = 0 €<br><span style="color:#6ec97a;">+40–60 € mehr Netto/Mo.</span></div></div></div>
-  <div class="tc" onclick="toggleTip(this)"><div class="th"><span style="font-size:18px;">⚡</span><div class="tif"><div class="tt">E-Auto: 0,25% bis 100.000 € LP</div><div class="tsr">Gilt bis 2030</div></div><span class="tch">›</span></div>
-  <div class="tb"><div class="exb">Verbrenner: 400 € GVV → ~160 € Steuer/Mo.<br>Elektro: 100 € GVV → ~40 € Steuer/Mo.<br><span style="color:#6ec97a;">Ersparnis: ~120 € / Monat</span></div></div></div>
-  <div class="tc" onclick="toggleTip(this)"><div class="th"><span style="font-size:18px;">🏠</span><div class="tif"><div class="tt">Homeoffice: Einzelbewertung</div><div class="tsr">Bis 300 € weniger GVV / Monat</div></div><span class="tch">›</span></div>
-  <div class="tb"><div class="exb">Pauschal 30km: 360 € GVV/Mo. | 4 Fahrten: 96 € GVV/Mo.<br><span style="color:#6ec97a;">Ersparnis: 264 € GVV/Mo. = ~105 € Steuer/Mo.</span></div></div></div>
-
-  <div style="background:#0a0f18;border:1px solid #0070ba44;border-radius:14px;padding:15px 13px;margin-top:6px;margin-bottom:11px;">
-    <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:#4a8ab0;margin-bottom:9px;">☕ Kauf mir ein Spezi</div>
-    <p style="font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:11px;">Der Weg von der Idee zur fertigen Webseite hat mich <strong style="color:var(--tx);">viele Spezi gekostet.</strong> Buchstäblich.<br><br>
-    Die Entscheidung zur <em style="color:var(--tx);">Webseite statt App</em> war bewusst: Kein App Store, keine Installation — Link schicken, fertig. Auf jedem Gerät nutzbar. In Safari (iOS) und Chrome (Android) als Homescreen-App installierbar.<br><br>
-    Bei Fehlern, Lob oder dem Wunsch mich wissen zu lassen wie toll der Rechner ist: konstruktive Kritik willkommen, solange sie mit Spezi bezahlt wird.</p>
-    <a href="mailto:wolast@gmail.com?subject=DienstwagenRechner" style="display:flex;align-items:center;gap:7px;color:var(--blu);font-size:13px;text-decoration:none;background:var(--sf2);border:1px solid #6ab0d433;border-radius:8px;padding:9px 13px;margin-bottom:8px;">✉️ wolast@gmail.com — Feedback &amp; Kritik</a>
-    <a href="https://www.paypal.me/kaufmireinspezi" target="_blank" class="btn btn-pp" style="text-decoration:none;">💳 PayPal.me/kaufmireinspezi</a>
+  <div class="card">
+    <div style="font-size:10px;color:var(--dm);margin-bottom:10px;letter-spacing:2px;text-transform:uppercase;">Spezi kaufen</div>
+    <p style="font-size:13px;color:var(--mu);line-height:1.7;margin-bottom:12px;">Der Weg von der Idee zur fertigen Seite hat mich viele Spezi gekostet. Konstruktive Kritik willkommen -- solange sie mit Spezi bezahlt wird.</p>
+    <a href="mailto:wolast@gmail.com?subject=DienstwagenRechner" style="display:block;text-align:center;background:var(--sf2);color:var(--blu);padding:12px;border-radius:8px;text-decoration:none;margin-bottom:8px;">E-Mail Feedback</a>
+    <a href="https://www.paypal.me/kaufmireinspezi" target="_blank" style="display:block;text-align:center;background:#0070ba;color:white;padding:12px;border-radius:8px;text-decoration:none;font-weight:700;">PayPal.me/kaufmireinspezi</a>
   </div>
-  <div class="hint"><strong>Keine Steuerberatung.</strong> Alle Angaben zur Orientierung. Im Zweifel Steuerberater konsultieren.</div>
-  <div class="footer">© 2026 · Version 1.0 · Idee &amp; Konzeption Stefan Wolf</div>
+  <div class="footer">c 2026 - Version 1.11 - Idee und Konzeption Stefan Wolf</div>
 </div>
 
-<!-- FLOATING NAV -->
-
 <nav class="nav">
-  <button type="button" class="nb" onclick="showPage('suche',0)"><span class="ni">🔎</span>Suchen</button>
-  <button type="button" class="nb active" onclick="showPage('auto',1)"><span class="ni">🚗</span>Rechner</button>
-  <button type="button" class="nb" onclick="showPage('stamm',2)"><span class="ni">👤</span>Stammdaten</button>
-  <button type="button" class="nb" onclick="showPage('haendler',3)"><span class="ni">🤝</span>Händler</button>
-  <button type="button" class="nb" onclick="showPage('saves',4)"><span class="ni">📂</span>Vergleich</button>
-  <button type="button" class="nb" onclick="showPage('tipps',5)"><span class="ni">💡</span>Tipps</button>
+  <button class="nb active" onclick="zeigSeite('rechner',0)">
+    <span class="nb-icon">Auto</span>Rechner
+  </button>
+  <button class="nb" onclick="zeigSeite('stamm',1)">
+    <span class="nb-icon">Person</span>Stammdaten
+  </button>
+  <button class="nb" onclick="zeigSeite('saves',2)">
+    <span class="nb-icon">Ordner</span>Vergleich
+  </button>
+  <button class="nb" onclick="zeigSeite('tipps',3)">
+    <span class="nb-icon">Lampe</span>Tipps
+  </button>
 </nav>
-<div id="ib"><span><strong>🚗 App installieren</strong>Zum Homescreen</span><button type="button" id="ibb" onclick="installApp()">Installieren</button><button type="button" id="icb" onclick="closeBanner()">✕</button></div>
+
 <script>
-// ===== STEUERBERECHNUNG =====
+var ANTRIEB = 'e';
+var SAETZE = {e:0.0025, h:0.005, v:0.01};
+
+function fmt(n){
+  return n.toLocaleString('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0});
+}
+function gi(id){
+  var el=document.getElementById(id);
+  return el ? (parseFloat(el.value)||0) : 0;
+}
+
 function lstF(z){
   if(z<=11604)return 0;
-  if(z<=17005){var y=(z-11604)/1e4;return Math.round((979.18*y+1400)*y);}
-  if(z<=66760){var w=(z-17005)/1e4;return Math.round((192.59*w+2397)*w+966.53);}
+  if(z<=17005){var y=(z-11604)/10000;return Math.round((979.18*y+1400)*y);}
+  if(z<=66760){var w=(z-17005)/10000;return Math.round((192.59*w+2397)*w+966.53);}
   if(z<=277826)return Math.round(0.42*z-10602.13);
   return Math.round(0.45*z-18936.88);
 }
@@ -714,884 +275,116 @@ function svAN(b){
   return Math.min(b,k)*0.073+Math.min(b,k)*0.009+Math.min(b,r)*0.093+Math.min(b,r)*0.013+Math.min(b,k)*0.017;
 }
 function getKS(){
-  var el=document.getElementById('kist-aktiv');
-  var ks=document.getElementById('kist-satz');
-  return (el&&el.checked)?(parseFloat(ks?ks.value:0)||0):0;
+  var el=document.getElementById('kist');
+  var satz=document.getElementById('kist-satz');
+  return (el&&el.checked) ? (parseFloat(satz?satz.value:0)||0) : 0;
 }
 function jst(mb,ks){
   var z=Math.max(0,mb*12-1230);
   var l=lstF(z);
-  var s=l>18130?Math.min(l*0.055,(l-18130)*0.199):0;
+  var s=l>18130 ? Math.min(l*0.055,(l-18130)*0.199) : 0;
   return l+s+l*ks;
 }
-function berechne(brutto,ks,lp,satz,zuz){
-  var gvvB=Math.round(lp*satz);
-  var gvv=Math.max(0,gvvB-Math.round(zuz||0));
-  var stO=jst(brutto,ks)/12, svO=svAN(brutto);
-  var stM=jst(brutto+gvv,ks)/12, svM=svAN(brutto+gvv);
-  return{gvv:gvv,gvvB:gvvB,gk:Math.round((stM-stO)+(svM-svO)),nettoOhne:Math.round(brutto-stO-svO),nettoMit:Math.round(brutto-stM-svM)};
-}
-function lfInfo(lf){
-  if(lf<0.8)return{t:'Ausgezeichnet',c:'var(--grn)'};
-  if(lf<1.0)return{t:'Gut',c:'var(--grn)'};
-  if(lf<1.3)return{t:'Verhandeln',c:'var(--gold)'};
-  return{t:'Zu teuer!',c:'var(--red)'};
-}
-function fmt(n){return n.toLocaleString('de-DE',{style:'currency',currency:'EUR',maximumFractionDigits:0});}
-function fmtPct(n){return n.toFixed(2).replace('.',',')+' %';}
-function gi(id){try{var el=document.getElementById(id);return el?(parseFloat(el.value)||0):0;}catch(e){return 0;}}
-function gs(id){try{var el=document.getElementById(id);return el?(el.value||''):'O';}catch(e){return '';}}
-function saf(t){
-  if(!t)return'--';
-  return t.replace(/\u00e4/g,'ae').replace(/\u00f6/g,'oe').replace(/\u00fc/g,'ue')
-   .replace(/\u00c4/g,'Ae').replace(/\u00d6/g,'Oe').replace(/\u00dc/g,'Ue')
-   .replace(/\u00df/g,'ss').replace(/[^\x00-\x7F]/g,'?');
+
+function setAntrieb(a){
+  ANTRIEB=a;
+  document.getElementById('ant-e').classList.toggle('active',a==='e');
+  document.getElementById('ant-h').classList.toggle('active',a==='h');
+  document.getElementById('ant-v').classList.toggle('active',a==='v');
+  rechne();
 }
 
-// ===== MARKEN =====
-var MARKEN={
-‘VW’:{rpct:10,hint:‘VW Gewerbekundenrabatt ca. 10-15%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘VW ID-Modelle foerderfaehig ab 01.01.2026. Antrag BAFA nach Zulassung.’}},
-‘Mercedes’:{rpct:15,hint:‘Mercedes-Benz Flottenrabatt 15-25%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Mercedes EQA/EQB foerderfaehig je nach Modell.’}},
-‘BMW’:{rpct:15,hint:‘BMW Geschaeftskundenrabatt 15-20%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘BMW i4/iX1/iX3 foerderfaehig. Antrag BAFA.’}},
-‘Audi’:{rpct:12,hint:‘Audi Flottenrabatt 12-18%.’,adac:‘Testsieger ADAC 2025’,fazit:‘ADAC 2025: Audi Q6 e-tron Note 1,6. Staerken: Verarbeitung, Ausstattung, Effizienz.’,foerd:{staat:4000,hersteller:0,hinweis:‘Audi Q4/Q6 e-tron foerderfaehig je nach Listenpreis.’}},
-‘Opel’:{rpct:20,hint:‘Opel Gewerbepr?mie bis 20%. Electric All In: Wallbox inklusive.’,adac:‘ADAC 2025: Note 2,0’,fazit:‘ADAC 2025: Opel Grandland Electric - solides Familien-SUV. Staerken: Platz, Verarbeitung, Assistenz.’,foerd:{staat:4000,hersteller:0,hinweis:‘Opel Grandland Electric foerderfaehig ab 01.01.2026. Electric All In Programm (Wallbox kostenlos).’}},
-‘Ford’:{rpct:18,hint:‘Ford Gewerbekundenrabatt 15-20%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Ford Explorer/Puma Electric foerderfaehig.’}},
-‘Skoda’:{rpct:20,hint:‘Skoda Firmenauto des Jahres 2025. SmallFleet-Praemie. 0% Leasingzins bis 06/2026.’,adac:‘ADAC 2025: Note 1,6’,fazit:‘ADAC 2025: Skoda Enyaq Note 1,6 - Platz 1 Mittelklasse. Elroq Note 1,6.’,foerd:{staat:4000,hersteller:0,hinweis:‘Skoda Enyaq + Elroq foerderfaehig. 0% Leasingzins bis 06/2026!’}},
-‘Seat’:{rpct:15,hint:‘Seat Gewerbekundenrabatt ca. 15%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Seat Born foerderfaehig.’}},
-‘Cupra’:{rpct:15,hint:‘Cupra Unternehmerbonus: 18% e-Hybrid, 15% BEV.’,adac:null,fazit:‘ADAC 2025: Cupra Tavascan empfohlen.’,foerd:{staat:4000,hersteller:0,hinweis:‘Cupra Born + Tavascan als BEV foerderfaehig.’}},
-‘Renault’:{rpct:18,hint:‘Renault 15-20%. Megane/Scenic E-Tech empfohlen.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Renault Megane/Scenic E-Tech foerderfaehig.’}},
-‘Peugeot’:{rpct:18,hint:‘Peugeot 15-20%. Herstellerpraemie auf E-Modelle!’,adac:null,fazit:null,foerd:{staat:4000,hersteller:5000,hinweis:‘Peugeot zahlt eigene Praemie: e-208 +5.500, e-2008 +6.500, e-3008/e-5008 je +5.000 EUR!’}},
-‘Toyota’:{rpct:12,hint:‘Toyota 10-15%.’,adac:null,fazit:null,foerd:{staat:3500,hersteller:0,hinweis:‘Toyota bZ4X foerderfaehig.’}},
-‘Hyundai’:{rpct:15,hint:‘Hyundai 15%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Hyundai Ioniq 5/6/9 foerderfaehig.’}},
-‘Kia’:{rpct:15,hint:‘Kia 15%. 7-Jahres-Garantie.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Kia EV3/EV6 foerderfaehig.’}},
-‘Tesla’:{rpct:0,hint:‘Tesla: Direktvertrieb, kaum Rabatte.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Tesla Model 3/Y foerderfaehig.’}},
-‘Volvo’:{rpct:20,hint:‘Volvo 15-20%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Volvo EX30/EX40 foerderfaehig.’}},
-‘Porsche’:{rpct:5,hint:‘Porsche: kaum Rabatte. Taycan > 100.000 EUR = 0,5% GVV.’,adac:null,fazit:null,foerd:{staat:0,hersteller:0,hinweis:‘Porsche Taycan: Listenpreis uebersteigt Foerdergrenzen.’}},
-‘Sonstiger’:{rpct:10,hint:‘Flottenrabatt je nach Hersteller 10-20%.’,adac:null,fazit:null,foerd:{staat:4000,hersteller:0,hinweis:‘Foerderfaehigkeit je nach Modell pruefen.’}}
-};
+function rechne(){
+  var brutto=gi('brutto')||4000;
+  var ks=getKS();
+  var lp=gi('lp')||40000;
+  var satz=SAETZE[ANTRIEB];
+  var gvv=Math.round(lp*satz);
+  var stO=jst(brutto,ks)/12;
+  var svO=svAN(brutto);
+  var stM=jst(brutto+gvv,ks)/12;
+  var svM=svAN(brutto+gvv);
+  var mehrsteuer=Math.round((stM-stO)+(svM-svO));
+  var nettoOhne=Math.round(brutto-stO-svO);
+  var nettoMit=Math.round(brutto-stM-svM);
 
-var SAETZE={elektro:0.0025,hybrid:0.005,verbrenner:0.01};
-var ANTRIEB_LABEL={elektro:‘Elektro’,hybrid:‘Hybrid’,verbrenner:‘Verbrenner’};
-var ANTRIEB_ICON={elektro:‘E’,hybrid:‘H’,verbrenner:‘V’};
-var ak=‘elektro’;
-var selSave=null;
-var ahSelected=null;
-var ahTimer=null;
-var lrModus=‘zusatz’;
-
-// ===== FAHRZEUGSUCHE =====
-var FAHRZEUGE=[
-{name:‘Opel Grandland Electric’,hersteller:‘Opel’,antrieb:‘elektro’,lp:40000,note:‘ADAC 2,0’,pro:‘Viel Platz, Electric All In, 20% Rabatt’,contra:‘Ladegeschwindigkeit’,tags:[‘platz’,‘effizienz’,‘kosten’],budget:‘3050’},
-{name:‘Skoda Enyaq 85’,hersteller:‘Skoda’,antrieb:‘elektro’,lp:43000,note:‘ADAC 1,6’,pro:‘ADAC Platz 1, 0% Leasingzins bis 06/2026’,contra:‘Kofferraum kleiner als Grandland’,tags:[‘platz’,‘effizienz’,‘kosten’],budget:‘3050’},
-{name:‘Skoda Elroq 85’,hersteller:‘Skoda’,antrieb:‘elektro’,lp:38000,note:‘ADAC 1,6’,pro:‘Zweitbeste ADAC-Note aller Zeiten’,contra:‘Neu auf dem Markt’,tags:[‘effizienz’,‘kosten’],budget:‘3050’},
-{name:‘Audi Q6 e-tron’,hersteller:‘Audi’,antrieb:‘elektro’,lp:68000,note:‘ADAC 1,6’,pro:‘Testsieger, hochwertige Verarbeitung’,contra:‘Hoher Listenpreis = mehr Steuer’,tags:[‘image’,‘effizienz’],budget:‘5080’},
-{name:‘Cupra Tavascan’,hersteller:‘Cupra’,antrieb:‘elektro’,lp:47000,note:‘ADAC empfohlen’,pro:‘Sportliches Design, gutes Fahrverhalten’,contra:‘Weniger Rabatt als Skoda’,tags:[‘sport’,‘image’],budget:‘3050’},
-{name:‘Cupra Formentor e-Hybrid’,hersteller:‘Cupra’,antrieb:‘hybrid’,lp:39000,note:‘18% Rabatt’,pro:‘18% Unternehmerbonus, Sport’,contra:‘0,5% GVV statt 0,25%’,tags:[‘sport’,‘kosten’],budget:‘3050’},
-{name:‘VW ID.4’,hersteller:‘VW’,antrieb:‘elektro’,lp:45000,note:null,pro:‘Bewaehrte Plattform, gutes P/L’,contra:‘Weniger Rabatt als Skoda’,tags:[‘platz’,‘prakt’],budget:‘3050’},
-{name:‘Tesla Model Y’,hersteller:‘Tesla’,antrieb:‘elektro’,lp:44000,note:null,pro:‘Reichweite, Ladenetz, Software’,contra:‘Kein Rabatt, weniger Komfort’,tags:[‘effizienz’,‘sport’],budget:‘3050’},
-{name:‘BMW i4’,hersteller:‘BMW’,antrieb:‘elektro’,lp:56000,note:null,pro:‘Fahrverhalten, Verarbeitung, Reichweite’,contra:‘Hoehere Kosten’,tags:[‘sport’,‘image’],budget:‘5080’},
-{name:‘Hyundai Ioniq 6’,hersteller:‘Hyundai’,antrieb:‘elektro’,lp:42000,note:null,pro:‘Sehr effizient, 800V-Laden’,contra:‘Design Geschmackssache’,tags:[‘effizienz’,‘kosten’],budget:‘3050’},
-{name:‘Peugeot e-3008’,hersteller:‘Peugeot’,antrieb:‘elektro’,lp:44000,note:null,pro:‘5.000 EUR Herstellerpraemie!’,contra:‘Neues Modell’,tags:[‘kosten’,‘prakt’],budget:‘3050’},
-{name:‘Renault Scenic E-Tech’,hersteller:‘Renault’,antrieb:‘elektro’,lp:38000,note:null,pro:‘Gutes P/L-Verhaeltnis, Platz’,contra:‘Weniger Markenimage’,tags:[‘platz’,‘kosten’],budget:‘3050’},
-{name:‘Volvo EX40’,hersteller:‘Volvo’,antrieb:‘elektro’,lp:46000,note:null,pro:‘Sicherheit, Komfort, 20% Rabatt’,contra:‘Weniger sportlich’,tags:[‘platz’,‘prakt’],budget:‘3050’},
-{name:‘Porsche Taycan’,hersteller:‘Porsche’,antrieb:‘elektro’,lp:95000,note:null,pro:‘Prestige, Fahrverhalten, Ladetechnik’,contra:‘Sehr hoher LP’,tags:[‘image’,‘sport’],budget:‘o80’}
-];
-
-function togglePref(btn){btn.classList.toggle(‘sel’);}
-
-function berechneEmpfehlungen(){
-var prefs={};
-var prefIds=[‘platz’,‘sport’,‘effizienz’,‘kosten’,‘image’,‘prakt’];
-for(var pi=0;pi<prefIds.length;pi++){
-var pel=document.getElementById(‘p-’+prefIds[pi]);
-if(pel&&pel.classList.contains(‘sel’))prefs[prefIds[pi]]=true;
-}
-var bev=document.getElementById(‘p-bev’)&&document.getElementById(‘p-bev’).classList.contains(‘sel’);
-var budget=‘3050’;
-var budgets=[‘u30’,‘3050’,‘5080’,‘o80’];
-for(var bi=0;bi<budgets.length;bi++){
-var bel=document.getElementById(‘p-’+budgets[bi]);
-if(bel&&bel.classList.contains(‘sel’)){budget=budgets[bi];break;}
-}
-var brutto=gi(‘brutto’)||4000;
-var ks=getKS();
-var scored=[];
-for(var fi=0;fi<FAHRZEUGE.length;fi++){
-var f=FAHRZEUGE[fi];
-var score=0;
-for(var tag in prefs){if(prefs[tag]){for(var ti=0;ti<f.tags.length;ti++){if(f.tags[ti]===tag)score+=3;}}}
-if(f.budget===budget)score+=2;
-if(f.note&&f.note.indexOf(‘1,6’)>=0)score+=2;
-if(bev&&f.antrieb===‘elektro’)score+=2;
-scored.push({f:f,score:score});
-}
-scored.sort(function(a,b){return b.score-a.score;});
-var top=scored.slice(0,5);
-var wrap=document.getElementById(‘emp-wrap’);
-var list=document.getElementById(‘emp-list’);
-if(!wrap||!list)return;
-wrap.style.display=‘block’;
-var html=’’;
-for(var si=0;si<top.length;si++){
-var f=top[si].f;
-var r=berechne(brutto,ks,f.lp,SAETZE[f.antrieb],0);
-var idx=si;
-html+=’<div class="emp-card">’;
-html+=’<div class="emp-head"><div>’;
-html+=’<div class="emp-name">’+f.antrieb.charAt(0).toUpperCase()+’ ‘+f.name+’</div>’;
-if(f.note)html+=’<div style="font-size:11px;color:var(--mu);margin-top:2px;">’+f.note+’</div>’;
-html+=’</div><div class="emp-badge">~’+fmt(f.lp)+’</div></div>’;
-html+=’<div class="emp-desc">Vorteil: ‘+f.pro+’<br>Nachteil: ‘+f.contra+’</div>’;
-html+=’<div class="emp-row"><span class="emp-l">Mehrsteuer/Mo.</span><span class="emp-v" style="color:var(--red);">-’+fmt(r.gk)+’</span></div>’;
-html+=’<div class="emp-row"><span class="emp-l">Netto mit DW</span><span class="emp-v" style="color:var(--gold);">’+fmt(r.nettoMit)+’</span></div>’;
-html+=’<button type="button" class="use-btn" onclick="uebernehmeFahrzeug('+si+')">Uebernehmen in Rechner</button>’;
-html+=’</div>’;
-}
-list.innerHTML=html;
-window._empTop=top;
+  var marke=document.getElementById('hersteller');
+  var modell=document.getElementById('modell');
+  document.getElementById('h-lp').textContent=fmt(lp);
+  document.getElementById('h-st').textContent='-'+fmt(mehrsteuer);
+  document.getElementById('r-diff').textContent='-'+fmt(mehrsteuer);
+  document.getElementById('r-brutto').textContent=fmt(brutto);
+  document.getElementById('r-ohne').textContent=fmt(nettoOhne);
+  document.getElementById('r-steuer').textContent='-'+fmt(mehrsteuer);
+  document.getElementById('r-mit').textContent=fmt(nettoMit);
 }
 
-function uebernehmeFahrzeug(idx){
-if(!window._empTop)return;
-var f=window._empTop[idx].f;
-var sel=document.getElementById(‘hersteller’);
-if(sel){
-for(var i=0;i<sel.options.length;i++){
-if(sel.options[i].value===f.hersteller){sel.selectedIndex=i;break;}
-}
-}
-var tyEl=document.getElementById(‘fahrzeugtyp’);
-if(tyEl)tyEl.value=f.name;
-var lpEl=document.getElementById(‘listenpreis’);
-if(lpEl)lpEl.value=f.lp;
-ak=f.antrieb;
-var abs=document.querySelectorAll(’.ab’);
-for(var i=0;i<abs.length;i++)abs[i].classList.toggle(‘active’,abs[i].getAttribute(‘data-key’)===ak);
-onHerstellerChange();
-showPage(‘auto’,1);
+function updateNetto(){
+  var b=gi('brutto')||4000;
+  var ks=getKS();
+  var n=Math.round(b-jst(b,ks)/12-svAN(b));
+  var el=document.getElementById('netto-prev');
+  if(el)el.innerHTML='Netto ohne Dienstwagen: <strong style="color:var(--grn);">'+fmt(n)+'/Mo.</strong>';
 }
 
-// ===== FOERDERUNG =====
-function updateFoerdSub(){
-var a=document.getElementById(‘foerd-aktiv’);
-var sub=document.getElementById(‘foerd-sub’);
-var det=document.getElementById(‘foerd-detail’);
-if(sub)sub.textContent=a&&a.checked?‘Aktiv’:‘Aus’;
-if(det)det.style.display=a&&a.checked?‘block’:‘none’;
-update();
-}
-function getFoerdGesamt(){
-var el=document.getElementById(‘foerd-aktiv’);
-if(!el||!el.checked)return 0;
-return gi(‘foerd-staat’)+gi(‘foerd-hersteller’);
+function onMarke(){rechne();}
+
+function zeigSeite(name,idx){
+  var pages=document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++)pages[i].classList.remove('active');
+  var p=document.getElementById('page-'+name);
+  if(p)p.classList.add('active');
+  var nbs=document.querySelectorAll('.nb');
+  for(var i=0;i<nbs.length;i++)nbs[i].classList.toggle('active',i===idx);
+  if(name==='saves')zeigSaves();
+  if(name==='stamm')updateNetto();
+  window.scrollTo(0,0);
 }
 
-// ===== LEASINGRATE MODUS =====
-function setLRMode(m){
-lrModus=m;
-var btnZ=document.getElementById(‘lr-mode-zusatz’);
-var btnU=document.getElementById(‘lr-mode-umwandlung’);
-var btnA=document.getElementById(‘lr-mode-abzug’);
-var erkl=document.getElementById(‘lr-mode-erkl’);
-if(btnZ){btnZ.style.background=‘none’;btnZ.style.color=‘var(–mu)’;}
-if(btnU){btnU.style.background=‘none’;btnU.style.color=‘var(–mu)’;}
-if(btnA){btnA.style.background=‘none’;btnA.style.color=‘var(–mu)’;}
-if(m===‘zusatz’){
-if(btnZ){btnZ.style.background=‘var(–grn)’;btnZ.style.color=’#0f0f13’;}
-if(erkl)erkl.innerHTML=’<strong style="color:var(--grn);">Beste Variante:</strong> AG zahlt die Rate zusaetzlich zu Ihrem Brutto. Ihr Netto sinkt nur durch die GVV-Mehrsteuer. Die Leasingrate kostet Sie nichts.’;
-}else if(m===‘umwandlung’){
-if(btnU){btnU.style.background=‘var(–gold)’;btnU.style.color=’#0f0f13’;}
-if(erkl)erkl.innerHTML=’<strong style="color:var(--gold);">Gehaltsumwandlung:</strong> Ihr Brutto wird um die Rate reduziert. Sie zahlen weniger Sozialversicherung - aber auch weniger Rente.’;
-}else{
-if(btnA){btnA.style.background=‘var(–red)’;btnA.style.color=’#fff’;}
-if(erkl)erkl.innerHTML=’<strong style="color:var(--red);">Achtung - schlechteste Variante:</strong> Die Rate wird von Ihrem Netto abgezogen. Kostenpunkt = GVV-Mehrsteuer PLUS volle Rate. Wenn moeglich verhandeln!’;
-}
-update();
-}
-
-// ===== MODE =====
-function setMode(m){update();}
-function updateLRLabel(){
-var t=gs(‘lrabatt-typ’);
-var el=document.getElementById(‘lrabatt-label’);
-if(el)el.textContent=t===‘pct’?‘Flottenabzug (%)’:‘Flottenabzug (EUR)’;
-}
-function onHerstellerChange(){
-var h=gs(‘hersteller’);
-var m=MARKEN[h];
-if(m){
-var rpct=document.getElementById(‘rpct’);
-if(rpct)rpct.value=m.rpct||0;
-if(m.foerd&&ak===‘elektro’){
-var fs=document.getElementById(‘foerd-staat’);
-var fh=document.getElementById(‘foerd-hersteller’);
-var fhi=document.getElementById(‘foerd-hinweis’);
-if(fs)fs.value=m.foerd.staat||0;
-if(fh)fh.value=m.foerd.hersteller||0;
-if(fhi)fhi.textContent=m.foerd.hinweis||’’;
-}
-}
-update();
-}
-function updateKistSub(){
-var a=document.getElementById(‘kist-aktiv’);
-var s=document.getElementById(‘kist-satz’);
-var sub=document.getElementById(‘kist-sub’);
-if(sub)sub.textContent=(a&&a.checked)?(‘Aktiv - ‘+(s&&s.value===‘0.08’?‘8%’:‘9%’)):‘Inaktiv’;
-}
-function updateHoSub(){
-var a=document.getElementById(‘ho-aktiv’);
-var sub=document.getElementById(‘ho-sub’);
-var hint=document.getElementById(‘ho-hint’);
-if(sub)sub.textContent=(a&&a.checked)?‘Aktiv - nur echte Fahrten’:‘Aus - Pauschale gilt’;
-if(hint)hint.style.display=(a&&a.checked)?‘block’:‘none’;
-updateKmInfo();
-}
-function renderNotiz(){
-var el=document.getElementById(‘notiz’);
-var list=document.getElementById(‘notiz-list’);
-if(!el||!list)return;
-var lines=el.value.split(’\n’);
-var html=’’;
-for(var i=0;i<lines.length;i++){
-var l=lines[i].replace(/^[-*\s]+/,’’).trim();
-if(l)html+=’<li>’+l+’</li>’;
-}
-list.innerHTML=html;
-update();
-}
-function updateNettoInfo(){
-var b=gi(‘brutto’)||4000;
-var ks=getKS();
-var n=Math.round(b-jst(b,ks)/12-svAN(b));
-var el=document.getElementById(‘netto-prev’);
-if(el)el.innerHTML=‘Ihr Nettolohn ohne Dienstwagen: <strong style="color:var(--grn);">’+fmt(n)+’/Mo.</strong>’;
-}
-function updateKmInfo(){
-var lp=gi(‘listenpreis’)||40000;
-var km=gi(‘km-info’)||3.4;
-var fahr=gi(‘fahr-info’)||21;
-var ho=document.getElementById(‘ho-aktiv’);
-var hoAktiv=ho&&ho.checked;
-var html=’<strong>Pauschale 0,03%:</strong> ‘+fmt(Math.round(lp*0.0003*km))+’/Mo.’;
-if(hoAktiv){
-var e=Math.round(lp*0.00002*km*fahr);
-var p=Math.round(lp*0.0003*km);
-html+=’<br><strong style="color:var(--blu);">Einzelbewertung (’+fahr+‘x):</strong> ‘+fmt(e)+’/Mo.’;
-if(p>e)html+=’ <span style="color:var(--grn);">- ‘+fmt(p-e)+’/Mo. guenstiger</span>’;
-}
-var el=document.getElementById(‘km-rechnung’);
-if(el)el.innerHTML=html;
+function speichern(){
+  var brutto=gi('brutto')||4000;
+  var ks=getKS();
+  var lp=gi('lp')||40000;
+  var satz=SAETZE[ANTRIEB];
+  var gvv=Math.round(lp*satz);
+  var stO=jst(brutto,ks)/12;
+  var svO=svAN(brutto);
+  var stM=jst(brutto+gvv,ks)/12;
+  var svM=svAN(brutto+gvv);
+  var mehrsteuer=Math.round((stM-stO)+(svM-svO));
+  var marke=document.getElementById('hersteller');
+  var modell=document.getElementById('modell');
+  var name=(marke?marke.value:'')+(modell?' '+modell.value:'');
+  var d=new Date().toLocaleDateString('de-DE');
+  var entry={id:Date.now(),name:name+' ('+d+')',lp:lp,mehrsteuer:mehrsteuer,antrieb:ANTRIEB};
+  var saves=[];
+  try{saves=JSON.parse(localStorage.getItem('dw_saves')||'[]');}catch(e){}
+  saves.unshift(entry);
+  try{localStorage.setItem('dw_saves',JSON.stringify(saves));}catch(e){}
+  var btn=document.querySelector('.btn-gold');
+  if(btn){btn.textContent='Gespeichert!';setTimeout(function(){btn.textContent='Berechnung speichern';},2000);}
+  zeigSeite('saves',2);
 }
 
-// ===== TOGGLE DETAILS =====
-function toggleDetails(){
-var panel=document.getElementById(‘details-panel’);
-var arrow=document.getElementById(‘details-arrow’);
-var btn=document.getElementById(‘details-toggle-btn’);
-if(!panel)return;
-var open=panel.style.display===‘none’;
-panel.style.display=open?‘block’:‘none’;
-if(arrow)arrow.style.transform=open?‘rotate(90deg)’:‘rotate(0deg)’;
-if(btn){btn.style.color=open?‘var(–gold)’:‘var(–mu)’;btn.style.borderColor=open?‘var(–gold)’:‘var(–br)’;}
-}
-function toggleDetailExtra(){
-var lrt=document.getElementById(‘lrtyp-w’);
-var lrv=document.getElementById(‘lrval-w’);
-var zuz=document.getElementById(‘zuzahl-w’);
-var btn=document.getElementById(‘detail-extra-toggle’);
-var show=lrt&&lrt.style.display===‘none’;
-if(lrt)lrt.style.display=show?‘block’:‘none’;
-if(lrv)lrv.style.display=show?‘block’:‘none’;
-if(zuz)zuz.style.display=show?‘block’:‘none’;
-if(btn){var b=btn.querySelector(‘button’);if(b)b.textContent=show?’- Flottenabzug ausblenden’:’+ Flottenabzug anzeigen’;}
+function zeigSaves(){
+  var saves=[];
+  try{saves=JSON.parse(localStorage.getItem('dw_saves')||'[]');}catch(e){}
+  var c=document.getElementById('saves-list');
+  if(!c)return;
+  if(!saves.length){c.innerHTML='<div class="saves-empty">Noch keine Berechnungen gespeichert.</div>';return;}
+  var h='';
+  for(var i=0;i<saves.length;i++){
+    var s=saves[i];
+    var a=s.antrieb==='e'?'Elektro':s.antrieb==='h'?'Hybrid':'Verbrenner';
+    h+='<div class="save-item"><div class="save-name">'+s.name+'</div>';
+    h+='<div class="save-meta">'+a+' - LP: '+fmt(s.lp)+' - Mehrsteuer: -'+fmt(s.mehrsteuer)+'/Mo.</div></div>';
+  }
+  c.innerHTML=h;
 }
 
-// ===== HAUPTUPDATE =====
-function update(){
-var brutto=gi(‘brutto’)||4000;
-var ks=getKS();
-var lp=gi(‘listenpreis’)||40000;
-var zuz=gi(‘zuzahl’)||0;
-var lr=gi(‘lrate’)||0;
-var pr=gi(‘priv-rate’)||0;
-var h=gs(‘hersteller’)||‘Opel’;
-var m=MARKEN[h];
-var typ=gs(‘fahrzeugtyp’)||’’;
-var foerdGes=getFoerdGesamt();
-var laufzeit=gi(‘laufzeit’)||36;
-var kmJahr=gi(‘km-jahr’)||10000;
-
-// Header aktualisieren
-var fhm=document.getElementById(‘fh-m’); if(fhm)fhm.textContent=h;
-var fht=document.getElementById(‘fh-t’); if(fht)fht.textContent=typ||’–’;
-var fhlp=document.getElementById(‘fh-lp’); if(fhlp)fhlp.textContent=fmt(lp);
-var fhlr=document.getElementById(‘fh-lr’); if(fhlr)fhlr.textContent=lr>0?fmt(lr)+’/Mo.’:’–’;
-
-// ADAC Badge
-var adac=document.getElementById(‘adac-inline’);
-if(adac)adac.innerHTML=m&&m.adac?(’<span class="adac-b">’+m.adac+’</span>’):’’;
-
-// Marken-Hint
-var mhEl=document.getElementById(‘marken-hint’);
-if(mhEl){
-if(m&&m.hint){mhEl.style.display=‘block’;mhEl.innerHTML=’<strong>’+h+’:</strong> ’+m.hint;}
-else mhEl.style.display=‘none’;
-}
-
-// Foerd-Card nur bei Elektro
-var fc=document.getElementById(‘foerd-card’);
-if(fc)fc.style.display=ak===‘elektro’?‘block’:‘none’;
-
-// Alle 3 Antriebe berechnen
-var RES={};
-var ns=[];
-var antriebe=[‘elektro’,‘hybrid’,‘verbrenner’];
-for(var ai=0;ai<antriebe.length;ai++){
-var key=antriebe[ai];
-RES[key]=berechne(brutto,ks,lp,SAETZE[key],zuz);
-ns.push(RES[key].nettoMit);
-}
-var maxN=Math.max(ns[0],ns[1],ns[2]);
-var minN=Math.min(ns[0],ns[1],ns[2]);
-
-var shortMap={e:‘elektro’,h:‘hybrid’,v:‘verbrenner’};
-for(var sk in shortMap){
-var skey=shortMap[sk];
-var sr=RES[skey];
-var tkEl=document.getElementById(‘tk-’+sk);
-var tnEl=document.getElementById(‘tn-’+sk);
-var triEl=document.getElementById(‘tri-’+sk);
-if(tkEl)tkEl.textContent=’-’+fmt(sr.gk)+’ Steuer’;
-if(tnEl){
-tnEl.textContent=fmt(sr.nettoMit);
-tnEl.className=‘tri-n’+(sr.nettoMit===maxN?’ best’:sr.nettoMit===minN?’ low’:’ mid’);
-}
-if(triEl)triEl.classList.toggle(‘sel’,skey===ak);
-}
-
-// Aktiver Antrieb
-var r=RES[ak];
-
-// Modusabhaengige Berechnung
-var anzeigeDiff=r.gk;
-var anzeigeNetto=r.nettoMit;
-var anzeigeHinweis=’’;
-if(lrModus===‘abzug’&&lr>0){
-anzeigeDiff=r.gk+lr;
-anzeigeNetto=r.nettoMit-lr;
-anzeigeHinweis=‘Mehrsteuer ‘+fmt(r.gk)+’ + Rate ‘+fmt(lr)+’ = ‘+fmt(anzeigeDiff)+’/Mo.’;
-}else if(lrModus===‘umwandlung’&&lr>0){
-var bruttoNeu=Math.max(0,brutto-lr);
-var rU=berechne(bruttoNeu,ks,lp,SAETZE[ak],zuz);
-var svErsparnis=Math.round(svAN(brutto)-svAN(bruttoNeu));
-anzeigeDiff=Math.max(0,r.nettoOhne-rU.nettoMit);
-anzeigeNetto=rU.nettoMit;
-anzeigeHinweis=‘GVV-Steuer ‘+fmt(rU.gk)+’ + Verzicht ‘+fmt(lr)+’ - SV-Ersparnis ‘+fmt(svErsparnis)+’ = ‘+fmt(anzeigeDiff)+’/Mo.’;
-}
-
-// Kostenblock
-var diffColor=lrModus===‘zusatz’?‘var(–gold)’:lrModus===‘umwandlung’?‘var(–orng)’:‘var(–red)’;
-var kbt=document.getElementById(‘kb-title’); if(kbt)kbt.textContent=ANTRIEB_LABEL[ak]+’ - Kostenrechnung’;
-var kbb=document.getElementById(‘kb-brutto’); if(kbb)kbb.textContent=fmt(brutto);
-var kbo=document.getElementById(‘kb-ohne’); if(kbo)kbo.textContent=fmt(r.nettoOhne);
-var kbst=document.getElementById(‘kb-st’); if(kbst)kbst.textContent=’-’+fmt(r.gk);
-var kbm=document.getElementById(‘kb-mit’); if(kbm)kbm.textContent=fmt(anzeigeNetto);
-var kbd=document.getElementById(‘kb-diff’);
-if(kbd){kbd.textContent=’-’+fmt(anzeigeDiff);kbd.style.color=diffColor;}
-var fhst=document.getElementById(‘fh-st’); if(fhst)fhst.textContent=’-’+fmt(anzeigeDiff);
-
-var kbzrow=document.getElementById(‘kb-zrow’);
-var kbz=document.getElementById(‘kb-z’);
-if(kbzrow&&kbz){
-kbzrow.style.display=zuz>0?‘flex’:‘none’;
-if(zuz>0)kbz.textContent=’-’+fmt(Math.min(zuz,r.gvvB))+’ GVV’;
-}
-
-// Rate-Info
-var lri=document.getElementById(‘kb-lr-info’);
-var lrResult=document.getElementById(‘lrate-result’);
-if(lr>0){
-var lf=lr/lp*100;
-var lfi=lfInfo(lf);
-var gesamtLK=lr*laufzeit;
-var kmStr=(kmJahr).toLocaleString(‘de-DE’);
-if(lri)lri.innerHTML=‘Rate: <strong>’+fmt(lr)+’</strong> ? ‘+laufzeit+’ Mo. ? ‘+kmStr+’ km/Jahr ? Gesamt: ‘+fmt(gesamtLK)+(lrModus===‘zusatz’?’ ? <span style="color:var(--grn);">AG zahlt - kein Abzug</span>’:lrModus===‘umwandlung’?’ ? <span style="color:var(--orng);">Gehaltsumwandlung</span>’:’ ? <span style="color:var(--red);">vom Netto abgezogen!</span>’);
-if(lrResult){
-lrResult.style.display=‘block’;
-lrResult.innerHTML=’<div style="background:var(--sf2);border-radius:9px;padding:10px 13px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;">’
-+’<div><div style="font-size:10px;color:var(--dm);margin-bottom:2px;">Leasingfaktor</div><div style="font-size:16px;font-weight:700;color:'+lfi.c+';">’+fmtPct(lf)+’</div><div style="font-size:10px;color:'+lfi.c+';">’+lfi.t+’</div></div>’
-+’<div style="text-align:right;"><div style="font-size:10px;color:var(--dm);margin-bottom:2px;">Ihr Kostenpunkt</div><div style="font-size:18px;font-weight:700;color:'+diffColor+';">-’+fmt(anzeigeDiff)+’</div><div style="font-size:10px;color:var(--dm);">pro Monat</div></div>’
-+’</div>’
-+(anzeigeHinweis?’<div style="font-size:11px;color:var(--dm);margin-top:5px;">’+anzeigeHinweis+’</div>’:’’);
-}
-}else{
-if(lri)lri.textContent=’’;
-if(lrResult)lrResult.style.display=‘none’;
-}
-
-// Foerderung
-var fbEl=document.getElementById(‘foerd-badge’);
-if(fbEl){
-if(foerdGes>0&&ak===‘elektro’){
-fbEl.style.display=‘block’;
-var staat=gi(‘foerd-staat’);
-var herst=gi(‘foerd-hersteller’);
-var frows=’’;
-if(staat>0)frows+=’<div class="foerd-row"><span style="color:var(--mu);">Staatl. Umweltbonus 2026</span><span style="font-weight:700;color:var(--grn);">+’+fmt(staat)+’</span></div>’;
-if(herst>0)frows+=’<div class="foerd-row"><span style="color:var(--mu);">Herstellerpraemie</span><span style="font-weight:700;color:var(--grn);">+’+fmt(herst)+’</span></div>’;
-var frowEl=document.getElementById(‘foerd-rows’); if(frowEl)frowEl.innerHTML=frows;
-var fgesEl=document.getElementById(‘foerd-gesamt’); if(fgesEl)fgesEl.textContent=’+’+fmt(foerdGes);
-var fantEl=document.getElementById(‘foerd-antrag’);
-if(fantEl)fantEl.innerHTML=‘BAFA-Antrag nach Zulassung, spaetestens 1 Jahr. Mind. 36 Monate halten. - Foerderung entspricht ca. <strong style="color:var(--grn);">’+(foerdGes/Math.max(1,r.gk)).toFixed(0)+’ Monaten</strong> Ihrer Mehrsteuer.’;
-}else fbEl.style.display=‘none’;
-}
-
-// Fazit
-var fEl=document.getElementById(‘test-fazit’);
-if(fEl){
-if(m&&m.fazit){fEl.style.display=‘block’;fEl.innerHTML=’<strong>Testurteil:</strong> ’+m.fazit;}
-else fEl.style.display=‘none’;
-}
-
-// Privatleasing
-var prEl=document.getElementById(‘priv-res’);
-if(prEl){
-if(pr>0){
-prEl.style.display=‘block’;
-var diff=pr-r.gk;
-var b=diff>0;
-prEl.innerHTML=’<div class="priv-title">Privatleasing vs. Dienstwagen</div>’
-+’<div class="priv-row"><span class="kl">Private Rate</span><span class="kv neg">-’+fmt(pr)+’/Mo.</span></div>’
-+’<div class="priv-row"><span class="kl">Mehrsteuer DW</span><span class="kv neg">-’+fmt(r.gk)+’/Mo.</span></div>’
-+’<div class="priv-row"><span class="kl">Unterschied</span><span class="kv '+(b?'pos':'neg')+'">’+(b?’+’:’-’)+fmt(Math.abs(diff))+’/Mo.</span></div>’
-+’<div class="priv-verd"><strong>’+(b?‘Dienstwagen guenstiger’:‘Privatleasing guenstiger’)+’</strong></div>’;
-}else prEl.style.display=‘none’;
-}
-
-// Verhandlungsanalyse
-updateVerhandlung(brutto,ks,lp,r,lr,laufzeit,kmJahr);
-
-// Haendler-Tab
-updateHaendlerTab(h,typ,lp,r,lr);
-
-// Haendler Laufzeit+km
-var hlz=document.getElementById(‘h-laufzeit’); if(hlz)hlz.textContent=laufzeit;
-var hkm=document.getElementById(‘h-km’); if(hkm)hkm.textContent=kmJahr.toLocaleString(‘de-DE’);
-
-// Save-Preview
-var d=new Date().toLocaleDateString(‘de-DE’,{day:‘2-digit’,month:‘2-digit’,year:‘numeric’});
-var sp=document.getElementById(‘save-preview’);
-if(sp)sp.textContent=h+’ - ‘+(typ||‘Typ’)+’ - ’+d;
-
-if(selSave)renderCompare(selSave);
-}
-
-function sw(k){
-try{
-ak=k;
-var abs=document.querySelectorAll(’.ab’);
-for(var i=0;i<abs.length;i++)abs[i].classList.toggle(‘active’,abs[i].getAttribute(‘data-key’)===k);
-update();
-}catch(e){alert(’sw Fehler: ’+e.message);}
-}
-
-function updateVerhandlung(brutto,ks,lp,r,lr,laufzeit,kmJahr){
-var vsec=document.getElementById(‘verhandlung-section’);
-if(!vsec)return;
-if(lr<=0){vsec.style.display=‘none’;return;}
-vsec.style.display=‘block’;
-var lf=lr/lp*100;
-var lfi=lfInfo(lf);
-var h=gs(‘hersteller’);
-var m=MARKEN[h];
-var gvvM=Math.round(lp*SAETZE[ak]);
-var rabattPct=m?m.rpct:0;
-var gesamtKosten=lr*(laufzeit||36);
-var rows=’’;
-rows+=’<div class="vh-row"><span class="vh-l">Listenpreis (steuerliche Basis)</span><span class="vh-v ok">’+fmt(lp)+’</span></div>’;
-if(rabattPct>0)rows+=’<div class="vh-row"><span class="vh-l">Einkaufspreis nach ‘+rabattPct+’% Rabatt</span><span class="vh-v good">’+fmt(Math.max(0,lp*(1-rabattPct/100)))+’</span></div>’;
-rows+=’<div class="vh-row"><span class="vh-l">GVV/Mo. (’+ANTRIEB_LABEL[ak]+’, ‘+(SAETZE[ak]*100).toFixed(2)+’%)</span><span class="vh-v ok">’+fmt(gvvM)+’</span></div>’;
-rows+=’<div class="vh-row"><span class="vh-l">Ihre Mehrsteuer</span><span class="vh-v bad">-’+fmt(r.gk)+’/Mo.</span></div>’;
-rows+=’<div class="vh-row"><span class="vh-l">Leasingrate (zahlt AG)</span><span class="vh-v neu">’+fmt(lr)+’/Mo.</span></div>’;
-rows+=’<div class="vh-row"><span class="vh-l">Laufzeit / km/Jahr</span><span class="vh-v neu">’+(laufzeit||36)+’ Mo. / ‘+((kmJahr||10000)).toLocaleString(‘de-DE’)+’ km</span></div>’;
-rows+=’<div class="vh-row"><span class="vh-l">Gesamtkosten Leasing</span><span class="vh-v neu">’+fmt(gesamtKosten)+’</span></div>’;
-rows+=’<div class="vh-row"><span class="vh-l">Leasingfaktor</span><span class="vh-v" style="color:'+lfi.c+';">’+fmtPct(lf)+’ - ‘+lfi.t+’</span></div>’;
-rows+=’<div style="padding:8px 0;"><div class="fakt-bar"><div class="fakt-fill" style="width:'+Math.min(100,lf/1.5*100)+'%;background:'+lfi.c+';"></div></div></div>’;
-var vhc=document.getElementById(‘vh-content’); if(vhc)vhc.innerHTML=rows;
-var taktik=’<strong>Taktik fuer ‘+h+’ (’+ANTRIEB_LABEL[ak]+’):</strong><br><br>’;
-if(lf>1.0)taktik+=‘Leasingfaktor ‘+fmtPct(lf)+’ ueber 1% - verhandeln Sie auf unter ‘+fmt(Math.round(lp/100))+’/Mo.<br>’;
-taktik+=‘Ihre Mehrsteuer ‘+fmt(r.gk)+’/Mo. ist Ihr einziger Kostenpunkt.<br>’;
-taktik+=‘AG-Argument: Leasingrate sofort als Betriebsausgabe absetzbar. Turboabschreibung 75% moeglich.’;
-var vht=document.getElementById(‘vh-taktik’); if(vht)vht.innerHTML=taktik;
-}
-
-function updateHaendlerTab(h,typ,lp,r,lr){
-var el=document.getElementById(‘haendler-fahrzeug’);
-if(el)el.innerHTML=’<strong>’+h+(typ?’ ‘+typ:’’)+’</strong><br>LP: ‘+fmt(lp)+’ - Mehrsteuer: -’+fmt(r.gk)+’/Mo.’+(lr>0?’<br>Rate (AG): ‘+fmt(lr)+’/Mo.’:’’);
-var m=MARKEN[h];
-var el2=document.getElementById(‘haendler-rabatt-text’);
-if(el2&&m)el2.textContent=‘Bei ‘+h+’ sind bis zu ‘+m.rpct+’% Flottenrabatt moeglich. Aktiv ansprechen!’;
-var el3=document.getElementById(‘chef-zahlen’);
-if(el3)el3.innerHTML=‘Mehrsteuer: <strong style="color:var(--red);">-’+fmt(r.gk)+’/Mo.</strong><br>Netto mit DW: <strong style="color:var(--gold);">’+fmt(r.nettoMit)+’/Mo.</strong>’+(lr>0?’<br>Rate (AG): <strong style="color:var(--grn);">’+fmt(lr)+’/Mo.</strong>’:’’)+’<br>AG-Kosten effektiv ca. 30-40% niedriger durch Steuerabzug’;
-}
-
-function updateHaendlerCalc(){
-var rate=gi(‘haendler-rate’);
-var lp=gi(‘listenpreis’);
-var el=document.getElementById(‘haendler-lf’);
-if(!el)return;
-if(rate>0&&lp>0){
-var lf=rate/lp*100;
-var lfi=lfInfo(lf);
-el.textContent=fmtPct(lf);
-el.style.color=lfi.c;
-}else{el.textContent=’–’;el.style.color=‘var(–mu)’;}
-}
-
-// ===== NAVIGATION =====
-function _showErr(m){
-var d=document.createElement(‘div’);
-d.style.cssText=‘position:fixed;top:60px;left:10px;right:10px;background:#c00;color:#fff;padding:14px;font-size:13px;font-weight:bold;z-index:99999;border-radius:10px;word-break:break-all;’;
-d.textContent=‘FEHLER: ‘+m;
-document.body.appendChild(d);
-setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},10000);
-}
-function _showInfo(m){
-var d=document.createElement(‘div’);
-d.style.cssText=‘position:fixed;top:60px;left:10px;right:10px;background:#060;color:#fff;padding:14px;font-size:13px;font-weight:bold;z-index:99999;border-radius:10px;’;
-d.textContent=m;
-document.body.appendChild(d);
-setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},3000);
-}
-function showPage(n,idx){
-_showInfo(‘Wechsle zu: ‘+n);
-try{
-var allPages=document.querySelectorAll(’.page’);
-if(!allPages||allPages.length===0){_showErr(‘Keine Seiten gefunden!’);return;}
-for(var i=0;i<allPages.length;i++){
-allPages[i].hidden=true;
-allPages[i].classList.remove(‘active’);
-}
-var target=document.getElementById(‘page-’+n);
-if(!target){_showErr(‘Seite fehlt: page-’+n);return;}
-target.hidden=false;
-target.classList.add(‘active’);
-var nbs=document.querySelectorAll(’.nb’);
-for(var i=0;i<nbs.length;i++)nbs[i].classList.toggle(‘active’,i===idx);
-try{if(n===‘auto’)update();}catch(e){_showErr(’update: ’+e.message);}
-try{if(n===‘saves’)renderSaves();}catch(e){_showErr(’saves: ’+e.message);}
-try{if(n===‘stamm’){updateNettoInfo();updateKmInfo();}}catch(e){_showErr(’stamm: ’+e.message);}
-try{window.scrollTo(0,0);}catch(e){}
-}catch(e){_showErr(’showPage: ’+e.message);}
-}
-function toggleTip(c){c.classList.toggle(‘open’);}
-
-// ===== AUTOHAUS SUCHE =====
-function debounceSearch(){clearTimeout(ahTimer);ahTimer=setTimeout(searchAutohaus,700);}
-function searchAutohaus(){
-var q=document.getElementById(‘ah-search’);
-var res=document.getElementById(‘ah-results’);
-if(!q||!res)return;
-if(q.value.trim().length<3){res.style.display=‘none’;return;}
-res.style.display=‘block’;
-res.innerHTML=’<div class="search-item" style="color:var(--mu);">Suche laeuft…</div>’;
-var url=‘https://nominatim.openstreetmap.org/search?q=’+encodeURIComponent(q.value.trim()+’ autohaus’)+’&format=json&addressdetails=1&limit=6&countrycodes=de&accept-language=de’;
-fetch(url,{headers:{‘User-Agent’:‘DienstwagenrechnerApp/1.0’}})
-.then(function(r){return r.json();})
-.then(function(data){
-if(!data.length){res.innerHTML=’<div class="search-item" style="color:var(--dm);">Nichts gefunden</div>’;return;}
-var html=’’;
-for(var di=0;di<data.length&&di<6;di++){
-var d=data[di];
-var name=(d.namedetails&&d.namedetails.name)||d.display_name.split(’,’)[0];
-var city=(d.address&&(d.address.city||d.address.town||d.address.village))||’’;
-var street=((d.address&&d.address.road)||’’)+((d.address&&d.address.house_number)?’ ‘+d.address.house_number:’’);
-var addr=[street,(d.address&&d.address.postcode)||’’,city].filter(function(x){return x;}).join(’, ‘);
-var lat=d.lat; var lon=d.lon;
-var ni=di;
-html+=’<div class="search-item" onclick="selectAutohaus('+ni+')"><div class="si-name-r">’+name+’</div><div class="si-addr">’+addr+’</div></div>’;
-window[’*ah*’+ni]={name:name,addr:addr,lat:lat,lon:lon};
-}
-res.innerHTML=html;
-})
-.catch(function(){res.innerHTML=’<div class="search-item" style="color:var(--dm);">Suche fehlgeschlagen</div>’;});
-}
-function selectAutohaus(ni){
-var data=window[’*ah*’+ni];
-if(!data)return;
-document.getElementById(‘ah-results’).style.display=‘none’;
-var qs=document.getElementById(‘ah-search’); if(qs)qs.value=data.name;
-ahSelected=data;
-var det=document.getElementById(‘ah-detail’); if(det){det.style.display=‘block’;}
-var wrap=document.getElementById(‘ah-detail-wrap’); if(wrap)wrap.style.display=‘block’;
-var kw=document.getElementById(‘ah-kontakt-wrap’); if(kw)kw.style.display=‘grid’;
-var detEl=document.getElementById(‘ah-detail’);
-if(detEl)detEl.innerHTML=’<div class="ah-name">’+data.name+’</div>’
-+’<div class="ah-info">’+data.addr+’<br>’
-+’<a href="https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(data.name+' '+data.addr)+'" target="_blank" style="color:var(--blu);">Google Maps</a></div>’
-+’<button type="button" onclick="clearAutohaus()" style="background:none;border:none;color:var(--dm);font-size:11px;cursor:pointer;margin-top:5px;">Entfernen</button>’;
-}
-function clearAutohaus(){
-ahSelected=null;
-var qs=document.getElementById(‘ah-search’); if(qs)qs.value=’’;
-var d=document.getElementById(‘ah-detail’); if(d)d.style.display=‘none’;
-var w=document.getElementById(‘ah-detail-wrap’); if(w)w.style.display=‘none’;
-var k=document.getElementById(‘ah-kontakt-wrap’); if(k)k.style.display=‘none’;
-}
-
-// ===== SAVES =====
-function getSaves(){try{return JSON.parse(localStorage.getItem(‘dw_v17’)||’[]’);}catch(e){return[];}}
-function setSaves(a){try{localStorage.setItem(‘dw_v17’,JSON.stringify(a));}catch(e){}}
-function saveResult(){
-var brutto=gi(‘brutto’)||4000;
-var ks=getKS();
-var lp=gi(‘listenpreis’)||40000;
-var zuz=gi(‘zuzahl’)||0;
-var lr=gi(‘lrate’)||0;
-var r=berechne(brutto,ks,lp,SAETZE[ak],zuz);
-var lf=lr>0?lr/lp*100:0;
-var h=gs(‘hersteller’);
-var typ=gs(‘fahrzeugtyp’);
-var d=new Date().toLocaleDateString(‘de-DE’,{day:‘2-digit’,month:‘2-digit’,year:‘numeric’});
-var entry={id:Date.now(),name:h+’ - ‘+(typ||‘Typ’)+’ - ‘+d,hersteller:h,typ:typ||’’,antrieb:ak,lp:lp,brutto:brutto,ks:ks,lr:lr,lf:lf,zuz:zuz,result:r,fazit:MARKEN[h]?MARKEN[h].fazit:null};
-var saves=getSaves();saves.unshift(entry);setSaves(saves);
-var btn=document.querySelector(’.btn-gold’);
-if(btn){btn.innerHTML=‘Gespeichert!’;setTimeout(function(){btn.innerHTML=‘Berechnung speichern’;},2000);}
-}
-function deleteSave(id,e){
-e.stopPropagation();
-setSaves(getSaves().filter(function(s){return s.id!==id;}));
-if(selSave&&selSave.id===id){selSave=null;var cs=document.getElementById(‘compare-section’);if(cs)cs.style.display=‘none’;}
-renderSaves();
-}
-function selectSave(id){
-var saves=getSaves();
-for(var i=0;i<saves.length;i++){
-if(saves[i].id===id){selSave=saves[i];break;}
-}
-var items=document.querySelectorAll(’.save-item’);
-for(var i=0;i<items.length;i++)items[i].classList.toggle(‘sel’,items[i].getAttribute(‘data-id’)==id);
-renderCompare(selSave);
-var cs=document.getElementById(‘compare-section’);
-if(cs){cs.style.display=‘block’;cs.scrollIntoView({behavior:‘smooth’});}
-}
-function lfColor(lf){if(lf<=0)return’var(–mu)’;if(lf<1.0)return’var(–grn)’;if(lf<1.3)return’var(–gold)’;return’var(–red)’;}
-function renderCompare(saved){
-if(!saved)return;
-var brutto=gi(‘brutto’)||4000;
-var ks=getKS();
-var lp=gi(‘listenpreis’)||40000;
-var zuz=gi(‘zuzahl’)||0;
-var lr=gi(‘lrate’)||0;
-var cur=berechne(brutto,ks,lp,SAETZE[ak],zuz);
-var sav=saved.result;
-var curLF=lr>0?lr/lp*100:0;
-var savLF=saved.lf||0;
-var h=gs(‘hersteller’);
-var typ=gs(‘fahrzeugtyp’);
-var hn=(h+(typ?’ ‘+typ:’’)).substring(0,22);
-var sn=(saved.hersteller+’ ‘+saved.typ).substring(0,22);
-var el;
-el=document.getElementById(‘vc-tl’);if(el)el.textContent=‘Aktuell: ‘+hn;
-el=document.getElementById(‘vc-tr’);if(el)el.textContent=‘Gespeichert: ‘+sn;
-el=document.getElementById(‘vc-lp-l’);if(el)el.textContent=fmt(lp);
-el=document.getElementById(‘vc-an-l’);if(el)el.textContent=ANTRIEB_LABEL[ak];
-el=document.getElementById(‘vc-st-l’);if(el)el.textContent=’-’+fmt(cur.gk)+’/Mo.’;
-el=document.getElementById(‘vc-nm-l’);if(el)el.textContent=fmt(cur.nettoMit);
-el=document.getElementById(‘vc-lr-l’);if(el)el.textContent=lr>0?fmt(lr)+’/Mo.’:’–’;
-el=document.getElementById(‘vc-lf-l’);if(el)el.innerHTML=curLF>0?(’<span style="color:'+lfColor(curLF)+';">’+fmtPct(curLF)+’</span>’):’–’;
-el=document.getElementById(‘vc-lp-r’);if(el)el.textContent=fmt(saved.lp);
-el=document.getElementById(‘vc-an-r’);if(el)el.textContent=ANTRIEB_LABEL[saved.antrieb]||’–’;
-el=document.getElementById(‘vc-st-r’);if(el)el.textContent=’-’+fmt(sav.gk)+’/Mo.’;
-el=document.getElementById(‘vc-nm-r’);if(el)el.textContent=fmt(sav.nettoMit);
-el=document.getElementById(‘vc-lr-r’);if(el)el.textContent=saved.lr>0?fmt(saved.lr)+’/Mo.’:’–’;
-el=document.getElementById(‘vc-lf-r’);if(el)el.innerHTML=savLF>0?(’<span style="color:'+lfColor(savLF)+';">’+fmtPct(savLF)+’</span>’):’–’;
-el=document.getElementById(‘ac-nl’);if(el)el.textContent=hn;
-el=document.getElementById(‘ac-nr’);if(el)el.textContent=sn;
-el=document.getElementById(‘ac-vl’);if(el)el.textContent=’-’+fmt(cur.gk);
-el=document.getElementById(‘ac-vr’);if(el)el.textContent=’-’+fmt(sav.gk);
-var wEl=document.getElementById(‘vc-winner’);
-if(wEl){
-if(cur.gk<sav.gk)wEl.innerHTML=’<strong>’+hn+’ guenstiger</strong> - ‘+fmt(sav.gk-cur.gk)+’ weniger/Mo.’;
-else if(sav.gk<cur.gk)wEl.innerHTML=’<strong>’+sn+’ guenstiger</strong> - ‘+fmt(cur.gk-sav.gk)+’ weniger/Mo.’;
-else wEl.innerHTML=’<strong>Beide identisch</strong>’;
-}
-}
-function renderSaves(){
-var saves=getSaves();
-var c=document.getElementById(‘saves-list’);
-var cs=document.getElementById(‘compare-section’);
-if(!c)return;
-if(!saves.length){
-c.innerHTML=’<div class="empty"><span>Archiv</span>Noch keine Berechnungen gespeichert.</div>’;
-if(cs)cs.style.display=‘none’;
-return;
-}
-var html=’’;
-for(var i=0;i<saves.length;i++){
-var s=saves[i];
-var lfi=s.lf>0?’ - LF: ‘+fmtPct(s.lf):’’;
-var isSel=selSave&&selSave.id===s.id;
-html+=’<div class="save-item'+(isSel?' sel':'')+'" data-id="'+s.id+'" onclick="selectSave('+s.id+')">’
-+’<span class="si-i">Auto</span>’
-+’<div class="si-n"><div class="si-name">’+s.name+’</div><div class="si-meta">Steuer: -’+fmt(s.result.gk)+’/Mo.’+lfi+’</div></div>’
-+’<button type="button" class="si-del" onclick="deleteSave('+s.id+',event)">X</button>’
-+’</div>’;
-}
-c.innerHTML=html;
-if(selSave)renderCompare(selSave);
-}
-
-// ===== PDF =====
-function exportPDF(){
-if(!window.jspdf){alert(‘PDF wird geladen, bitte kurz warten.’);return;}
-var jsPDF=window.jspdf.jsPDF;
-var doc=new jsPDF({orientation:‘portrait’,unit:‘mm’,format:‘a4’});
-var W=210,M=16,TW=W-2*M;
-var brutto=gi(‘brutto’)||4000,ks=getKS(),lp=gi(‘listenpreis’)||40000,zuz=gi(‘zuzahl’)||0,lr=gi(‘lrate’)||0;
-var r=berechne(brutto,ks,lp,SAETZE[ak],zuz);
-var lf=lr>0?lr/lp*100:0;
-var h=saf(gs(‘hersteller’)),typ=saf(gs(‘fahrzeugtyp’));
-var m=MARKEN[gs(‘hersteller’)];
-var d=new Date().toLocaleDateString(‘de-DE’,{day:‘2-digit’,month:‘2-digit’,year:‘numeric’});
-doc.setFillColor(12,12,18);doc.rect(0,0,W,28,‘F’);
-doc.setTextColor(201,168,76);doc.setFontSize(7);doc.setFont(‘helvetica’,‘bold’);doc.text(‘DIENSTWAGENRECHNER’,M,10);
-doc.setTextColor(232,230,224);doc.setFontSize(15);doc.text(h+(typ?’ - ‘+typ:’’),M,20);
-doc.setTextColor(100,100,120);doc.setFontSize(7);doc.setFont(‘helvetica’,‘normal’);doc.text(d,W-M,20,{align:‘right’});
-var y=34;
-var fzR=[[‘Brutto-Listenpreis’,fmt(lp)],[‘Antrieb’,saf(ANTRIEB_LABEL[ak])+’ (’+(SAETZE[ak]*100).toFixed(2)+’%)’],[‘Leasingrate (AG)’,lr>0?fmt(lr)+’/Mo.’:’–’],[‘Leasingfaktor’,lf>0?fmtPct(lf):’–’],[‘Kirchensteuer’,getKS()>0?Math.round(getKS()*100)+’%’:‘Keine’]];
-if(ahSelected){fzR.push([‘Autohaus’,saf(ahSelected.name)]);fzR.push([‘Adresse’,saf(ahSelected.addr||’–’)]);}
-doc.setFillColor(20,20,28);doc.roundedRect(M,y,TW,fzR.length*5.5+8,2,2,‘F’);
-doc.setTextColor(70,70,98);doc.setFontSize(7);doc.setFont(‘helvetica’,‘bold’);doc.text(‘FAHRZEUG’,M+4,y+5);
-for(var fi=0;fi<fzR.length;fi++){var ry=y+10+fi*5.5;doc.setTextColor(110,110,130);doc.setFontSize(8);doc.setFont(‘helvetica’,‘normal’);doc.text(fzR[fi][0],M+4,ry);doc.setTextColor(220,218,212);doc.setFont(‘helvetica’,‘bold’);doc.text(String(fzR[fi][1]).substring(0,45),W-M-4,ry,{align:‘right’});}
-y+=fzR.length*5.5+12;
-var kr=[[‘Bruttogehalt’,fmt(brutto),[210,208,202]],[‘Netto ohne DW’,fmt(r.nettoOhne),[200,198,192]],[‘Mehrsteuer’,’-’+fmt(r.gk),[224,96,96]],[‘Netto mit DW’,fmt(r.nettoMit),[201,168,76]]];
-doc.setFillColor(16,16,10);doc.roundedRect(M,y,TW,kr.length*5.5+22,2,2,‘F’);
-doc.setTextColor(70,70,98);doc.setFontSize(7);doc.setFont(‘helvetica’,‘bold’);doc.text(‘KOSTENRECHNUNG - ‘+saf(ANTRIEB_LABEL[ak]).toUpperCase(),M+4,y+5);
-for(var ki=0;ki<kr.length;ki++){var ry2=y+11+ki*5.5;doc.setTextColor(110,110,130);doc.setFontSize(8);doc.setFont(‘helvetica’,‘normal’);doc.text(kr[ki][0],M+4,ry2);doc.setTextColor(kr[ki][2][0],kr[ki][2][1],kr[ki][2][2]);doc.setFont(‘helvetica’,‘bold’);doc.text(kr[ki][1],W-M-4,ry2,{align:‘right’});}
-var by=y+kr.length*5.5+10;
-doc.setFillColor(28,24,10);doc.roundedRect(M+2,by,TW-4,11,2,2,‘F’);
-doc.setTextColor(150,148,140);doc.setFontSize(8.5);doc.setFont(‘helvetica’,‘normal’);doc.text(‘Monatliche Mehrsteuer (Ihr Kostenpunkt)’,M+6,by+5);
-doc.setTextColor(224,96,96);doc.setFontSize(12);doc.setFont(‘helvetica’,‘bold’);doc.text(’-’+fmt(r.gk),W-M-6,by+6,{align:‘right’});
-y+=kr.length*5.5+26;
-doc.setFillColor(20,20,28);doc.roundedRect(M,y,TW,24,2,2,‘F’);
-doc.setTextColor(70,70,98);doc.setFontSize(7);doc.setFont(‘helvetica’,‘bold’);doc.text(‘ANTRIEBSVERGLEICH’,M+4,y+5);
-var cw=(TW-4)/3;
-var antArr=[‘elektro’,‘hybrid’,‘verbrenner’];
-for(var vi=0;vi<antArr.length;vi++){var vkey=antArr[vi];var cr=berechne(brutto,ks,lp,SAETZE[vkey],zuz);var cx=M+2+vi*cw;if(vkey===ak){doc.setFillColor(28,24,10);doc.roundedRect(cx,y+7,cw-1,15,1,1,‘F’);}doc.setTextColor(vkey===ak?201:110,vkey===ak?168:110,vkey===ak?76:130);doc.setFontSize(8);doc.setFont(‘helvetica’,‘bold’);doc.text(saf(ANTRIEB_LABEL[vkey]),cx+cw/2,y+13,{align:‘center’});doc.setTextColor(224,96,96);doc.setFontSize(7.5);doc.setFont(‘helvetica’,‘bold’);doc.text(’-’+fmt(cr.gk)+’/Mo.’,cx+cw/2,y+22,{align:‘center’});}
-y+=28;
-if(m&&m.fazit){var lines=doc.splitTextToSize(saf(m.fazit),TW-8);var bh=Math.min(lines.length*4+10,40);doc.setFillColor(20,20,28);doc.roundedRect(M,y,TW,bh,2,2,‘F’);doc.setTextColor(70,70,98);doc.setFontSize(7);doc.setFont(‘helvetica’,‘bold’);doc.text(‘TESTURTEIL’,M+4,y+5);doc.setTextColor(160,158,180);doc.setFontSize(7.5);doc.setFont(‘helvetica’,‘normal’);for(var li=0;li<lines.length&&li<8;li++)doc.text(lines[li],M+4,y+10+li*4);}
-doc.setFillColor(12,12,18);doc.rect(0,282,W,15,‘F’);
-doc.setTextColor(70,70,98);doc.setFontSize(6.5);doc.setFont(‘helvetica’,‘normal’);
-doc.text(’(c) 2026 - Version 1.0 - Idee & Konzeption Stefan Wolf | Keine Steuerberatung’,M,289);
-doc.text(d,W-M,289,{align:‘right’});
-doc.save((h+(typ?’-’+typ:’’)).replace(/[^a-zA-Z0-9]/g,’_’)+’-’+d.replace(/./g,’-’)+’.pdf’);
-}
-
-function exportVergleichPDF(){
-if(!selSave){alert(‘Bitte erst ein gespeichertes Fahrzeug antippen.’);return;}
-if(!window.jspdf){alert(‘PDF wird geladen, bitte kurz warten.’);return;}
-var jsPDF=window.jspdf.jsPDF;
-var doc=new jsPDF({orientation:‘landscape’,unit:‘mm’,format:‘a4’});
-var W=297,H=210,M=14,TW=W-2*M;
-var brutto=gi(‘brutto’)||4000,ks=getKS(),lp=gi(‘listenpreis’)||40000,zuz=gi(‘zuzahl’)||0,lr=gi(‘lrate’)||0;
-var cur=berechne(brutto,ks,lp,SAETZE[ak],zuz),sav=selSave.result;
-var curLF=lr>0?lr/lp*100:0,savLF=selSave.lf||0;
-var h=saf(gs(‘hersteller’)),typ=saf(gs(‘fahrzeugtyp’));
-var d=new Date().toLocaleDateString(‘de-DE’,{day:‘2-digit’,month:‘2-digit’,year:‘numeric’});
-doc.setFillColor(12,12,18);doc.rect(0,0,W,22,‘F’);
-doc.setTextColor(201,168,76);doc.setFontSize(7);doc.setFont(‘helvetica’,‘bold’);doc.text(‘DIENSTWAGENRECHNER - VERGLEICH’,M,9);
-doc.setTextColor(232,230,224);doc.setFontSize(12);doc.text(saf(h+(typ?’ ‘+typ:’’))+’ vs. ‘+saf(selSave.hersteller+’ ‘+selSave.typ),M,18);
-doc.setTextColor(100,100,120);doc.setFontSize(7);doc.setFont(‘helvetica’,‘normal’);doc.text(d,W-M,18,{align:‘right’});
-var y=28;var cols=[M,M+TW/2+4];var cw=TW/2-3;
-var veh=[{label:‘Aktuell: ‘+saf(h+(typ?’ ‘+typ:’’)),r:cur,lp:lp,ant:ak,lr:lr,lf:curLF},{label:‘Gespeichert: ‘+saf(selSave.hersteller+’ ‘+selSave.typ),r:sav,lp:selSave.lp,ant:selSave.antrieb,lr:selSave.lr||0,lf:savLF}];
-for(var vi=0;vi<veh.length;vi++){doc.setFillColor(vi===0?22:18,vi===0?20:20,vi===0?10:28);doc.roundedRect(cols[vi],y,cw,6,1,1,‘F’);doc.setTextColor(201,168,76);doc.setFontSize(8);doc.setFont(‘helvetica’,‘bold’);doc.text(veh[vi].label.substring(0,40),cols[vi]+3,y+4.5);}
-y+=9;
-var rowDefs=[[‘Listenpreis’,‘lp’,‘fmt’],[‘Antrieb’,‘ant’,‘label’],[‘Mehrsteuer’,‘gk’,‘negfmt’],[‘Netto mit DW’,‘nettoMit’,‘fmt’],[‘Leasingrate’,‘lr’,‘lrfmt’],[‘Leasingfaktor’,‘lf’,‘lffmt’]];
-var rh=6;
-doc.setFillColor(18,18,26);doc.roundedRect(M,y,TW+3,rowDefs.length*rh+4,2,2,‘F’);
-for(var ri=0;ri<rowDefs.length;ri++){
-var rd=rowDefs[ri];
-for(var ci=0;ci<veh.length;ci++){
-var v=veh[ci];var ry=y+5+ri*rh;
-var val=’–’;
-if(rd[0]===‘Listenpreis’)val=fmt(v.lp);
-else if(rd[0]===‘Antrieb’)val=saf(ANTRIEB_LABEL[v.ant]||’–’);
-else if(rd[0]===‘Mehrsteuer’)val=’-’+fmt(v.r.gk)+’/Mo.’;
-else if(rd[0]===‘Netto mit DW’)val=fmt(v.r.nettoMit);
-else if(rd[0]===‘Leasingrate’)val=v.lr>0?fmt(v.lr)+’/Mo.’:’–’;
-else if(rd[0]===‘Leasingfaktor’)val=v.lf>0?fmtPct(v.lf):’–’;
-doc.setTextColor(100,100,120);doc.setFontSize(7.5);doc.setFont(‘helvetica’,‘normal’);doc.text(rd[0],cols[ci]+4,ry);
-var tc=[210,208,202];
-if(rd[0]===‘Mehrsteuer’)tc=[224,96,96];
-else if(rd[0]===‘Netto mit DW’)tc=[201,168,76];
-else if(rd[0]===‘Leasingrate’)tc=[110,180,130];
-doc.setTextColor(tc[0],tc[1],tc[2]);doc.setFont(‘helvetica’,‘bold’);doc.text(val,cols[ci]+cw-4,ry,{align:‘right’});
-}
-}
-y+=rowDefs.length*rh+8;
-doc.setFillColor(22,22,10);doc.roundedRect(M,y,TW+3,9,1,1,‘F’);
-doc.setTextColor(201,168,76);doc.setFontSize(9);doc.setFont(‘helvetica’,‘bold’);
-var win=cur.gk<sav.gk?‘Guenstiger: ‘+saf(h+(typ?’ ‘+typ:’’))+’ - ‘+fmt(sav.gk-cur.gk)+’ weniger/Mo.’:sav.gk<cur.gk?‘Guenstiger: ‘+saf(selSave.hersteller+’ ‘+selSave.typ)+’ - ‘+fmt(cur.gk-sav.gk)+’ weniger/Mo.’:‘Beide identisch’;
-doc.text(win,W/2,y+6,{align:‘center’});
-doc.setFillColor(12,12,18);doc.rect(0,H-9,W,9,‘F’);doc.setTextColor(70,70,98);doc.setFontSize(6.5);doc.setFont(‘helvetica’,‘normal’);
-doc.text(’(c) 2026 - Version 1.0 - Idee & Konzeption Stefan Wolf | Keine Steuerberatung’,M,H-3);
-doc.text(d,W-M,H-3,{align:‘right’});
-doc.save(‘Vergleich_’+saf(h+(typ?’-’+typ:’’)).replace(/[^a-zA-Z0-9]/g,’_’)+’-’+d.replace(/./g,’-’)+’.pdf’);
-}
-
-// ===== PWA =====
-var _dp=null;
-window.addEventListener(‘beforeinstallprompt’,function(e){e.preventDefault();_dp=e;var ib=document.getElementById(‘ib’);if(ib)ib.style.display=‘flex’;});
-function installApp(){if(!_dp)return;_dp.prompt();_dp.userChoice.then(function(){_dp=null;closeBanner();});}
-function closeBanner(){var ib=document.getElementById(‘ib’);if(ib)ib.style.display=‘none’;}
-
-// ===== INIT =====
-// Fehler-Handler fuer Debugging
-window.onerror = function(msg, src, line, col, err) {
-var d = document.createElement(‘div’);
-d.style.cssText = ‘position:fixed;top:0;left:0;right:0;background:red;color:white;padding:8px;font-size:12px;z-index:9999;’;
-d.textContent = ’JS Fehler Zeile ’ + line + ’: ’ + msg;
-document.body.appendChild(d);
-return false;
-};
-
-// INIT - Script ist am Ende von body, DOM ist bereits bereit
-// Init mit sichtbaren Fehlermeldungen
-var _initErrors = [];
-function _tryInit(name, fn){
-try{ fn(); }catch(e){ _initErrors.push(name+’: ’+e.message); }
-}
-_tryInit(‘setLRMode’, function(){ setLRMode(‘zusatz’); });
-_tryInit(‘herstellerChange’, function(){ onHerstellerChange(); });
-_tryInit(‘nettoInfo’, function(){ updateNettoInfo(); });
-_tryInit(‘kmInfo’, function(){ updateKmInfo(); });
-_tryInit(‘kistSub’, function(){ updateKistSub(); });
-_tryInit(‘hoSub’, function(){ updateHoSub(); });
-// Zeige Init-Fehler als roten Banner
-if(_initErrors.length>0){
-var eb=document.createElement(‘div’);
-eb.style.cssText=‘position:fixed;top:0;left:0;right:0;background:red;color:white;padding:10px;font-size:11px;z-index:9999;word-break:break-all;’;
-eb.textContent=‘INIT-FEHLER v12: ‘+_initErrors.join(’ | ‘);
-document.body.appendChild(eb);
-}
-// Seiten initial mit hidden-Attribut steuern
-var _allPages=document.querySelectorAll(’.page’);
-for(var _pi=0;_pi<_allPages.length;_pi++){
-_allPages[_pi].hidden=!_allPages[_pi].classList.contains(‘active’);
-}
-// Init-Check (3 Sek sichtbar)
-setTimeout(function(){
-var _d=document.createElement(‘div’);
-_d.style.cssText=‘position:fixed;bottom:80px;right:10px;background:#333;color:#fff;padding:8px 12px;font-size:11px;border-radius:8px;z-index:9999;opacity:0.9;’;
-_d.textContent=‘JS v1.10 OK’;
-document.body.appendChild(_d);
-setTimeout(function(){if(_d.parentNode)_d.parentNode.removeChild(_d);},3000);
-},500);
+rechne();
+updateNetto();
 </script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script>
 
 </body>
 </html>
