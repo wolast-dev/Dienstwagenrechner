@@ -5,8 +5,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <meta name="theme-color" content="#0f0f13"/>
-<title>Dienstwagenrechner v12</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<title>Dienstwagenrechner 1.10</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap');
 :root{--bg:#0f0f13;--sf:#16161e;--sf2:#1a1a24;--sf3:#0e0e16;--br:#252532;--gold:#c9a84c;--gd:#c9a84c33;--tx:#e8e6e0;--mu:#7a7a90;--dm:#4a4a62;--red:#e06060;--grn:#6ec97a;--blu:#6ab0d4;--orng:#d4944a;--purp:#9b82d4;}
@@ -174,7 +173,7 @@ h1{font-family:'Playfair Display',serif;font-size:clamp(20px,5vw,30px);line-heig
 <body>
 <!-- FLOATING HEADER -->
 <div class="fhdr"><div class="fhdr-in">
-  <div class="fapp">DW-Rechner v12</div>
+  <div class="fapp">DW-Rechner <span style="font-size:9px;opacity:0.5;font-family:DM Sans,sans-serif;font-weight:400;">1.10</span></div>
   <div class="ff"><div class="fl">Marke</div><div class="fv" id="fh-m">Opel</div></div><div class="fdv"></div>
   <div class="ff"><div class="fl">Typ</div><div class="fv" id="fh-t">Grandland Electric</div></div><div class="fdv"></div>
   <div class="ff"><div class="fl">Listenpreis</div><div class="fv gold" id="fh-lp">40.000 €</div></div><div class="fdv"></div>
@@ -1258,22 +1257,30 @@ d.textContent=‘FEHLER: ‘+m;
 document.body.appendChild(d);
 setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},10000);
 }
+function _showInfo(m){
+var d=document.createElement(‘div’);
+d.style.cssText=‘position:fixed;top:60px;left:10px;right:10px;background:#060;color:#fff;padding:14px;font-size:13px;font-weight:bold;z-index:99999;border-radius:10px;’;
+d.textContent=m;
+document.body.appendChild(d);
+setTimeout(function(){if(d.parentNode)d.parentNode.removeChild(d);},3000);
+}
 function showPage(n,idx){
+_showInfo(‘Wechsle zu: ‘+n);
 try{
 var allPages=document.querySelectorAll(’.page’);
-if(!allPages||allPages.length===0){_showErr(‘Keine .page Elemente gefunden!’);return;}
+if(!allPages||allPages.length===0){_showErr(‘Keine Seiten gefunden!’);return;}
 for(var i=0;i<allPages.length;i++){
-allPages[i].style.display=‘none’;
+allPages[i].hidden=true;
 allPages[i].classList.remove(‘active’);
 }
 var target=document.getElementById(‘page-’+n);
-if(!target){_showErr(‘Seite nicht gefunden: page-’+n);return;}
-target.style.display=‘block’;
+if(!target){_showErr(‘Seite fehlt: page-’+n);return;}
+target.hidden=false;
 target.classList.add(‘active’);
 var nbs=document.querySelectorAll(’.nb’);
 for(var i=0;i<nbs.length;i++)nbs[i].classList.toggle(‘active’,i===idx);
 try{if(n===‘auto’)update();}catch(e){_showErr(’update: ’+e.message);}
-try{if(n===‘saves’)renderSaves();}catch(e){_showErr(’renderSaves: ’+e.message);}
+try{if(n===‘saves’)renderSaves();}catch(e){_showErr(’saves: ’+e.message);}
 try{if(n===‘stamm’){updateNettoInfo();updateKmInfo();}}catch(e){_showErr(’stamm: ’+e.message);}
 try{window.scrollTo(0,0);}catch(e){}
 }catch(e){_showErr(’showPage: ’+e.message);}
@@ -1569,12 +1576,22 @@ eb.style.cssText=‘position:fixed;top:0;left:0;right:0;background:red;color:whi
 eb.textContent=‘INIT-FEHLER v12: ‘+_initErrors.join(’ | ‘);
 document.body.appendChild(eb);
 }
-// Seiten initial korrekt setzen
+// Seiten initial mit hidden-Attribut steuern
 var _allPages=document.querySelectorAll(’.page’);
 for(var _pi=0;_pi<_allPages.length;_pi++){
-_allPages[_pi].style.display=_allPages[_pi].classList.contains(‘active’)?‘block’:‘none’;
+_allPages[_pi].hidden=!_allPages[_pi].classList.contains(‘active’);
 }
+// Init-Check (3 Sek sichtbar)
+setTimeout(function(){
+var _d=document.createElement(‘div’);
+_d.style.cssText=‘position:fixed;bottom:80px;right:10px;background:#333;color:#fff;padding:8px 12px;font-size:11px;border-radius:8px;z-index:9999;opacity:0.9;’;
+_d.textContent=‘JS v1.10 OK’;
+document.body.appendChild(_d);
+setTimeout(function(){if(_d.parentNode)_d.parentNode.removeChild(_d);},3000);
+},500);
 </script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script>
 
 </body>
 </html>
