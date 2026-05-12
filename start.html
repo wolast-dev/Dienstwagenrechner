@@ -1,0 +1,384 @@
+from pathlib import Path
+
+html = r"""<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Dienstwagen Rechner</title>
+
+<style>
+:root{
+    --bg:#111827;
+    --card:#1f2937;
+    --accent:#fbbf24;
+    --text:#f9fafb;
+    --muted:#9ca3af;
+    --green:#22c55e;
+    --red:#ef4444;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+    margin:0;
+    font-family:Arial,sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    padding:16px;
+}
+
+.container{
+    max-width:700px;
+    margin:auto;
+}
+
+.card{
+    background:var(--card);
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:16px;
+}
+
+h1{
+    margin-top:0;
+    color:var(--accent);
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    margin-bottom:6px;
+    font-size:14px;
+    color:var(--muted);
+}
+
+input,select{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    font-size:16px;
+}
+
+button{
+    width:100%;
+    margin-top:18px;
+    padding:14px;
+    border:none;
+    border-radius:12px;
+    background:var(--accent);
+    color:black;
+    font-size:16px;
+    font-weight:bold;
+}
+
+.result{
+    font-size:18px;
+    margin-top:10px;
+}
+
+.big{
+    font-size:32px;
+    font-weight:bold;
+    color:var(--accent);
+}
+
+.info{
+    color:var(--muted);
+    line-height:1.5;
+    font-size:14px;
+}
+
+.good{
+    color:var(--green);
+}
+
+.bad{
+    color:var(--red);
+}
+
+.tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:16px;
+}
+
+.tab{
+    flex:1;
+    padding:12px;
+    border-radius:10px;
+    background:#374151;
+    color:white;
+    text-align:center;
+    cursor:pointer;
+}
+
+.tab.active{
+    background:var(--accent);
+    color:black;
+    font-weight:bold;
+}
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+.saveItem{
+    background:#374151;
+    padding:12px;
+    border-radius:10px;
+    margin-top:10px;
+}
+
+@media (max-width:600px){
+    body{
+        padding:10px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="tabs">
+    <div class="tab active" onclick="showPage('rechner', this)">Rechner</div>
+    <div class="tab" onclick="showPage('stamm', this)">Stammdaten</div>
+    <div class="tab" onclick="showPage('speicher', this)">Speicher</div>
+</div>
+
+<!-- Rechner -->
+<div class="page active" id="rechner">
+
+<div class="card">
+<h1>Dienstwagen Rechner</h1>
+
+<label>Fahrzeug</label>
+<input id="fahrzeug" value="Tesla Model Y">
+
+<label>Listenpreis (€)</label>
+<input id="listenpreis" type="number" value="45000">
+
+<label>Antrieb</label>
+<select id="antrieb">
+    <option value="0.0025">Elektro (0,25%)</option>
+    <option value="0.005">Hybrid (0,5%)</option>
+    <option value="0.01">Verbrenner (1%)</option>
+</select>
+
+<label>Leasingrate Arbeitgeber (€)</label>
+<input id="leasing" type="number" value="550">
+
+<label>Eigenanteil (€)</label>
+<input id="eigen" type="number" value="0">
+
+<button onclick="berechnen()">Berechnen</button>
+</div>
+
+<div class="card">
+<div class="info">Monatlicher geldwerter Vorteil</div>
+<div class="big" id="gsv">0 €</div>
+
+<div class="result">
+Mehrsteuer: <span id="steuer">0 €</span>
+</div>
+
+<div class="result">
+Nettoverlust: <span id="verlust">0 €</span>
+</div>
+
+<div class="result">
+Bewertung: <span id="bewertung">-</span>
+</div>
+</div>
+
+<div class="card">
+<button onclick="speichern()">Berechnung speichern</button>
+</div>
+
+</div>
+
+<!-- Stammdaten -->
+<div class="page" id="stamm">
+
+<div class="card">
+<h1>Stammdaten</h1>
+
+<label>Bruttogehalt (€)</label>
+<input id="brutto" type="number" value="4000">
+
+<label>Steuerklasse</label>
+<select id="steuerklasse">
+<option>1</option>
+<option>2</option>
+<option>3</option>
+<option selected>4</option>
+<option>5</option>
+<option>6</option>
+</select>
+
+<div class="info" style="margin-top:15px;">
+Diese Werte werden für die Berechnung verwendet.
+</div>
+</div>
+
+</div>
+
+<!-- Speicher -->
+<div class="page" id="speicher">
+
+<div class="card">
+<h1>Gespeicherte Fahrzeuge</h1>
+<div id="saveList"></div>
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+function showPage(id, element){
+
+    document.querySelectorAll('.page').forEach(p=>{
+        p.classList.remove('active');
+    });
+
+    document.getElementById(id).classList.add('active');
+
+    document.querySelectorAll('.tab').forEach(t=>{
+        t.classList.remove('active');
+    });
+
+    element.classList.add('active');
+}
+
+function berechnen(){
+
+    const lp = parseFloat(document.getElementById('listenpreis').value) || 0;
+    const faktor = parseFloat(document.getElementById('antrieb').value) || 0;
+    const eigen = parseFloat(document.getElementById('eigen').value) || 0;
+    const brutto = parseFloat(document.getElementById('brutto').value) || 4000;
+
+    const gsv = (lp * faktor) - eigen;
+
+    let steuerSatz = 0.35;
+
+    const sk = document.getElementById('steuerklasse').value;
+
+    if(sk === "3"){
+        steuerSatz = 0.25;
+    }
+
+    if(sk === "5" || sk === "6"){
+        steuerSatz = 0.42;
+    }
+
+    const steuer = gsv * steuerSatz;
+    const nettoverlust = steuer;
+
+    document.getElementById('gsv').innerText =
+        gsv.toFixed(2) + " €";
+
+    document.getElementById('steuer').innerText =
+        steuer.toFixed(2) + " €";
+
+    document.getElementById('verlust').innerText =
+        nettoverlust.toFixed(2) + " €";
+
+    let text = "Neutral";
+    let klasse = "";
+
+    if(nettoverlust < 80){
+        text = "Sehr attraktiv";
+        klasse = "good";
+    }else if(nettoverlust > 180){
+        text = "Relativ teuer";
+        klasse = "bad";
+    }
+
+    document.getElementById('bewertung').innerHTML =
+        '<span class="'+klasse+'">'+text+'</span>';
+}
+
+function speichern(){
+
+    const fahrzeug = document.getElementById('fahrzeug').value;
+    const preis = document.getElementById('listenpreis').value;
+    const steuer = document.getElementById('steuer').innerText;
+
+    const daten = {
+        fahrzeug,
+        preis,
+        steuer
+    };
+
+    let liste = JSON.parse(localStorage.getItem('dienstwagen')) || [];
+
+    liste.push(daten);
+
+    localStorage.setItem('dienstwagen', JSON.stringify(liste));
+
+    ladeSpeicher();
+
+    alert("Gespeichert");
+}
+
+function ladeSpeicher(){
+
+    let liste = JSON.parse(localStorage.getItem('dienstwagen')) || [];
+
+    const box = document.getElementById('saveList');
+
+    if(liste.length === 0){
+        box.innerHTML = "<div class='info'>Keine Fahrzeuge gespeichert.</div>";
+        return;
+    }
+
+    box.innerHTML = "";
+
+    liste.forEach((item,index)=>{
+
+        box.innerHTML += `
+        <div class="saveItem">
+            <strong>${item.fahrzeug}</strong><br>
+            Listenpreis: ${item.preis} €<br>
+            Mehrsteuer: ${item.steuer}<br><br>
+            <button onclick="loeschen(${index})">Löschen</button>
+        </div>
+        `;
+    });
+}
+
+function loeschen(index){
+
+    let liste = JSON.parse(localStorage.getItem('dienstwagen')) || [];
+
+    liste.splice(index,1);
+
+    localStorage.setItem('dienstwagen', JSON.stringify(liste));
+
+    ladeSpeicher();
+}
+
+berechnen();
+ladeSpeicher();
+
+</script>
+
+</body>
+</html>
+"""
+
+path = Path("/mnt/data/Dienstwagen_Rechner_Neu.html")
+path.write_text(html, encoding="utf-8")
+
+print(f"Datei erstellt: {path}")
