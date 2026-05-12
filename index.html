@@ -3,113 +3,121 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dienstwagen Rechner 1.1</title>
+    <title>Dienstwagen Rechner Pro</title>
     <style>
-        body { margin:0; background:#111827; color:white; font-family:Arial,sans-serif; }
-        .header { background:#1f2937; padding:14px; font-size:20px; font-weight:bold; color:#fbbf24; position:sticky; top:0; z-index:10; }
-        .container { max-width:800px; margin:auto; padding:16px; }
-        .card { background:#1f2937; padding:18px; border-radius:14px; margin-bottom:16px; }
-        h2 { margin-top:0; font-size:1.2rem; color:#fbbf24; }
-        label { display:block; margin-top:10px; font-size:0.9rem; color:#9ca3af; }
-        input, select { width:100%; padding:12px; border:none; border-radius:10px; margin-top:6px; margin-bottom:14px; font-size:16px; box-sizing:border-box; background:#374151; color:white; }
-        button { width:100%; padding:14px; border:none; border-radius:12px; background:#fbbf24; font-weight:bold; font-size:16px; cursor:pointer; color:#000; }
-        .result { font-size:18px; margin-top:10px; }
-        .big { font-size:32px; color:#fbbf24; font-weight:bold; margin:10px 0; }
-        .green { color:#22c55e; font-weight:bold; }
-        .red { color:#ef4444; font-weight:bold; }
-        .small { color:#9ca3af; line-height:1.6; font-size:0.9rem; }
-        .tabs { display:flex; gap:8px; margin-bottom:16px; }
-        .tab { flex:1; background:#374151; padding:12px; border-radius:10px; text-align:center; cursor:pointer; font-size:0.9rem; }
-        .tab.active { background:#fbbf24; color:black; font-weight:bold; }
-        .page { display:none; }
-        .page.active { display:block; }
-        .save { background:#374151; padding:12px; border-radius:10px; margin-top:10px; border-left:4px solid #fbbf24; }
+        :root {
+            --apple-bg: #F5F5F7;
+            --apple-card: #FFFFFF;
+            --apple-accent: #0071E3;
+            --apple-text: #1D1D1F;
+            --apple-secondary: #86868B;
+        }
+        body { margin:0; background: var(--apple-bg); color: var(--apple-text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-font-smoothing: antialiased; }
+        
+        .nav-container { background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px); position: sticky; top: 0; z-index: 100; border-bottom: 0.5px solid #d2d2d7; }
+        .tabs { display: flex; max-width: 800px; margin: 0 auto; padding: 10px; gap: 5px; }
+        .tab { flex: 1; padding: 8px 12px; border-radius: 8px; text-align: center; cursor: pointer; font-size: 13px; font-weight: 500; color: var(--apple-secondary); transition: all 0.2s; }
+        .tab.active { background: var(--apple-accent); color: white; }
+
+        .container { max-width: 800px; margin: 20px auto; padding: 0 16px 100px 16px; }
+        .card { background: var(--apple-card); padding: 24px; border-radius: 18px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        
+        h1 { font-size: 24px; font-weight: 600; letter-spacing: -0.5px; margin-bottom: 20px; }
+        h2 { font-size: 17px; font-weight: 600; margin: 0 0 15px 0; }
+        
+        label { display: block; font-size: 12px; font-weight: 600; color: var(--apple-secondary); margin-bottom: 6px; text-transform: uppercase; }
+        input, select { width: 100%; padding: 12px; border: 1px solid #d2d2d7; border-radius: 10px; margin-bottom: 15px; font-size: 16px; box-sizing: border-box; background: #fafafa; }
+        input:focus { border-color: var(--apple-accent); outline: none; }
+
+        button { width: 100%; padding: 16px; border: none; border-radius: 12px; background: var(--apple-accent); color: white; font-weight: 600; font-size: 16px; cursor: pointer; transition: opacity 0.2s; }
+        button:active { opacity: 0.7; }
+
+        /* Vergleichs-Tabelle */
+        .comparison-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; margin-top: 20px; }
+        .comp-column { background: #f9f9fb; border-radius: 12px; padding: 12px; border: 1px solid #e5e5e7; }
+        .comp-header { font-weight: bold; border-bottom: 1px solid #d2d2d7; margin-bottom: 8px; padding-bottom: 4px; font-size: 14px; }
+        .comp-val { font-size: 13px; margin-bottom: 5px; color: var(--apple-text); }
+        .comp-label { font-size: 10px; color: var(--apple-secondary); }
+
+        .save-item { display: flex; align-items: center; background: #f5f5f7; padding: 12px; border-radius: 10px; margin-bottom: 8px; font-size: 14px; }
+        .save-item input { width: 20px; margin-right: 15px; margin-bottom: 0; }
+
+        .big-res { font-size: 34px; font-weight: 700; color: var(--apple-accent); margin: 10px 0; }
+        .page { display: none; }
+        .page.active { display: block; }
+        
+        .adac-tag { display: inline-block; background: #004d91; color: white; padding: 4px 8px; border-radius: 6px; font-size: 11px; text-decoration: none; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="header">Dienstwagen Rechner 1.1</div>
-
-<div class="container">
+<div class="nav-container">
     <div class="tabs">
         <div class="tab active" onclick="showPage('rechner',this)">Rechner</div>
-        <div class="tab" onclick="showPage('hilfe',this)">Hilfe</div>
-        <div class="tab" onclick="showPage('speicher',this)">Speicher</div>
+        <div class="tab" onclick="showPage('speicher',this)">Vergleich</div>
+        <div class="tab" onclick="showPage('stammdaten',this)">Profil</div>
     </div>
+</div>
 
+<div class="container">
     <div class="page active" id="rechner">
+        <h1>Neues Fahrzeug</h1>
         <div class="card">
-            <h2>Fahrzeugdaten</h2>
-            <label>Fahrzeug Modell</label>
-            <input id="fahrzeug" value="Tesla Model Y">
-            <label>Brutto Listenpreis (€)</label>
-            <input id="listenpreis" type="number" value="45000">
-            <label>Leasingrate vom Autohaus (€ / Monat)</label>
-            <input id="leasingrate" type="number" value="499">
-            <label>Antrieb / Versteuerung</label>
+            <label>Marke</label>
+            <select id="marke">
+                <option value="tesla">Tesla</option>
+                <option value="vw">VW</option>
+                <option value="bmw">BMW</option>
+                <option value="audi">Audi</option>
+                <option value="mercedes-benz">Mercedes</option>
+                <option value="hyundai">Hyundai</option>
+            </select>
+            <label>Modellbezeichnung</label>
+            <input id="modell" placeholder="z.B. Model Y">
+            <label>Listenpreis (€)</label>
+            <input id="lp" type="number" value="45000">
+            <label>Leasingrate (€)</label>
+            <input id="rate" type="number" value="450">
+            <label>Bezahlmodell</label>
+            <select id="modellTyp">
+                <option value="zusatz">Zusätzlich zum Gehalt</option>
+                <option value="umwandlung">Gehaltsumwandlung</option>
+            </select>
+            <label>Antrieb</label>
             <select id="antrieb">
                 <option value="0.0025">Elektro (0,25%)</option>
                 <option value="0.005">Hybrid (0,5%)</option>
-                <option value="0.01">Verbrenner (1,0%)</option>
+                <option value="0.01">Verbrenner (1%)</option>
             </select>
-            <label>Eigenanteil (€)</label>
-            <input id="eigen" type="number" value="0">
-            <button onclick="berechnen()">Berechnen & Speichern</button>
-        </div>
-
-        <div class="card">
-            <h2>Ergebnis</h2>
-            <div class="small">Monatl. geldwerter Vorteil:</div>
-            <div class="big" id="gsv">0 €</div>
-            <div class="result">Steuerlast (ca.): <span id="steuer" class="red">0 €</span></div>
-            <div class="result">Leasingfaktor: <span id="lf">0%</span></div>
-            <div class="result">Bewertung: <span id="bewertung">-</span></div>
-        </div>
-
-        <div class="card">
-            <h2>Fragen fürs Autohaus</h2>
-            <div class="small" id="autohausText">
-                • Gibt es zusätzliche Flottenrabatte?<br>
-                • Welche Lieferzeit gilt aktuell?<br>
-                • Sind Wartung und Verschleiß enthalten?<br>
-                • Ist eine Wallbox inklusive?<br>
-                • Gibt es Sonderaktionen für dieses Modell?
-            </div>
-        </div>
-
-        <div class="card">
-            <h2>Tipps für die Verhandlung</h2>
-            <div class="small">
-                • Gehaltsumwandlung spart Sozialabgaben.<br>
-                • E-Autos sind das stärkste Argument (0,25%).<br>
-                • Leasingraten sind für Chefs Betriebsausgaben.<br>
-                • Niedriger geldwerter Vorteil = mehr Netto für dich.
-            </div>
-        </div>
-    </div>
-
-    <div class="page" id="hilfe">
-        <div class="card">
-            <h2>Hilfe & Infos</h2>
-            <div class="small">
-                <b>Listenpreis:</b> Maßgeblich für die Versteuerung.<br><br>
-                <b>Leasingfaktor:</b> Zeigt, wie gut das Angebot ist.<br>
-                <span class="green">Unter 0,8: Top Deal</span><br>
-                <span>0,8 - 1,1: Solide</span><br>
-                <span class="red">Über 1,1: Teuer</span><br><br>
-                <b>Versteuerung:</b><br>
-                • Elektro (bis 70k€): 0,25%<br>
-                • Hybrid/Teure E-Autos: 0,5%<br>
-                • Verbrenner: 1,0%
-            </div>
+            <button onclick="berechnen()">Berechnen & Sichern</button>
         </div>
     </div>
 
     <div class="page" id="speicher">
+        <h1>Vergleich</h1>
         <div class="card">
-            <h2>Vergleichsliste</h2>
-            <div id="liste">Keine Fahrzeuge gespeichert.</div>
-            <button style="margin-top:20px; background:#ef4444; color:white;" onclick="localStorage.clear(); laden();">Liste leeren</button>
+            <h2>Wähle bis zu 3 Fahrzeuge</h2>
+            <div id="historyList">Lade...</div>
+            <button style="margin-top:15px; background:#f5f5f7; color:#ff3b30;" onclick="clearAll()">Alle löschen</button>
+        </div>
+
+        <div id="compareResult" style="display:none;">
+            <h2>Gegenüberstellung</h2>
+            <div class="comparison-grid" id="compGrid"></div>
+        </div>
+    </div>
+
+    <div class="page" id="stammdaten">
+        <h1>Profil & Steuern</h1>
+        <div class="card">
+            <label>Bruttogehalt (€)</label>
+            <input id="brutto" type="number" value="4500" onchange="saveProfile()">
+            <label>Kirchensteuer</label>
+            <select id="kist" onchange="saveProfile()">
+                <option value="0">Keine</option>
+                <option value="0.08">8% (Bayern/BaWü)</option>
+                <option value="0.09">9% (Rest)</option>
+            </select>
         </div>
     </div>
 </div>
@@ -120,52 +128,88 @@
         document.getElementById(id).classList.add('active');
         document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
         el.classList.add('active');
+        if(id === 'speicher') renderHistory();
     }
 
     function berechnen(){
-        let lp = parseFloat(document.getElementById('listenpreis').value)||0;
-        let leasing = parseFloat(document.getElementById('leasingrate').value)||0;
-        let faktor = parseFloat(document.getElementById('antrieb').value)||0;
-        let eigen = parseFloat(document.getElementById('eigen').value)||0;
-        let name = document.getElementById('fahrzeug').value;
+        const data = {
+            id: Date.now(),
+            marke: document.getElementById('marke').value,
+            modell: document.getElementById('modell').value,
+            lp: parseFloat(document.getElementById('lp').value),
+            rate: parseFloat(document.getElementById('rate').value),
+            antrieb: parseFloat(document.getElementById('antrieb').value),
+            typ: document.getElementById('modellTyp').value
+        };
 
-        let gsv = (lp * faktor) - eigen;
-        if(gsv < 0) gsv = 0;
-        let steuer = gsv * 0.35; // Durchschnittlicher Steuersatz
-        let lf = (leasing / lp) * 100;
-
-        document.getElementById('gsv').innerText = gsv.toFixed(2) + " €";
-        document.getElementById('steuer').innerText = steuer.toFixed(2) + " €";
-        document.getElementById('lf').innerText = lf.toFixed(2) + "%";
-
-        let text = "";
-        let klasse = "";
-        if(lf < 0.8){ text = "Sehr gut"; klasse = "green"; }
-        else if(lf < 1.1){ text = "Gut"; klasse = "green"; }
-        else { text = "Eher teuer"; klasse = "red"; }
+        const kist = parseFloat(localStorage.getItem('dw_kist')) || 0;
+        const tax = 0.35 + (0.35 * kist);
+        const gsv = data.lp * data.antrieb;
         
-        document.getElementById('bewertung').innerHTML = '<span class="' + klasse + '">' + text + '</span>';
+        data.netto = (data.typ === "zusatz") ? (gsv * tax) : (data.rate + (gsv * tax) - (data.rate * tax));
+        data.lf = (data.rate / data.lp) * 100;
 
-        speichern(name, lf.toFixed(2));
+        let history = JSON.parse(localStorage.getItem('dw_v14')) || [];
+        history.push(data);
+        localStorage.setItem('dw_v14', JSON.stringify(history));
+        
+        alert("Gespeichert! Wechsel zum Vergleich-Tab.");
+        showPage('speicher', document.querySelectorAll('.tab')[1]);
     }
 
-    function speichern(name, faktor){
-        let daten = JSON.parse(localStorage.getItem('autos')) || [];
-        daten.push(name + " (LF: " + faktor + "%)");
-        localStorage.setItem('autos', JSON.stringify(daten));
-        laden();
+    function renderHistory(){
+        const history = JSON.parse(localStorage.getItem('dw_v14')) || [];
+        const container = document.getElementById('historyList');
+        container.innerHTML = history.map(item => `
+            <div class="save-item">
+                <input type="checkbox" class="comp-check" value="${item.id}" onchange="updateComparison()">
+                <div style="flex:1"><b>${item.marke.toUpperCase()}</b> ${item.modell}</div>
+                <div style="color:var(--apple-accent); font-weight:600">-${item.netto.toFixed(2)}€</div>
+            </div>
+        `).join('') || "Noch keine Daten.";
     }
 
-    function laden(){
-        let daten = JSON.parse(localStorage.getItem('autos')) || [];
-        let html = "";
-        daten.reverse().forEach(e=>{
-            html += '<div class="save">' + e + '</div>';
-        });
-        document.getElementById('liste').innerHTML = html || "Keine Fahrzeuge gespeichert.";
+    function updateComparison(){
+        const selectedIds = Array.from(document.querySelectorAll('.comp-check:checked')).map(c => c.value);
+        if(selectedIds.length > 3) {
+            alert("Maximal 3 Fahrzeuge wählbar.");
+            event.target.checked = false;
+            return;
+        }
+
+        const history = JSON.parse(localStorage.getItem('dw_v14')) || [];
+        const container = document.getElementById('compGrid');
+        const box = document.getElementById('compareResult');
+
+        if(selectedIds.length === 0){ box.style.display = 'none'; return; }
+        box.style.display = 'block';
+
+        const selectedCars = history.filter(h => selectedIds.includes(h.id.toString()));
+        
+        container.innerHTML = selectedCars.map(c => `
+            <div class="comp-column">
+                <div class="comp-header">${c.marke.toUpperCase()}</div>
+                <div class="comp-label">Netto-Last</div>
+                <div class="comp-val"><b>${c.netto.toFixed(2)}€</b></div>
+                <div class="comp-label">Leasingfaktor</div>
+                <div class="comp-val">${c.lf.toFixed(2)}%</div>
+                <div class="comp-label">Listenpreis</div>
+                <div class="comp-val">${c.lp}€</div>
+                <a class="adac-tag" href="https://www.google.com/search?q=ADAC+Test+${c.marke}+${c.modell}" target="_blank">ADAC Test</a>
+            </div>
+        `).join('');
     }
 
-    laden();
+    function saveProfile(){
+        localStorage.setItem('dw_brutto', document.getElementById('brutto').value);
+        localStorage.setItem('dw_kist', document.getElementById('kist').value);
+    }
+
+    function clearAll(){ if(confirm("Wirklich alles löschen?")){ localStorage.clear(); renderHistory(); document.getElementById('compareResult').style.display='none'; } }
+
+    // Init
+    document.getElementById('brutto').value = localStorage.getItem('dw_brutto') || 4500;
+    document.getElementById('kist').value = localStorage.getItem('dw_kist') || 0;
 </script>
 </body>
 </html>
