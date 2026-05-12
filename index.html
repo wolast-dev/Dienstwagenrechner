@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dienstwagen Rechner 1.1</title>
+    <style>
+        body { margin:0; background:#111827; color:white; font-family:Arial,sans-serif; }
+        .header { background:#1f2937; padding:14px; font-size:20px; font-weight:bold; color:#fbbf24; position:sticky; top:0; z-index:10; }
+        .container { max-width:800px; margin:auto; padding:16px; }
+        .card { background:#1f2937; padding:18px; border-radius:14px; margin-bottom:16px; }
+        h2 { margin-top:0; font-size:1.2rem; color:#fbbf24; }
+        label { display:block; margin-top:10px; font-size:0.9rem; color:#9ca3af; }
+        input, select { width:100%; padding:12px; border:none; border-radius:10px; margin-top:6px; margin-bottom:14px; font-size:16px; box-sizing:border-box; background:#374151; color:white; }
+        button { width:100%; padding:14px; border:none; border-radius:12px; background:#fbbf24; font-weight:bold; font-size:16px; cursor:pointer; color:#000; }
+        .result { font-size:18px; margin-top:10px; }
+        .big { font-size:32px; color:#fbbf24; font-weight:bold; margin:10px 0; }
+        .green { color:#22c55e; font-weight:bold; }
+        .red { color:#ef4444; font-weight:bold; }
+        .small { color:#9ca3af; line-height:1.6; font-size:0.9rem; }
+        .tabs { display:flex; gap:8px; margin-bottom:16px; }
+        .tab { flex:1; background:#374151; padding:12px; border-radius:10px; text-align:center; cursor:pointer; font-size:0.9rem; }
+        .tab.active { background:#fbbf24; color:black; font-weight:bold; }
+        .page { display:none; }
+        .page.active { display:block; }
+        .save { background:#374151; padding:12px; border-radius:10px; margin-top:10px; border-left:4px solid #fbbf24; }
+    </style>
+</head>
+<body>
+
+<div class="header">Dienstwagen Rechner 1.1</div>
+
+<div class="container">
+    <div class="tabs">
+        <div class="tab active" onclick="showPage('rechner',this)">Rechner</div>
+        <div class="tab" onclick="showPage('hilfe',this)">Hilfe</div>
+        <div class="tab" onclick="showPage('speicher',this)">Speicher</div>
+    </div>
+
+    <div class="page active" id="rechner">
+        <div class="card">
+            <h2>Fahrzeugdaten</h2>
+            <label>Fahrzeug Modell</label>
+            <input id="fahrzeug" value="Tesla Model Y">
+            <label>Brutto Listenpreis (€)</label>
+            <input id="listenpreis" type="number" value="45000">
+            <label>Leasingrate vom Autohaus (€ / Monat)</label>
+            <input id="leasingrate" type="number" value="499">
+            <label>Antrieb / Versteuerung</label>
+            <select id="antrieb">
+                <option value="0.0025">Elektro (0,25%)</option>
+                <option value="0.005">Hybrid (0,5%)</option>
+                <option value="0.01">Verbrenner (1,0%)</option>
+            </select>
+            <label>Eigenanteil (€)</label>
+            <input id="eigen" type="number" value="0">
+            <button onclick="berechnen()">Berechnen & Speichern</button>
+        </div>
+
+        <div class="card">
+            <h2>Ergebnis</h2>
+            <div class="small">Monatl. geldwerter Vorteil:</div>
+            <div class="big" id="gsv">0 €</div>
+            <div class="result">Steuerlast (ca.): <span id="steuer" class="red">0 €</span></div>
+            <div class="result">Leasingfaktor: <span id="lf">0%</span></div>
+            <div class="result">Bewertung: <span id="bewertung">-</span></div>
+        </div>
+
+        <div class="card">
+            <h2>Fragen fürs Autohaus</h2>
+            <div class="small" id="autohausText">
+                • Gibt es zusätzliche Flottenrabatte?<br>
+                • Welche Lieferzeit gilt aktuell?<br>
+                • Sind Wartung und Verschleiß enthalten?<br>
+                • Ist eine Wallbox inklusive?<br>
+                • Gibt es Sonderaktionen für dieses Modell?
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Tipps für die Verhandlung</h2>
+            <div class="small">
+                • Gehaltsumwandlung spart Sozialabgaben.<br>
+                • E-Autos sind das stärkste Argument (0,25%).<br>
+                • Leasingraten sind für Chefs Betriebsausgaben.<br>
+                • Niedriger geldwerter Vorteil = mehr Netto für dich.
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="hilfe">
+        <div class="card">
+            <h2>Hilfe & Infos</h2>
+            <div class="small">
+                <b>Listenpreis:</b> Maßgeblich für die Versteuerung.<br><br>
+                <b>Leasingfaktor:</b> Zeigt, wie gut das Angebot ist.<br>
+                <span class="green">Unter 0,8: Top Deal</span><br>
+                <span>0,8 - 1,1: Solide</span><br>
+                <span class="red">Über 1,1: Teuer</span><br><br>
+                <b>Versteuerung:</b><br>
+                • Elektro (bis 70k€): 0,25%<br>
+                • Hybrid/Teure E-Autos: 0,5%<br>
+                • Verbrenner: 1,0%
+            </div>
+        </div>
+    </div>
+
+    <div class="page" id="speicher">
+        <div class="card">
+            <h2>Vergleichsliste</h2>
+            <div id="liste">Keine Fahrzeuge gespeichert.</div>
+            <button style="margin-top:20px; background:#ef4444; color:white;" onclick="localStorage.clear(); laden();">Liste leeren</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    function showPage(id, el){
+        document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+        el.classList.add('active');
+    }
+
+    function berechnen(){
+        let lp = parseFloat(document.getElementById('listenpreis').value)||0;
+        let leasing = parseFloat(document.getElementById('leasingrate').value)||0;
+        let faktor = parseFloat(document.getElementById('antrieb').value)||0;
+        let eigen = parseFloat(document.getElementById('eigen').value)||0;
+        let name = document.getElementById('fahrzeug').value;
+
+        let gsv = (lp * faktor) - eigen;
+        if(gsv < 0) gsv = 0;
+        let steuer = gsv * 0.35; // Durchschnittlicher Steuersatz
+        let lf = (leasing / lp) * 100;
+
+        document.getElementById('gsv').innerText = gsv.toFixed(2) + " €";
+        document.getElementById('steuer').innerText = steuer.toFixed(2) + " €";
+        document.getElementById('lf').innerText = lf.toFixed(2) + "%";
+
+        let text = "";
+        let klasse = "";
+        if(lf < 0.8){ text = "Sehr gut"; klasse = "green"; }
+        else if(lf < 1.1){ text = "Gut"; klasse = "green"; }
+        else { text = "Eher teuer"; klasse = "red"; }
+        
+        document.getElementById('bewertung').innerHTML = '<span class="' + klasse + '">' + text + '</span>';
+
+        speichern(name, lf.toFixed(2));
+    }
+
+    function speichern(name, faktor){
+        let daten = JSON.parse(localStorage.getItem('autos')) || [];
+        daten.push(name + " (LF: " + faktor + "%)");
+        localStorage.setItem('autos', JSON.stringify(daten));
+        laden();
+    }
+
+    function laden(){
+        let daten = JSON.parse(localStorage.getItem('autos')) || [];
+        let html = "";
+        daten.reverse().forEach(e=>{
+            html += '<div class="save">' + e + '</div>';
+        });
+        document.getElementById('liste').innerHTML = html || "Keine Fahrzeuge gespeichert.";
+    }
+
+    laden();
+</script>
+</body>
+</html>
